@@ -92,7 +92,7 @@
         <!-- <input class="body-paste" placeholder="PASTE PAPER" v-model="paperBody" @input="toCheck(paperBody)"> -->
          <quill-editor class="body-paste"
                       ref="myTextEditor"
-                      :content="bodyContent"
+                      v-model="bodyContent"
                       :options="bodyEditorOption"
                       @change="onBodyEditorChange($event)">
         </quill-editor>
@@ -121,6 +121,7 @@ export default {
         errorSpellingRight:'',
         titleContent: '',
         bodyContent:'',
+        bodyContentArray: [],
         titleEditorOption: {
           theme: 'bubble',
           placeholder: "PASTE TITLE",
@@ -260,10 +261,10 @@ export default {
         } 
     },
     onTitleEditorChange({ editor, html, text }) {
-        this.content = html
+        this.titleContent = html
     },
     onBodyEditorChange({ editor, html, text }) {
-        this.content = text
+        this.bodyContent = text
         this.$http.post('/api/num', {
             paperBody:this.content
         }).then(res => {
@@ -278,12 +279,20 @@ export default {
                 this.sumNum = res.body.data.sumNum,
                 this.errorSpellingPosL = res.body.data.errorSpellingPosL,
                 this.errorSpellingPosR = res.body.data.errorSpellingPosR,
-                this.errorSpellingRight =res.body.data.errorSpellingRight
+                this.errorSpellingRight =res.body.data.errorSpellingRight,
+                this.addSpellingTag(this.errorSpellingPosL,this.errorSpellingPosR,this.bodyContent)
             }
             else {
                 alert(error)
             }
         })
+    },
+    addSpellingTag(L,R,content) {
+        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")
+        // console.log(this.bodyContentArray[L])
+        for (let i = L; i<=R ; i++) {
+            console.log(this.bodyContentArray[i])
+        }
     }
   },
   created() {

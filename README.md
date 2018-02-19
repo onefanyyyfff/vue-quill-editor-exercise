@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # y
 
 > y
@@ -28,3 +29,6 @@ npm test
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+=======
+# Front-End
+>>>>>>> 9d4d564b79ae7bb0ccb95c33b09161e5b3d41bfc
