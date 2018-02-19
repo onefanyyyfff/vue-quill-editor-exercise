@@ -1,0 +1,17 @@
+{
+    "num": {
+        "success":1,
+        "data":{
+            "id": 1,
+            "errorSpelling": 5,
+            "errorGrammar":2,
+            "errorLexeme":4,
+            "suggestLexeme":5,
+            "suggestStructure":2,
+            "sumNum":17,
+            "errorSpellingPosL":1,
+            "errorSpellingPosR":4,
+            "errorSpellingRight":"hahaha"
+        }
+    }
+}
