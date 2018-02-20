@@ -122,6 +122,7 @@ export default {
         titleContent: '',
         bodyContent:'',
         bodyContentArray: [],
+        spanArray:[],
         titleEditorOption: {
           theme: 'bubble',
           placeholder: "PASTE TITLE",
@@ -280,7 +281,7 @@ export default {
                 this.errorSpellingPosL = res.body.data.errorSpellingPosL,
                 this.errorSpellingPosR = res.body.data.errorSpellingPosR,
                 this.errorSpellingRight =res.body.data.errorSpellingRight,
-                this.addSpellingTag(this.errorSpellingPosL,this.errorSpellingPosR,this.bodyContent)
+                this.addSpellingTag(this.errorSpellingPosL,this.errorSpellingPosR,this.bodyContent)//给带修改的部分加span
             }
             else {
                 alert(error)
@@ -288,11 +289,13 @@ export default {
         })
     },
     addSpellingTag(L,R,content) {
-        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")
+        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
         // console.log(this.bodyContentArray[L])
         for (let i = L; i<=R ; i++) {
             console.log(this.bodyContentArray[i])
+            this.spanArray.push(this.bodyContentArray[i])
         }
+        console.log(this.spanArray)
     }
   },
   created() {
