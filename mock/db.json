@@ -11,7 +11,9 @@
             "sumNum":17,
             "errorSpellingPosL":[1,11,111],
             "errorSpellingPosR":[4,14,114],
-            "errorSpellingRight":["hahaha","ooo","lalala"]
+            "errorSpellingRight":["hahaha","ooo","lalala"],
+            "errorGrammarPosL":[5,15,115],
+            "errorGrammarPosR":[7,17,117]
         }
     }
 }

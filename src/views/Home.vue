@@ -82,30 +82,28 @@
     <div class="splender-left">
     </div>
     <div class="middle">
-        <!-- <input class="title-paste" placeholder="PASTE PAPER TITLE" v-model="paperTitle"> -->
-         <quill-editor class="title-paste"
+        <quill-editor class="title-paste"
                       ref="myTextEditor"
                       :content="titleContent"
                       :options="titleEditorOption"
                       @change="onTitleEditorChange($event)">
         </quill-editor>
-        <!-- <input class="body-paste" placeholder="PASTE PAPER" v-model="paperBody" @input="toCheck(paperBody)"> -->
-         <quill-editor class="body-paste"
+        <quill-editor class="body-paste"
                       ref="myTextEditor"
                       :content="bodyContent"
                       :options="bodyEditorOption"
                       @change="onBodyEditorChange($event)">
         </quill-editor>
-        <!-- <div id="editor"
-             ref="myTextEditor"
-             v-model="bodyContent"
-             :options="bodyEditorOption"
-             @change="onBodyEditorChange($event)">
-        </div> -->
     </div>
     <div class="splender-right">
     </div>
     <div class="right">
+        <div>
+            <span>改：</span>
+        </div>
+        <div v-for="(el,index) in errorSpellingRight" :key="index">
+            <span>{{el}}</span>
+        </div>
     </div>
 </div>
 </template>
