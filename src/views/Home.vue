@@ -92,10 +92,16 @@
         <!-- <input class="body-paste" placeholder="PASTE PAPER" v-model="paperBody" @input="toCheck(paperBody)"> -->
          <quill-editor class="body-paste"
                       ref="myTextEditor"
-                      v-model="bodyContent"
+                      :content="bodyContent"
                       :options="bodyEditorOption"
                       @change="onBodyEditorChange($event)">
         </quill-editor>
+        <!-- <div id="editor"
+             ref="myTextEditor"
+             v-model="bodyContent"
+             :options="bodyEditorOption"
+             @change="onBodyEditorChange($event)">
+        </div> -->
     </div>
     <div class="splender-right">
     </div>
@@ -104,6 +110,17 @@
 </div>
 </template>
 <script> 
+import Vue from 'vue'
+import Quill from 'quill'
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+Vue.use(VueQuillEditor)
+// var quill = new Quill('#editor', {
+//   theme: 'bubble'   // Specify theme in configuration
+// });
+
 export default {
   data () {
     return {
@@ -116,6 +133,7 @@ export default {
         suggestLexeme: '',
         suggestStructure: '',
         sumNum: '' ,
+        judgeAdd:'',
         errorSpellingPosL:'',
         errorSpellingPosR:'',
         errorSpellingRight:'',
@@ -123,6 +141,8 @@ export default {
         bodyContent:'',
         bodyContentArray: [],
         spanArray:[],
+        spanString:'',
+        htmlContent:'',
         titleEditorOption: {
           theme: 'bubble',
           placeholder: "PASTE TITLE",
@@ -138,7 +158,6 @@ export default {
     }
   },
   mounted () {
-      
   },
   methods: {
     changeMS() {
@@ -265,12 +284,12 @@ export default {
         this.titleContent = html
     },
     onBodyEditorChange({ editor, html, text }) {
-        this.bodyContent = text
+        // this.bodyContent = text
         this.$http.post('/api/num', {
-            paperBody:this.content
+            paperBody: text
         }).then(res => {
             if(res.body.success) {
-                console.log(this.editor) 
+                //console.log(this.editor) 
                 this.paperOn = true,
                 this.errorSpelling = res.body.data.errorSpelling,
                 this.errorGrammar = res.body.data.errorGrammar,
@@ -280,8 +299,16 @@ export default {
                 this.sumNum = res.body.data.sumNum,
                 this.errorSpellingPosL = res.body.data.errorSpellingPosL,
                 this.errorSpellingPosR = res.body.data.errorSpellingPosR,
-                this.errorSpellingRight =res.body.data.errorSpellingRight,
-                this.addSpellingTag(this.errorSpellingPosL,this.errorSpellingPosR,this.bodyContent)//给带修改的部分加span
+                this.errorSpellingRight =res.body.data.errorSpellingRight
+                if ((this.judgeAdd != text) && text.length != 1) {
+                    this.addSpellingTag(this.errorSpellingPosL,this.errorSpellingPosR,text)//给带修改的部分加span
+                    this.changeEditor(text,html)
+                    // console.log("text:" + text)
+                    // console.log("judgeAdd:" +this.judgeAdd)
+                    // console.log("text's length:" + text.length)
+                    // console.log("judgeAdd's length:"+this.judgeAdd.length)
+                    this.judgeAdd = text
+                }
             }
             else {
                 alert(error)
@@ -290,12 +317,37 @@ export default {
     },
     addSpellingTag(L,R,content) {
         this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
-        // console.log(this.bodyContentArray[L])
         for (let i = L; i<=R ; i++) {
-            console.log(this.bodyContentArray[i])
             this.spanArray.push(this.bodyContentArray[i])
         }
-        console.log(this.spanArray)
+        // 加span
+        var re = this.spanArray.join("")
+        var str = this.bodyContentArray.join("") 
+        this.spanString = str.replace(re, function(x) {
+            return '<span style="color:red">' + x + '</span>';
+        });
+    },
+    changeEditor(text,html) {
+        //加p标签
+        if (this.spanString.trim().length === 0) {
+            this.htmlContent = this.spanString
+        }
+        else {
+            this.htmlContent = this.spanString.replace(this.spanString, function(x) {
+                return '<p>' + x + '</p>';
+            });
+        }
+        if((this.htmlContent.trim().length ===0 )&& (this.bodyContent.trim().length === 0)){
+
+        }
+        else {
+            //删除editor内容
+            var length = this.editor.getLength()
+            this.editor.deleteText(0, length-1)
+            //插入html
+            this.editor.clipboard.dangerouslyPasteHTML(0,this.htmlContent)
+            console.log("htmlContent:"+this.htmlContent)
+        }
     }
   },
   created() {
@@ -309,6 +361,12 @@ export default {
 </script>
 
 <style>
+.errorSpelling {
+    color:red;
+}
+#editor {
+  height: 375px;
+}
  .base {
     width:100%;
     height:100%;
