@@ -9,9 +9,9 @@
             "suggestLexeme":5,
             "suggestStructure":2,
             "sumNum":17,
-            "errorSpellingPosL":1,
-            "errorSpellingPosR":4,
-            "errorSpellingRight":"hahaha"
+            "errorSpellingPosL":[1,11,111],
+            "errorSpellingPosR":[4,14,114],
+            "errorSpellingRight":["hahaha","ooo","lalala"]
         }
     }
 }

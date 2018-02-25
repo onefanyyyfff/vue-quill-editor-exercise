@@ -134,9 +134,9 @@ export default {
         suggestStructure: '',
         sumNum: '' ,
         judgeAdd:'',
-        errorSpellingPosL:'',
-        errorSpellingPosR:'',
-        errorSpellingRight:'',
+        errorSpellingPosL:[],
+        errorSpellingPosR:[],
+        errorSpellingRight:[],
         titleContent: '',
         bodyContent:'',
         bodyContentArray: [],
@@ -301,8 +301,10 @@ export default {
                 this.errorSpellingPosR = res.body.data.errorSpellingPosR,
                 this.errorSpellingRight =res.body.data.errorSpellingRight
                 if ((this.judgeAdd != text) && text.length != 1) {
-                    this.addSpellingTag(this.errorSpellingPosL,this.errorSpellingPosR,text)//给带修改的部分加span
-                    this.changeEditor(text,html)
+                    for (let i=0 ; i<this.errorSpellingPosL.length ; i++) {
+                        this.addSpellingTag(this.errorSpellingPosL[i],this.errorSpellingPosR[i],text)//给带修改的部分加span
+                    }
+                    this.changeEditor()
                     // console.log("text:" + text)
                     // console.log("judgeAdd:" +this.judgeAdd)
                     // console.log("text's length:" + text.length)
@@ -317,17 +319,26 @@ export default {
     },
     addSpellingTag(L,R,content) {
         this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
-        for (let i = L; i<=R ; i++) {
-            this.spanArray.push(this.bodyContentArray[i])
+        for (let m = L; m<=R ; m++) {
+            this.spanArray.push(this.bodyContentArray[m])
         }
         // 加span
         var re = this.spanArray.join("")
-        var str = this.bodyContentArray.join("") 
-        this.spanString = str.replace(re, function(x) {
-            return '<span style="color:red">' + x + '</span>';
-        });
+        var str = this.bodyContentArray.join("")
+        if (this.spanString == "") {
+            this.spanString = str.replace(re, function(x) {
+                return '<span style="color:red">' + x + '</span>';
+            });
+        } 
+        else {
+            this.spanString = this.spanString.replace(re, function(x) {
+                return '<span style="color:red">' + x + '</span>';
+            });
+        }
+        this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
+        console.log(this.spanString)
     },
-    changeEditor(text,html) {
+    changeEditor() {
         //加p标签
         if (this.spanString.trim().length === 0) {
             this.htmlContent = this.spanString
@@ -346,7 +357,6 @@ export default {
             this.editor.deleteText(0, length-1)
             //插入html
             this.editor.clipboard.dangerouslyPasteHTML(0,this.htmlContent)
-            console.log("htmlContent:"+this.htmlContent)
         }
     }
   },
