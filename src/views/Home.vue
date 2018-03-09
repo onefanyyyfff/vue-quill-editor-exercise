@@ -38,9 +38,9 @@
                     </div>
                 </li>
                 <li id="mistakes-lexeme" @mouseover="changeML()" @mouseout="returnML()">
-                    <span class="list-title">LEXEME</span>
+                    <span class="list-title">SEMANTIC</span>
                     <div id="mistakes-lexeme-circle" v-if="paperOn">
-                        <span id="mistakes-lexeme-num">{{errorLexeme}}</span>
+                        <span id="mistakes-lexeme-num">{{errorSemantic}}</span>
                     </div>
                     <div class="clear-float">
                     </div>
@@ -57,7 +57,7 @@
                 <li id="suggestions-lexeme" @mouseover="changeSL()" @mouseout="returnSL()">
                     <span class="list-title">LEXEME</span>
                     <div id="suggestions-lexeme-circle" v-if="paperOn">
-                        <span id="suggestions-lexeme-num">{{suggestLexeme}}</span>
+                        <span id="suggestions-lexeme-num">{{suggestSemantic}}</span>
                     </div>
                     <div class="clear-float">
                     </div>
@@ -98,11 +98,43 @@
     <div class="splender-right">
     </div>
     <div class="right">
-        <div>
-            <span>改：</span>
+        <div v-for="(el,index) in errorSpellingArr" :key="index" class="right-spelling">
+            <div class="rs-first-floor">
+                <span>{{el.rep}}</span>
+                <img src="/static/img/delete.png" class="delete-option">
+                <img src="/static/img/close.png" class="close-option">
+            </div>
+            <!-- <div class="rs-second-floor">
+                <span>{{el.exp}}</span>
+            </div> -->
         </div>
-        <div v-for="(el,index) in errorSpellingRight" :key="index">
-            <span>{{el}}</span>
+        <div v-for="(el,index) in errorGrammarArr" :key="index" class="right-grammar">
+            <div class="rg-first-floor">
+                <span>{{el.rep}}</span>
+                <img src="/static/img/delete.png" class="delete-option">
+                <img src="/static/img/close.png" class="close-option">
+            </div>
+        </div>
+        <div v-for="(el,index) in errorSemanticArr" :key="index" class="right-semantic">
+            <div class="rse-first-floor">
+                <span>{{el.rep}}</span>
+                <img src="/static/img/delete.png" class="delete-option">
+                <img src="/static/img/close.png" class="close-option">
+            </div>
+        </div>
+        <div v-for="(el,index) in suggestSemanticArr" :key="index" class="suggest-semantic">
+            <div class="ss-first-floor">
+                <span>{{el.rep}}</span>
+                <img src="/static/img/delete.png" class="delete-option">
+                <img src="/static/img/close.png" class="close-option">
+            </div>
+        </div>
+        <div v-for="(el,index) in suggestStructureArr" :key="index" class="suggest-structure">
+            <div class="sst-first-floor">
+                <span>{{el.rep}}</span>
+                <img src="/static/img/delete.png" class="delete-option">
+                <img src="/static/img/close.png" class="close-option">
+            </div>
         </div>
     </div>
 </div>
@@ -111,13 +143,17 @@
 import Vue from 'vue'
 import Quill from 'quill'
 import VueQuillEditor from 'vue-quill-editor'
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
+// import 'quill/dist/quill.core.css'
+// import 'quill/dist/quill.snow.css'
+// import 'quill/dist/quill.bubble.css'
 Vue.use(VueQuillEditor)
-// var quill = new Quill('#editor', {
-//   theme: 'bubble'   // Specify theme in configuration
-// });
+
+const Parchment = Quill.import('parchment')
+var boxAttributor = new Parchment.Attributor.Class('box', 'line', {
+    scope: Parchment.Scope.INLINE,
+    whitelist: ['error', 'suggest']
+});
+ Quill.register(boxAttributor);
 
 export default {
   data () {
@@ -127,14 +163,36 @@ export default {
         paperBody: '',
         errorSpelling: '',
         errorGrammar: '',
-        errorLexeme: '',
-        suggestLexeme: '',
+        errorSemantic: '',
+        suggestSemantic: '',
         suggestStructure: '',
         sumNum: '' ,
         judgeAdd:'',
+        errorSpellingArr: [],
         errorSpellingPosL:[],
         errorSpellingPosR:[],
         errorSpellingRight:[],
+        errorSpellingExplain:[],
+        errorGrammarArr: [],
+        errorGrammarPosL:[],
+        errorGrammarPosR:[],
+        errorGrammarRight:[],
+        errorGrammarExplain:[],
+        errorSemanticArr:[],
+        errorSemanticPosL:[],
+        errorSemanticPosR:[],
+        errorSemanticRight:[],
+        errorSemanticExplain:[],
+        suggestSemanticArr: [],
+        suggestSemanticPosL:[],
+        suggestSemanticPosR:[],
+        suggestSemanticRight:[],
+        suggestSemanticExplain:[],
+        suggestStructureArr: [],
+        suggestStructurePosL:[],
+        suggestStructurePosR:[],
+        suggestStructureRight:[],
+        suggestStructureExplain:[],
         titleContent: '',
         bodyContent:'',
         bodyContentArray: [],
@@ -282,31 +340,76 @@ export default {
         this.titleContent = html
     },
     onBodyEditorChange({ editor, html, text }) {
-        // this.bodyContent = text
         this.$http.post('/api/num', {
             paperBody: text
         }).then(res => {
             if(res.body.success) {
-                //console.log(this.editor) 
                 this.paperOn = true,
-                this.errorSpelling = res.body.data.errorSpelling,
-                this.errorGrammar = res.body.data.errorGrammar,
-                this.errorLexeme = res.body.data.errorLexeme,
-                this.suggestLexeme = res.body.data.suggestLexeme,
-                this.suggestStructure = res.body.data.suggestStructure,
-                this.sumNum = res.body.data.sumNum,
-                this.errorSpellingPosL = res.body.data.errorSpellingPosL,
-                this.errorSpellingPosR = res.body.data.errorSpellingPosR,
-                this.errorSpellingRight =res.body.data.errorSpellingRight
+                this.errorSpelling = res.body.count.errorSpelling,
+                this.errorGrammar = res.body.count.errorGrammar,
+                this.errorSemantic = res.body.count.errorSemantic,
+                this.suggestSemantic = res.body.count.suggestSemantic,
+                this.suggestStructure = res.body.count.suggestStructure,
+                this.sumNum = res.body.count.sumNum,
+
+                this.errorSpellingArr = res.body.spelling.err,
+                // this.errorSpellingPosL = res.body.spelling.err.start,
+                // this.errorSpellingPosR = res.body.spelling.err.end,
+                // this.errorSpellingRight =res.body.spelling.err.rep,
+                // this.errorSpellingExplain=res.body.spelling.err.exp,
+
+                this.errorGrammarArr = res.body.grammar.err,
+                // this.errorGrammarPosL=res.body.grammar.err.start,
+                // this.errorGrammarPosR=res.body.grammar.err.end,
+                // this.errorGrammarRight=res.body.grammar.err.rep,
+                // this.errorGrammarExplain=res.body.grammar.err.exp,
+
+                this.errorSemanticArr = res.body.semantic.err,
+                // this.errorSemanticPosL=res.body.semantic.err.start,
+                // this.errorSemanticPosR=res.body.semantic.err.end,
+                // this.errorSemanticRight=res.body.semantic.err.rep,
+                // this.errorSemanticExplain=res.body.semantic.err.exp,
+
+                this.suggestSemanticArr = res.body.semantic.sug,
+                // this.suggestSemanticPosL=res.body.semantic.sug.start,
+                // this.suggestSemanticPosR=res.body.semantic.sug.end,
+                // this.suggestSemanticRight=res.body.semantic.sug.rep,
+                // this.suggestSemanticExplain=res.body.semantic.sug.exp,
+
+                this.suggestStructureArr = res.body.structure.sug
+                // this.suggestStructurePosL=res.body.structure.sug.start,
+                // this.suggestStructurePosR=res.body.structure.sug.end,
+                // this.suggestStructureRight=res.body.structure.sug.rep,
+                // this.suggestStructureExplain=res.body.structure.sug.exp
+
+                //当文本被处理完，且只处理一次的时候，调用changeEditor函数，替换处理好的html文本
                 if ((this.judgeAdd != text) && text.length != 1) {
-                    for (let i=0 ; i<this.errorSpellingPosL.length ; i++) {
-                        this.addSpellingTag(this.errorSpellingPosL[i],this.errorSpellingPosR[i],text)//给带修改的部分加span
+                    for (let i=0 ; i<this.errorSpellingArr.length ; i++) {
+                        for(let j=0; j<this.errorSpellingArr[i].start.length; j++) {
+                            this.addErrorSpellingTag(this.errorSpellingArr[i].start[j],this.errorSpellingArr[i].end[j],text)//给带修改的部分加span
+                        }
+                    }
+                    for (let i=0 ; i<this.errorGrammarArr.length ; i++) {
+                        for(let j=0 ; j<this.errorGrammarArr[i].start.length ; j++) {
+                            this.addErrorGrammarTag(this.errorGrammarArr[i].start[j],this.errorGrammarArr[i].end[j],text)//给带修改的部分加span
+                        }
+                    }
+                    for (let i=0; i<this.errorSemanticArr.length ; i++) {
+                        for(let j=0 ; j<this.errorSemanticArr[i].start.length ; j++) {
+                            this.addErrorLexemeTag(this.errorSemanticArr[i].start[j],this.errorSemanticArr[i].end[j],text)//给带修改的部分加span
+                        }
+                    }
+                    for (let i=0; i<this.suggestSemanticArr.length ; i++) {
+                        for(let j=0 ; j<this.suggestSemanticArr[i].start.length ; j++) {
+                            this.addSuggestLexemeTag(this.suggestSemanticArr[i].start[j],this.suggestSemanticArr[i].end[j],text)//给带修改的部分加span
+                        }
+                    }
+                    for (let i=0; i<this.suggestStructureArr.length ; i++) {
+                        for(let j=0 ; j<this.suggestStructureArr[i].start.length ; j++) {
+                            this.addSuggestStructureTag(this.suggestStructureArr[i].start[j],this.suggestStructureArr[i].end[j],text)//给带修改的部分加span
+                        }
                     }
                     this.changeEditor()
-                    // console.log("text:" + text)
-                    // console.log("judgeAdd:" +this.judgeAdd)
-                    // console.log("text's length:" + text.length)
-                    // console.log("judgeAdd's length:"+this.judgeAdd.length)
                     this.judgeAdd = text
                 }
             }
@@ -315,7 +418,8 @@ export default {
             }
         })
     },
-    addSpellingTag(L,R,content) {
+    //给拼写错误的部分加span显示
+    addErrorSpellingTag(L,R,content) {
         this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
         for (let m = L; m<=R ; m++) {
             this.spanArray.push(this.bodyContentArray[m])
@@ -325,12 +429,100 @@ export default {
         var str = this.bodyContentArray.join("")
         if (this.spanString == "") {
             this.spanString = str.replace(re, function(x) {
-                return '<span style="color:red">' + x + '</span>';
+                return '<span class="line-error">' + x + '</span>';
             });
         } 
         else {
             this.spanString = this.spanString.replace(re, function(x) {
-                return '<span style="color:red">' + x + '</span>';
+                return '<span class="line-error">' + x + '</span>';
+            });
+        }
+        this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
+        console.log(this.spanString)
+    },
+    //给语法错误的部分加span显示
+    addErrorGrammarTag(L,R,content) {
+        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
+        for (let m = L; m<=R ; m++) {
+            this.spanArray.push(this.bodyContentArray[m])
+        }
+        // 加span
+        var re = this.spanArray.join("")
+        var str = this.bodyContentArray.join("")
+        if (this.spanString == "") {
+            this.spanString = str.replace(re, function(x) {
+                return '<span class="line-error">' + x + '</span>';
+            });
+        } 
+        else {
+            this.spanString = this.spanString.replace(re, function(x) {
+                return '<span class="line-error">'  + x + '</span>';
+            });
+        }
+        this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
+        console.log(this.spanString)
+    },
+    //给语意错误的部分加span显示
+    addErrorLexemeTag(L,R,content) {
+        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
+        for (let m = L; m<=R ; m++) {
+            this.spanArray.push(this.bodyContentArray[m])
+        }
+        // 加span
+        var re = this.spanArray.join("")
+        var str = this.bodyContentArray.join("")
+        if (this.spanString == "") {
+            this.spanString = str.replace(re, function(x) {
+                return '<span class="line-error">' + x + '</span>';
+            });
+        } 
+        else {
+            this.spanString = this.spanString.replace(re, function(x) {
+                return '<span class="line-error">' + x + '</span>';
+            });
+        }
+        this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
+        console.log(this.spanString)
+    },
+    //给需要提建议的语意部分加span显示
+    addSuggestLexemeTag(L,R,content) {
+        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
+        for (let m = L; m<=R ; m++) {
+            this.spanArray.push(this.bodyContentArray[m])
+        }
+        // 加span
+        var re = this.spanArray.join("")
+        var str = this.bodyContentArray.join("")
+        if (this.spanString == "") {
+            this.spanString = str.replace(re, function(x) {
+                return '<span class="line-suggest">' + x + '</span>';
+            });
+        } 
+        else {
+            this.spanString = this.spanString.replace(re, function(x) {
+                return '<span class="line-suggest">' + x + '</span>';
+            });
+        }
+        this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
+        console.log(this.spanString)
+    },
+    //给需要提建议的结构部分加span显示
+    addSuggestStructureTag(L,R,content) {
+        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
+        for (let m = L; m<=R ; m++) {
+            this.spanArray.push(this.bodyContentArray[m])
+        }
+        // 加span
+        var re = this.spanArray.join("")
+        var str = this.bodyContentArray.join("")
+        if (this.spanString == "") {
+            this.spanString = str.replace(re, function(x) {
+                return '<span class="line-suggest">' + x + '</span>';
+            });
+        } 
+        else {
+            this.spanString = this.spanString.replace(re, function(x) {
+                return '<span class="line-suggest">' + x + '</span>';
             });
         }
         this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
@@ -369,13 +561,10 @@ export default {
 </script>
 
 <style>
-.errorSpelling {
-    color:red;
-}
 #editor {
   height: 375px;
 }
- .base {
+.base {
     width:100%;
     height:100%;
     letter-spacing: 1px;
@@ -653,6 +842,12 @@ export default {
     width:44%;
     height:100%;
 }
+.line-error {
+    border-bottom: 2px solid red;
+}
+.line-suggest {
+    border-bottom: 2px solid rgb(238,188,80);
+}
 .title-paste {
     width:80%;
     height:50px;
@@ -675,8 +870,75 @@ export default {
 /* 右边栏样式 */
 .right {
     float: left;
-    width:30%;
-    height:100%;
+    width: 30%;
+    height: 100%;
+    margin-top: 125px;
+}
+.right-spelling {
+    color: red;
+    height: 30px;
+    margin: 0 40px 10px 10px;
+    border-bottom:1px solid rgb(225,225,225);
+}
+.rs-first-floor {
+    position: relative;
+    top:10px;
+}
+/* .rs-second-floor {
+    position: relative;
+    top:20px;
+    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.5);
+} */
+.right-grammar {
+    color: red;
+    height: 30px;
+    margin: 0 40px 10px 10px;
+    border-bottom:1px solid rgb(225,225,225);
+}
+.rg-first-floor {
+    position: relative;
+    top:10px;
+}
+.right-semantic {
+    color: red;
+    height: 30px;
+    margin: 0 40px 10px 10px;
+    border-bottom:1px solid rgb(225,225,225);
+}
+.rg-first-floor {
+    position: relative;
+    top:10px;
+}
+.suggest-semantic {
+    color: rgb(238,188,80);
+    height: 30px;
+    margin: 0 40px 10px 10px;
+    border-bottom:1px solid rgb(225,225,225);
+}
+.ss-first-floor {
+    position: relative;
+    top:10px;
+}
+.suggest-structure {
+    color: rgb(238,188,80);
+    height: 30px;
+    margin: 0 40px 10px 10px;
+    border-bottom:1px solid rgb(225,225,225);
+}
+.sst-first-floor {
+    position: relative;
+    top:10px;
+}
+.delete-option {
+    width:10px;
+    height:10px;
+    float:right;
+}
+.close-option {
+    width:15px;
+    height:10px;
+    float:right;
+    margin-right:10px;
 }
 .splender-left {
     float: left;

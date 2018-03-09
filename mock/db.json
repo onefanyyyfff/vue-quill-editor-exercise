@@ -1,19 +1,64 @@
 {
     "num": {
-        "success":1,
-        "data":{
+        "count": {
+            "errorSpelling": 0,
+            "errorGrammar": 2,
+            "errorStructure": 0,
+            "errorSemantic": 0,
             "id": 1,
-            "errorSpelling": 5,
-            "errorGrammar":2,
-            "errorLexeme":4,
-            "suggestLexeme":5,
-            "suggestStructure":2,
-            "sumNum":17,
-            "errorSpellingPosL":[1,11,111],
-            "errorSpellingPosR":[4,14,114],
-            "errorSpellingRight":["hahaha","ooo","lalala"],
-            "errorGrammarPosL":[5,15,115],
-            "errorGrammarPosR":[7,17,117]
-        }
+            "suggestStructure": 0,
+            "suggestGrammar": 0,
+            "suggestSemantic": 0,
+            "suggestSpelling": 0,
+            "sumNum": 1
+        },
+        "spelling": {
+            "err": [
+                {
+                    "cat": 1,
+                    "eid": 3,
+                    "end": [3],
+                    "rep": "spelling err rep",
+                    "start": [1],
+                    "type": 1,
+                    "exp":"spelling err exp"
+                }
+            ],
+            "sug": []
+        },
+        "grammar": {
+            "err": [
+            {
+                "cat": 1,
+                "eid": 3,
+                "end": [50],
+                "rep": "grammar err rep",
+                "start": [40],
+                "type": 1,
+                "exp":"grammar err exp"
+            }
+            ],
+            "sug": [
+            ]
+        },
+        "semantic": {
+            "err":[],
+            "sug":[]
+        },
+        "structure": {
+            "err": [],
+            "sug": [
+                {
+                    "cat": 1,
+                    "eid": 3,
+                    "end": [19],
+                    "rep": "structure sug rep",
+                    "start": [15],
+                    "type": 1,
+                    "exp":"structure sug exp"
+                }
+            ]
+        },
+        "success": 1
     }
 }
