@@ -16,7 +16,7 @@
         </div>
         <div class="clear-float">
         </div>
-        <div class="mistakes" @click="toShowMistake()">
+        <div class="mistakes">
             <div class="mistakes-circle">
             </div>
             <span class="mistakes-title">MISTAKES</span>
@@ -98,7 +98,49 @@
     <div class="splender-right">
     </div>
     <div class="right">
-        <div v-for="(el,index) in errorSpellingArr" :key="index" class="right-spelling" v-if="showESpelling">
+        <el-collapse accordion>
+            <el-collapse-item v-for="(el,index) in errorSpellingArr" :key="index"  v-if="showESpelling">
+                <template slot="title">
+                    <li class="right-spelling">{{el.rep}}</li>
+                </template>
+                <div class="es-second-floor">
+                    <span>{{el.exp}}</span>
+                </div>
+            </el-collapse-item>
+            <el-collapse-item v-for="(el,index) in errorGrammarArr" :key="index"  v-if="showEGrammar">
+                <template slot="title">
+                    <li class="right-grammar">{{el.rep}}</li>
+                </template>
+                <div class="eg-second-floor">
+                    <span>{{el.exp}}</span>
+                </div>
+            </el-collapse-item>
+            <el-collapse-item v-for="(el,index) in errorSemanticArr" :key="index" v-if="showESemantic">
+                <template slot="title">
+                    <li class="right-semantic">{{el.rep}}</li>
+                </template>
+                <div class="ese-second-floor">
+                    <span>{{el.exp}}</span>
+                </div>
+            </el-collapse-item>
+            <el-collapse-item v-for="(el,index) in suggestSemanticArr" :key="index" v-if="showSSemantic">
+                <template slot="title">
+                    <li class="suggest-semantic">{{el.rep}}</li>
+                </template>
+                <div class="ss-second-floor">
+                    <span>{{el.exp}}</span>
+                </div>
+            </el-collapse-item>
+            <el-collapse-item v-for="(el,index) in suggestStructureArr" :key="index" v-if="showSStructure">
+                <template slot="title">
+                    <li class="suggest-structure">{{el.rep}}</li>
+                </template>
+                <div class="sst-second-floor">
+                    <span>{{el.exp}}</span>
+                </div>
+            </el-collapse-item>
+        </el-collapse>
+        <!-- <div v-for="(el,index) in errorSpellingArr" :key="index" class="right-spelling" v-if="showESpelling">
             <div class="rs-first-floor">
                 <span>{{el.rep}}</span>
                 <img src="/static/img/delete.png" class="delete-option">
@@ -132,7 +174,7 @@
                 <img src="/static/img/delete.png" class="delete-option">
                 <img src="/static/img/close.png" class="close-option">
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 </template>
@@ -925,60 +967,75 @@ export default {
     height: 100%;
     margin-top: 125px;
 }
+.el-collapse {
+    border: none;
+    width:96%;
+    margin: 0 auto 0 auto;
+}
 .right-spelling {
     color: red;
     height: 30px;
-    margin: 0 40px 10px 10px;
-    border-bottom:1px solid rgb(225,225,225);
+    margin: 0 40px 10px -3px;
 }
-.rs-first-floor {
-    position: relative;
-    top:10px;
-}
-/* .rs-second-floor {
-    position: relative;
-    top:20px;
-    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.5);
-} */
 .right-grammar {
     color: red;
     height: 30px;
-    margin: 0 40px 10px 10px;
-    border-bottom:1px solid rgb(225,225,225);
-}
-.rg-first-floor {
-    position: relative;
-    top:10px;
+    margin: 0 40px 10px -3px;
 }
 .right-semantic {
     color: red;
     height: 30px;
-    margin: 0 40px 10px 10px;
-    border-bottom:1px solid rgb(225,225,225);
-}
-.rg-first-floor {
-    position: relative;
-    top:10px;
+    margin: 0 40px 10px -3px;
 }
 .suggest-semantic {
     color: rgb(238,188,80);
     height: 30px;
-    margin: 0 40px 10px 10px;
-    border-bottom:1px solid rgb(225,225,225);
-}
-.ss-first-floor {
-    position: relative;
-    top:10px;
+    margin: 0 40px 10px -3px;
 }
 .suggest-structure {
     color: rgb(238,188,80);
     height: 30px;
-    margin: 0 40px 10px 10px;
-    border-bottom:1px solid rgb(225,225,225);
+    margin: 0 40px 10px -3px;
 }
-.sst-first-floor {
+.es-second-floor {
     position: relative;
     top:10px;
+    width: 98%;
+    height: 95%;
+    margin: auto auto;
+    box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.1);
+}
+.eg-second-floor {
+    position: relative;
+    top:10px;
+    width: 98%;
+    height: 95%;
+    margin: auto auto;
+    box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.1);
+}
+.ese-second-floor {
+    position: relative;
+    top:10px;
+    width: 98%;
+    height: 95%;
+    margin: auto auto;
+    box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.1);
+}
+.ss-second-floor {
+    position: relative;
+    top:10px;
+    width: 98%;
+    height: 95%;
+    margin: auto auto;
+    box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.1);
+}
+.sst-second-floor {
+    position: relative;
+    top:10px;
+    width: 98%;
+    height: 95%;
+    margin: auto auto;
+    box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.1);
 }
 .delete-option {
     width:10px;
