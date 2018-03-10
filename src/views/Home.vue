@@ -9,19 +9,19 @@
         </div>
         <div class="clear-float">
         </div>
-        <div class="show-all">
+        <div class="show-all" @click="toShowAll()">
             <div class="show-all-circle">
             </div>
             <span class="show-all-title">SHOW ALL</span>
         </div>
         <div class="clear-float">
         </div>
-        <div class="mistakes">
+        <div class="mistakes" @click="toShowMistake()">
             <div class="mistakes-circle">
             </div>
             <span class="mistakes-title">MISTAKES</span>
             <ul class="mistakes-list">
-                <li id="mistakes-spelling" @mouseover="changeMS()" @mouseout="returnMS()">
+                <li id="mistakes-spelling" @mouseover="changeMS()" @mouseout="returnMS()" @click="toShowESpelling()">
                     <span class="list-title">SPELLING</span>
                     <div id="mistakes-spelling-circle" v-if="paperOn">
                         <span id="mistakes-spelling-num">{{errorSpelling}}</span>
@@ -29,7 +29,7 @@
                     <div class="clear-float">
                     </div>
                 </li>
-                <li id="mistakes-grammar" @mouseover="changeMG()" @mouseout="returnMG()">
+                <li id="mistakes-grammar" @mouseover="changeMG()" @mouseout="returnMG()" @click="toShowEGrammar()">
                     <span class="list-title">GRAMMAR</span>
                     <div id="mistakes-grammar-circle" v-if="paperOn">
                         <span id="mistakes-grammar-num">{{errorGrammar}}</span>
@@ -37,7 +37,7 @@
                     <div class="clear-float">
                     </div>
                 </li>
-                <li id="mistakes-lexeme" @mouseover="changeML()" @mouseout="returnML()">
+                <li id="mistakes-lexeme" @mouseover="changeML()" @mouseout="returnML()" @click="toShowESemantic()">
                     <span class="list-title">SEMANTIC</span>
                     <div id="mistakes-lexeme-circle" v-if="paperOn">
                         <span id="mistakes-lexeme-num">{{errorSemantic}}</span>
@@ -54,15 +54,15 @@
             </div>
             <span class="suggestions-title">SUGGESTIONS</span>
             <ul class="suggestions-list">
-                <li id="suggestions-lexeme" @mouseover="changeSL()" @mouseout="returnSL()">
-                    <span class="list-title">LEXEME</span>
+                <li id="suggestions-lexeme" @mouseover="changeSL()" @mouseout="returnSL()" @click="toShowSSemantic()">
+                    <span class="list-title">SEMANTIC</span>
                     <div id="suggestions-lexeme-circle" v-if="paperOn">
                         <span id="suggestions-lexeme-num">{{suggestSemantic}}</span>
                     </div>
                     <div class="clear-float">
                     </div>
                 </li>
-                <li id="suggestions-structure" @mouseover="changeSS()" @mouseout="returnSS()">
+                <li id="suggestions-structure" @mouseover="changeSS()" @mouseout="returnSS()" @click="toShowSStructure()">
                     <span class="list-title">SENTENCE STRUCTURE</span>
                     <div id="suggestion-structure-circle" v-if="paperOn">
                         <span id="suggestion-structure-num">{{suggestStructure}}</span>
@@ -98,38 +98,35 @@
     <div class="splender-right">
     </div>
     <div class="right">
-        <div v-for="(el,index) in errorSpellingArr" :key="index" class="right-spelling">
+        <div v-for="(el,index) in errorSpellingArr" :key="index" class="right-spelling" v-if="showESpelling">
             <div class="rs-first-floor">
                 <span>{{el.rep}}</span>
                 <img src="/static/img/delete.png" class="delete-option">
                 <img src="/static/img/close.png" class="close-option">
             </div>
-            <!-- <div class="rs-second-floor">
-                <span>{{el.exp}}</span>
-            </div> -->
         </div>
-        <div v-for="(el,index) in errorGrammarArr" :key="index" class="right-grammar">
+        <div v-for="(el,index) in errorGrammarArr" :key="index" class="right-grammar" v-if="showEGrammar">
             <div class="rg-first-floor">
                 <span>{{el.rep}}</span>
                 <img src="/static/img/delete.png" class="delete-option">
                 <img src="/static/img/close.png" class="close-option">
             </div>
         </div>
-        <div v-for="(el,index) in errorSemanticArr" :key="index" class="right-semantic">
+        <div v-for="(el,index) in errorSemanticArr" :key="index" class="right-semantic" v-if="showESemantic">
             <div class="rse-first-floor">
                 <span>{{el.rep}}</span>
                 <img src="/static/img/delete.png" class="delete-option">
                 <img src="/static/img/close.png" class="close-option">
             </div>
         </div>
-        <div v-for="(el,index) in suggestSemanticArr" :key="index" class="suggest-semantic">
+        <div v-for="(el,index) in suggestSemanticArr" :key="index" class="suggest-semantic" v-if="showSSemantic">
             <div class="ss-first-floor">
                 <span>{{el.rep}}</span>
                 <img src="/static/img/delete.png" class="delete-option">
                 <img src="/static/img/close.png" class="close-option">
             </div>
         </div>
-        <div v-for="(el,index) in suggestStructureArr" :key="index" class="suggest-structure">
+        <div v-for="(el,index) in suggestStructureArr" :key="index" class="suggest-structure" v-if="showSStructure">
             <div class="sst-first-floor">
                 <span>{{el.rep}}</span>
                 <img src="/static/img/delete.png" class="delete-option">
@@ -159,6 +156,11 @@ export default {
   data () {
     return {
         paperOn: false,
+        showESpelling: true,
+        showEGrammar: true,
+        showESemantic: true,
+        showSSemantic: true,
+        showSStructure: true,
         paperTitle:'',
         paperBody: '',
         errorSpelling: '',
@@ -417,6 +419,55 @@ export default {
                 alert(error)
             }
         })
+    },
+    toShowAll() {
+        this.showESpelling = true,
+        this.showEGrammar = true,
+        this.showESemantic = true,
+        this.showSSemantic = true,
+        this.showSStructure = true
+    },
+    toShowMistake() {
+        this.showESpelling = true,
+        this.showEGrammar = true,
+        this.showESemantic = true,
+        this.showSSemantic = false,
+        this.showSStructure = false
+    },
+    toShowESpelling() {
+        this.showESpelling = true,
+        this.showEGrammar = false,
+        this.showESemantic = false,
+        this.showSSemantic = false,
+        this.showSStructure = false
+    },
+    toShowEGrammar() {
+        this.showESpelling = false,
+        this.showEGrammar = true,
+        this.showESemantic = false,
+        this.showSSemantic = false,
+        this.showSStructure = false
+    },
+    toShowESemantic() {
+        this.showESpelling = false,
+        this.showEGrammar = false,
+        this.showESemantic = true,
+        this.showSSemantic = false,
+        this.showSStructure = false
+    },
+    toShowSSemantic() {
+        this.showESpelling = false,
+        this.showEGrammar = false,
+        this.showESemantic = false,
+        this.showSSemantic = true,
+        this.showSStructure = false
+    },
+    toShowSStructure() {
+        this.showESpelling = false,
+        this.showEGrammar = false,
+        this.showESemantic = false,
+        this.showSSemantic = false,
+        this.showSStructure = true
     },
     //给拼写错误的部分加span显示
     addErrorSpellingTag(L,R,content) {
