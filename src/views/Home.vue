@@ -85,8 +85,7 @@
         <quill-editor class="title-paste"
                       ref="myTextEditor"
                       :content="titleContent"
-                      :options="titleEditorOption"
-                      @change="onTitleEditorChange($event)">
+                      :options="titleEditorOption">
         </quill-editor>
         <quill-editor class="body-paste"
                       ref="myTextEditor"
@@ -181,15 +180,12 @@
 import Vue from 'vue'
 import Quill from 'quill'
 import VueQuillEditor from 'vue-quill-editor'
-// import 'quill/dist/quill.core.css'
-// import 'quill/dist/quill.snow.css'
-// import 'quill/dist/quill.bubble.css'
 Vue.use(VueQuillEditor)
 
 const Parchment = Quill.import('parchment')
 var boxAttributor = new Parchment.Attributor.Class('box', 'line', {
     scope: Parchment.Scope.INLINE,
-    whitelist: ['spellingError', 'grammarError','semanticError','semanticSuggest','structureSuggest']
+    whitelist: ['error','suggest']
 });
  Quill.register(boxAttributor);
 
@@ -380,9 +376,6 @@ export default {
             SSN.style.color = "#898989";
         } 
     },
-    onTitleEditorChange({ editor, html, text }) {
-        this.titleContent = html
-    },
     changeHtml() {
         setInterval(() => {
             if(this.editor.container.firstChild.innerHTML.trim() == this.htmlContent.trim()) return
@@ -391,7 +384,6 @@ export default {
             }).then(res => {
                 if(res.body.success) {
                     let text = this.editor.getText()
-                    console.log('res', res)
                     this.paperOn = true,
                     this.errorSpelling = res.body.count.errorSpelling,
                     this.errorGrammar = res.body.count.errorGrammar,
@@ -404,125 +396,45 @@ export default {
                     this.errorSemanticArr = res.body.semantic.err,
                     this.suggestSemanticArr = res.body.semantic.sug,
                     this.suggestStructureArr = res.body.structure.sug
-                    for (let i=0 ; i<this.errorSpellingArr.length ; i++) {
-                        for(let j=0; j<this.errorSpellingArr[i].start.length; j++) {
-                            this.addErrorSpellingTag(this.errorSpellingArr[i].start[j],this.errorSpellingArr[i].end[j],text)//给带修改的部分加span
-                        }
+                    let resArr = []
+                    let catArr = [this.errorSpellingArr, this.errorGrammarArr, this.errorSemanticArr, 
+                    this.suggestSemanticArr, this.suggestStructureArr]
+                    catArr.forEach(cat => {                        
+                        cat.forEach(item => {
+                            if(item.end) {
+                               for(let i = 0; i< item.end.length; i++) {
+                                resArr.push({
+                                    start: item.start[i],
+                                    end: item.end[i],
+                                    type: item.type
+                                })
+                            } 
+                            }
+                        })
+                    });
+                    resArr.sort((a,b) => a.end < b.end)
+                    function insert_flg(str,idx,insert){
+                        let a = str.substring(0, idx)
+                        let b = str.substring(idx, str.length)
+                        return a+insert+b
                     }
-                    for (let i=0 ; i<this.errorGrammarArr.length ; i++) {
-                        for(let j=0 ; j<this.errorGrammarArr[i].start.length ; j++) {
-                            this.addErrorGrammarTag(this.errorGrammarArr[i].start[j],this.errorGrammarArr[i].end[j],text)//给带修改的部分加span
+                    resArr.forEach(item => {
+                        if (item.type == 1) {
+                            text = insert_flg(text, item.end, '</span>')
+                            text = insert_flg(text, item.start, '<span class="line-error">')
                         }
-                    }
-                    for (let i=0; i<this.errorSemanticArr.length ; i++) {
-                        for(let j=0 ; j<this.errorSemanticArr[i].start.length ; j++) {
-                            this.addErrorLexemeTag(this.errorSemanticArr[i].start[j],this.errorSemanticArr[i].end[j],text)//给带修改的部分加span
+                        else {
+                            text = insert_flg(text, item.end, '</span>')
+                            text = insert_flg(text, item.start, '<span class="line-suggest">')
                         }
-                    }
-                    for (let i=0; i<this.suggestSemanticArr.length ; i++) {
-                        for(let j=0 ; j<this.suggestSemanticArr[i].start.length ; j++) {
-                            this.addSuggestLexemeTag(this.suggestSemanticArr[i].start[j],this.suggestSemanticArr[i].end[j],text)//给带修改的部分加span
-                        }
-                    }
-                    for (let i=0; i<this.suggestStructureArr.length ; i++) {
-                        for(let j=0 ; j<this.suggestStructureArr[i].start.length ; j++) {
-                            this.addSuggestStructureTag(this.suggestStructureArr[i].start[j],this.suggestStructureArr[i].end[j],text)//给带修改的部分加span
-                        }
-                    }
-                    console.log('finish',this.spanString)
+                    })
                     this.cursorIndex = this.editor.getSelection().index
-                    // this.editor.deleteText(0, this.editor.getLength()+1)
-                    // console.log('delete html', this.editor.container.firstChild.innerHTML)
-
-                    // this.editor.clipboard.dangerouslyPasteHTML(0, this.htmlContent.trim())
-                    // console.log('paste html', this.editor.container.firstChild.innerHTML)
-                    this.changeEditor()
+                    this.changeEditor(text)
                     this.editor.setSelection(this.cursorIndex, 0)
                 }
             })
         },3000)
     },
-        // console.log('change', text)
-    //     this.$http.post('/api/num', {
-    //         paperBody: text
-    //     }).then(res => {
-    //         if(res.body.success) {
-    //             console.log('res', res)
-    //             this.paperOn = true,
-    //             this.errorSpelling = res.body.count.errorSpelling,
-    //             this.errorGrammar = res.body.count.errorGrammar,
-    //             this.errorSemantic = res.body.count.errorSemantic,
-    //             this.suggestSemantic = res.body.count.suggestSemantic,
-    //             this.suggestStructure = res.body.count.suggestStructure,
-    //             this.sumNum = res.body.count.sumNum,
-
-    //             this.errorSpellingArr = res.body.spelling.err,
-    //             // this.errorSpellingPosL = res.body.spelling.err.start,
-    //             // this.errorSpellingPosR = res.body.spelling.err.end,
-    //             // this.errorSpellingRight =res.body.spelling.err.rep,
-    //             // this.errorSpellingExplain=res.body.spelling.err.exp,
-
-    //             this.errorGrammarArr = res.body.grammar.err,
-    //             // this.errorGrammarPosL=res.body.grammar.err.start,
-    //             // this.errorGrammarPosR=res.body.grammar.err.end,
-    //             // this.errorGrammarRight=res.body.grammar.err.rep,
-    //             // this.errorGrammarExplain=res.body.grammar.err.exp,
-
-    //             this.errorSemanticArr = res.body.semantic.err,
-    //             // this.errorSemanticPosL=res.body.semantic.err.start,
-    //             // this.errorSemanticPosR=res.body.semantic.err.end,
-    //             // this.errorSemanticRight=res.body.semantic.err.rep,
-    //             // this.errorSemanticExplain=res.body.semantic.err.exp,
-
-    //             this.suggestSemanticArr = res.body.semantic.sug,
-    //             // this.suggestSemanticPosL=res.body.semantic.sug.start,
-    //             // this.suggestSemanticPosR=res.body.semantic.sug.end,
-    //             // this.suggestSemanticRight=res.body.semantic.sug.rep,
-    //             // this.suggestSemanticExplain=res.body.semantic.sug.exp,
-
-    //             this.suggestStructureArr = res.body.structure.sug
-    //             // this.suggestStructurePosL=res.body.structure.sug.start,
-    //             // this.suggestStructurePosR=res.body.structure.sug.end,
-    //             // this.suggestStructureRight=res.body.structure.sug.rep,
-    //             // this.suggestStructureExplain=res.body.structure.sug.exp
-
-    //             //当文本被处理完，且只处理一次的时候，调用changeEditor函数，替换处理好的html文本
-    //             if ((this.judgeAdd != text) && text.length != 1) {
-    //                 for (let i=0 ; i<this.errorSpellingArr.length ; i++) {
-    //                     for(let j=0; j<this.errorSpellingArr[i].start.length; j++) {
-    //                         this.addErrorSpellingTag(this.errorSpellingArr[i].start[j],this.errorSpellingArr[i].end[j],text)//给带修改的部分加span
-    //                     }
-    //                 }
-    //                 for (let i=0 ; i<this.errorGrammarArr.length ; i++) {
-    //                     for(let j=0 ; j<this.errorGrammarArr[i].start.length ; j++) {
-    //                         this.addErrorGrammarTag(this.errorGrammarArr[i].start[j],this.errorGrammarArr[i].end[j],text)//给带修改的部分加span
-    //                     }
-    //                 }
-    //                 for (let i=0; i<this.errorSemanticArr.length ; i++) {
-    //                     for(let j=0 ; j<this.errorSemanticArr[i].start.length ; j++) {
-    //                         this.addErrorLexemeTag(this.errorSemanticArr[i].start[j],this.errorSemanticArr[i].end[j],text)//给带修改的部分加span
-    //                     }
-    //                 }
-    //                 for (let i=0; i<this.suggestSemanticArr.length ; i++) {
-    //                     for(let j=0 ; j<this.suggestSemanticArr[i].start.length ; j++) {
-    //                         this.addSuggestLexemeTag(this.suggestSemanticArr[i].start[j],this.suggestSemanticArr[i].end[j],text)//给带修改的部分加span
-    //                     }
-    //                 }
-    //                 for (let i=0; i<this.suggestStructureArr.length ; i++) {
-    //                     for(let j=0 ; j<this.suggestStructureArr[i].start.length ; j++) {
-    //                         this.addSuggestStructureTag(this.suggestStructureArr[i].start[j],this.suggestStructureArr[i].end[j],text)//给带修改的部分加span
-    //                     }
-    //                 }
-    //                 this.changeEditor()
-    //                 console.log('res text', text)
-    //                 this.judgeAdd = text
-    //             }
-    //         }
-    //         else {
-    //             alert(error)
-    //         }
-    //     })
-    // },
     toShowAll() {
         this.showESpelling = true,
         this.showEGrammar = true,
@@ -682,29 +594,20 @@ export default {
         this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
         console.log(this.spanString)
     },
-    changeEditor() {
+    changeEditor(text) {
         //加p标签
         
-        if (this.spanString.trim().length === 0) {
-            this.htmlContent = this.spanString
+        if (text.trim().length === 0) {
+            this.htmlContent = text
         }
         else {
-            this.htmlContent = this.spanString.replace(this.spanString, function(x) {
-                return '<p>' + x + '</p>';
-            });
+            this.htmlContent = `<p>${text}</p>`
         }
         console.log('htmlContent', this.htmlContent)
-
-        if((this.htmlContent.trim().length ===0 )&& (this.bodyContent.trim().length === 0)){
-
-        }
-        else {
-            //删除editor内容
-            var length = this.editor.getLength()
-            this.editor.deleteText(0, length-1)
-            //插入html
-            this.editor.clipboard.dangerouslyPasteHTML(0,this.htmlContent)
-        }
+        var length = this.editor.getLength()
+        this.editor.deleteText(0, length-1)
+        //插入html
+        this.editor.clipboard.dangerouslyPasteHTML(0,this.htmlContent)
     }
   },
   created() {
@@ -999,19 +902,10 @@ export default {
     width:44%;
     height:100%;
 }
-.line-spellingError {
+.line-error {
     border-bottom: 2px solid red;
 }
-.line-grammarError {
-    border-bottom: 2px solid red;
-}
-.line-semanticError {
-    border-bottom: 2px solid red;
-}
-.line-semanticSuggest {
-    border-bottom: 2px solid rgb(238,188,80);
-}
-.line-structureSuggest {
+.line-suggest {
     border-bottom: 2px solid rgb(238,188,80);
 }
 .title-paste {

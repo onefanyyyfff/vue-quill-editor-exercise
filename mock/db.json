@@ -29,7 +29,7 @@
         "grammar": {
             "err": [
             {
-                "cat": 1,
+                "cat": 2,
                 "eid": 3,
                 "end": [50],
                 "rep": "grammar err rep",
@@ -49,12 +49,12 @@
             "err": [],
             "sug": [
                 {
-                    "cat": 1,
+                    "cat": 4,
                     "eid": 3,
                     "end": [19],
                     "rep": "structure sug rep",
                     "start": [15],
-                    "type": 1,
+                    "type": 2,
                     "exp":"structure sug exp"
                 }
             ]
