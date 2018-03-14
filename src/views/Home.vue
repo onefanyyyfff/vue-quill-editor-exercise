@@ -138,41 +138,6 @@
                 </div>
             </el-collapse-item>
         </el-collapse>
-        <!-- <div v-for="(el,index) in errorSpellingArr" :key="index" class="right-spelling" v-if="showESpelling">
-            <div class="rs-first-floor">
-                <span>{{el.rep}}</span>
-                <img src="/static/img/delete.png" class="delete-option">
-                <img src="/static/img/close.png" class="close-option">
-            </div>
-        </div>
-        <div v-for="(el,index) in errorGrammarArr" :key="index" class="right-grammar" v-if="showEGrammar">
-            <div class="rg-first-floor">
-                <span>{{el.rep}}</span>
-                <img src="/static/img/delete.png" class="delete-option">
-                <img src="/static/img/close.png" class="close-option">
-            </div>
-        </div>
-        <div v-for="(el,index) in errorSemanticArr" :key="index" class="right-semantic" v-if="showESemantic">
-            <div class="rse-first-floor">
-                <span>{{el.rep}}</span>
-                <img src="/static/img/delete.png" class="delete-option">
-                <img src="/static/img/close.png" class="close-option">
-            </div>
-        </div>
-        <div v-for="(el,index) in suggestSemanticArr" :key="index" class="suggest-semantic" v-if="showSSemantic">
-            <div class="ss-first-floor">
-                <span>{{el.rep}}</span>
-                <img src="/static/img/delete.png" class="delete-option">
-                <img src="/static/img/close.png" class="close-option">
-            </div>
-        </div>
-        <div v-for="(el,index) in suggestStructureArr" :key="index" class="suggest-structure" v-if="showSStructure">
-            <div class="sst-first-floor">
-                <span>{{el.rep}}</span>
-                <img src="/static/img/delete.png" class="delete-option">
-                <img src="/static/img/close.png" class="close-option">
-            </div>
-        </div> -->
     </div>
 </div>
 </template>
@@ -187,7 +152,7 @@ var boxAttributor = new Parchment.Attributor.Class('box', 'line', {
     scope: Parchment.Scope.INLINE,
     whitelist: ['error','suggest']
 });
- Quill.register(boxAttributor);
+Quill.register(boxAttributor);
 
 export default {
   data () {
@@ -378,7 +343,11 @@ export default {
     },
     changeHtml() {
         setInterval(() => {
-            if(this.editor.container.firstChild.innerHTML.trim() == this.htmlContent.trim()) return
+            if(this.editor.container.firstChild.innerText.trim() == this.htmlContent.trim() || this.editor.container.firstChild.innerText.trim()=="") return
+            console.log('1',this.htmlContent.trim())
+            console.log('2',this.editor.container.firstChild.innerText.trim())
+
+            let originContent = this.editor.container.firstChild.innerText.trim()
             this.$http.post('/api/num', {
                 paperBody: this.editor.getText()
             }).then(res => {
@@ -431,6 +400,7 @@ export default {
                     this.cursorIndex = this.editor.getSelection().index
                     this.changeEditor(text)
                     this.editor.setSelection(this.cursorIndex, 0)
+                    this.htmlContent = originContent
                 }
             })
         },3000)
