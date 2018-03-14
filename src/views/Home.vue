@@ -190,7 +190,7 @@ Vue.use(VueQuillEditor)
 const Parchment = Quill.import('parchment')
 var boxAttributor = new Parchment.Attributor.Class('box', 'line', {
     scope: Parchment.Scope.INLINE,
-    whitelist: ['error', 'suggest']
+    whitelist: ['spellingError', 'grammarError','semanticError','semanticSuggest','structureSuggest']
 });
  Quill.register(boxAttributor);
 
@@ -522,12 +522,12 @@ export default {
         var str = this.bodyContentArray.join("")
         if (this.spanString == "") {
             this.spanString = str.replace(re, function(x) {
-                return '<span class="line-error">' + x + '</span>';
+                return '<span class="line-spellingError">' + x + '</span>';
             });
         } 
         else {
             this.spanString = this.spanString.replace(re, function(x) {
-                return '<span class="line-error">' + x + '</span>';
+                return '<span class="line-spellingError">' + x + '</span>';
             });
         }
         this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
@@ -544,12 +544,12 @@ export default {
         var str = this.bodyContentArray.join("")
         if (this.spanString == "") {
             this.spanString = str.replace(re, function(x) {
-                return '<span class="line-error">' + x + '</span>';
+                return '<span class="line-grammarError">' + x + '</span>';
             });
         } 
         else {
             this.spanString = this.spanString.replace(re, function(x) {
-                return '<span class="line-error">'  + x + '</span>';
+                return '<span class="line-grammarError">'  + x + '</span>';
             });
         }
         this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
@@ -566,12 +566,12 @@ export default {
         var str = this.bodyContentArray.join("")
         if (this.spanString == "") {
             this.spanString = str.replace(re, function(x) {
-                return '<span class="line-error">' + x + '</span>';
+                return '<span class="line-semanticError">' + x + '</span>';
             });
         } 
         else {
             this.spanString = this.spanString.replace(re, function(x) {
-                return '<span class="line-error">' + x + '</span>';
+                return '<span class="line-semanticError">' + x + '</span>';
             });
         }
         this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
@@ -588,12 +588,12 @@ export default {
         var str = this.bodyContentArray.join("")
         if (this.spanString == "") {
             this.spanString = str.replace(re, function(x) {
-                return '<span class="line-suggest">' + x + '</span>';
+                return '<span class="line-semanticSuggest">' + x + '</span>';
             });
         } 
         else {
             this.spanString = this.spanString.replace(re, function(x) {
-                return '<span class="line-suggest">' + x + '</span>';
+                return '<span class="line-semanticSuggest">' + x + '</span>';
             });
         }
         this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
@@ -610,12 +610,12 @@ export default {
         var str = this.bodyContentArray.join("")
         if (this.spanString == "") {
             this.spanString = str.replace(re, function(x) {
-                return '<span class="line-suggest">' + x + '</span>';
+                return '<span class="line-structureSuggest">' + x + '</span>';
             });
         } 
         else {
             this.spanString = this.spanString.replace(re, function(x) {
-                return '<span class="line-suggest">' + x + '</span>';
+                return '<span class="line-structureSuggest">' + x + '</span>';
             });
         }
         this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
@@ -935,10 +935,19 @@ export default {
     width:44%;
     height:100%;
 }
-.line-error {
+.line-spellingError {
     border-bottom: 2px solid red;
 }
-.line-suggest {
+.line-grammarError {
+    border-bottom: 2px solid red;
+}
+.line-semanticError {
+    border-bottom: 2px solid red;
+}
+.line-semanticSuggest {
+    border-bottom: 2px solid rgb(238,188,80);
+}
+.line-structureSuggest {
     border-bottom: 2px solid rgb(238,188,80);
 }
 .title-paste {
