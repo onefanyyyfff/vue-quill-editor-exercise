@@ -10,6 +10,11 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Home
+    },
+    {
+      path: '/demo',
+      name: 'demo',
+      component: resolve => require(['../views/demo.vue'], resolve)
     }
   ]
 })
