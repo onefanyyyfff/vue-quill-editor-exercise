@@ -17,9 +17,9 @@
                 {
                     "cat": 1,
                     "eid": 3,
-                    "end": [3],
+                    "end": [6],
                     "rep": "spelling err rep",
-                    "start": [1],
+                    "start": [4],
                     "type": 1,
                     "exp":"spelling err exp"
                 }

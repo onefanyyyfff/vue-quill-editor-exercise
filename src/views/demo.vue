@@ -1,29 +1,11 @@
 <template>
-  <md-card>
-    <md-card-actions>
-      <div class="md-subhead">
-        <span>01 Example (theme snow)</span>
-      </div>
-      <md-button target="_blank" 
-                 class="md-icon-button"
-                 href="https://github.com/surmon-china/vue-quill-editor/tree/master/examples/01-example.vue">
-        <md-icon>code</md-icon>
-      </md-button>
-    </md-card-actions>
-    <md-card-media>
-      <div class="quill-editor-example">
-        <!-- quill-editor -->
-        <quill-editor ref="myTextEditor"
-                      v-model="content"
-                      :options="editorOption"
-                      @blur="onEditorBlur($event)"
-                      @change="change($event)"
-                      @focus="onEditorFocus($event)"
-                      @ready="onEditorReady($event)">
-        </quill-editor>
-      </div>
-    </md-card-media>
-  </md-card>
+<div class="quill-editor-example">
+  <!-- quill-editor -->
+  <quill-editor ref="myTextEditor"
+                v-model="content"
+                :options="editorOption">
+  </quill-editor>
+</div>
 </template>
 
 <script>
@@ -32,7 +14,7 @@
     data() {
       return {
         name: '01-example',
-        content: `<h2 class="ql-align-center"><span class="ql-font-serif">Text content loading..</span></h2>`,
+        content: '',
         htmlContent: '',
         cursorIndex: 0,
         editorOption: {
@@ -80,19 +62,23 @@
       },
       getHtml() {
           setInterval(() => {
-            console.log('init html', this.editor.container.firstChild.innerHTML)
-            if(this.editor.container.firstChild.innerHTML.trim() == this.htmlContent.trim()) return
+            //console.log('init html', this.editor.container.firstChild.innerHTML)
+            if(this.editor.container.firstChild.innerHTML.trim() == this.htmlContent.trim() || this.editor.container.firstChild.innerHTML.trim()=="") return
+            console.log('1',this.htmlContent)
+            console.log('2',this.editor.container.firstChild.innerHTML)
             this.htmlContent = this.editor.container.firstChild.innerHTML.trim().replace('abc', 'fff')
             this.cursorIndex = this.editor.getSelection().index
             this.editor.deleteText(0, this.editor.getLength()+1)
-            console.log('delete html', this.editor.container.firstChild.innerHTML)
+            //console.log('delete html', this.editor.container.firstChild.innerHTML)
 
             this.editor.clipboard.dangerouslyPasteHTML(0, this.htmlContent.trim())
-            console.log('paste html', this.editor.container.firstChild.innerHTML)
+            //console.log('paste html', this.editor.container.firstChild.innerHTML)
 
             this.editor.setSelection(this.cursorIndex, 0)
+            console.log('3',this.htmlContent)
+            console.log('4',this.editor.container.firstChild.innerHTML)
 
-          }, 5000)
+          }, 3000)
       }
     },
     computed: {

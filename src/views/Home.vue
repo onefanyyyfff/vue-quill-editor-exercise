@@ -343,16 +343,15 @@ export default {
     },
     changeHtml() {
         setInterval(() => {
-            if(this.editor.container.firstChild.innerText.trim() == this.htmlContent.trim() || this.editor.container.firstChild.innerText.trim()=="") return
-            console.log('1',this.htmlContent.trim())
-            console.log('2',this.editor.container.firstChild.innerText.trim())
-
-            let originContent = this.editor.container.firstChild.innerText.trim()
+            if(this.editor.container.firstChild.innerText.trim() == this.htmlContent.trim() || this.editor.container.firstChild.innerText.trim()=="") return     
+            let originContent = this.editor.container.firstChild.innerText
             this.$http.post('/api/num', {
                 paperBody: this.editor.getText()
             }).then(res => {
                 if(res.body.success) {
                     let text = this.editor.getText()
+                    console.log("1"+text)
+                    //this.htmlContent = this.editor.container.firstChild.innerText.trim()
                     this.paperOn = true,
                     this.errorSpelling = res.body.count.errorSpelling,
                     this.errorGrammar = res.body.count.errorGrammar,
@@ -386,21 +385,31 @@ export default {
                         let a = str.substring(0, idx)
                         let b = str.substring(idx, str.length)
                         return a+insert+b
-                    }
+                    };
                     resArr.forEach(item => {
                         if (item.type == 1) {
                             text = insert_flg(text, item.end, '</span>')
                             text = insert_flg(text, item.start, '<span class="line-error">')
+                            console.log("2"+text)
                         }
                         else {
                             text = insert_flg(text, item.end, '</span>')
                             text = insert_flg(text, item.start, '<span class="line-suggest">')
+                            console.log("3"+text)
                         }
-                    })
+                    });
                     this.cursorIndex = this.editor.getSelection().index
-                    this.changeEditor(text)
+                    //this.changeEditor(text)
+                    this.editor.deleteText(0, this.editor.getLength()+1)
+                    console.log("4"+text)
+                    //插入html
+                    this.editor.clipboard.dangerouslyPasteHTML(0,text)
+                    console.log("5"+text)
                     this.editor.setSelection(this.cursorIndex, 0)
                     this.htmlContent = originContent
+                    console.log('1',this.htmlContent)
+                    console.log('2',this.editor.container.firstChild.innerText)
+            
                 }
             })
         },3000)
@@ -454,131 +463,129 @@ export default {
         this.showSSemantic = false,
         this.showSStructure = true
     },
-    //给拼写错误的部分加span显示
-    addErrorSpellingTag(L,R,content) {
-        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
-        for (let m = L; m<=R ; m++) {
-            this.spanArray.push(this.bodyContentArray[m])
-        }
-        // 加span
-        var re = this.spanArray.join("")
-        var str = this.bodyContentArray.join("")
-        if (this.spanString == "") {
-            this.spanString = str.replace(re, function(x) {
-                return '<span class="line-spellingError">' + x + '</span>';
-            });
-        } 
-        else {
-            this.spanString = this.spanString.replace(re, function(x) {
-                return '<span class="line-spellingError">' + x + '</span>';
-            });
-        }
-        this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
-        console.log(this.spanString)
-    },
-    //给语法错误的部分加span显示
-    addErrorGrammarTag(L,R,content) {
-        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
-        for (let m = L; m<=R ; m++) {
-            this.spanArray.push(this.bodyContentArray[m])
-        }
-        // 加span
-        var re = this.spanArray.join("")
-        var str = this.bodyContentArray.join("")
-        if (this.spanString == "") {
-            this.spanString = str.replace(re, function(x) {
-                return '<span class="line-grammarError">' + x + '</span>';
-            });
-        } 
-        else {
-            this.spanString = this.spanString.replace(re, function(x) {
-                return '<span class="line-grammarError">'  + x + '</span>';
-            });
-        }
-        this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
-        console.log(this.spanString)
-    },
-    //给语意错误的部分加span显示
-    addErrorLexemeTag(L,R,content) {
-        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
-        for (let m = L; m<=R ; m++) {
-            this.spanArray.push(this.bodyContentArray[m])
-        }
-        // 加span
-        var re = this.spanArray.join("")
-        var str = this.bodyContentArray.join("")
-        if (this.spanString == "") {
-            this.spanString = str.replace(re, function(x) {
-                return '<span class="line-semanticError">' + x + '</span>';
-            });
-        } 
-        else {
-            this.spanString = this.spanString.replace(re, function(x) {
-                return '<span class="line-semanticError">' + x + '</span>';
-            });
-        }
-        this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
-        console.log(this.spanString)
-    },
-    //给需要提建议的语意部分加span显示
-    addSuggestLexemeTag(L,R,content) {
-        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
-        for (let m = L; m<=R ; m++) {
-            this.spanArray.push(this.bodyContentArray[m])
-        }
-        // 加span
-        var re = this.spanArray.join("")
-        var str = this.bodyContentArray.join("")
-        if (this.spanString == "") {
-            this.spanString = str.replace(re, function(x) {
-                return '<span class="line-semanticSuggest">' + x + '</span>';
-            });
-        } 
-        else {
-            this.spanString = this.spanString.replace(re, function(x) {
-                return '<span class="line-semanticSuggest">' + x + '</span>';
-            });
-        }
-        this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
-        console.log(this.spanString)
-    },
-    //给需要提建议的结构部分加span显示
-    addSuggestStructureTag(L,R,content) {
-        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
-        for (let m = L; m<=R ; m++) {
-            this.spanArray.push(this.bodyContentArray[m])
-        }
-        // 加span
-        var re = this.spanArray.join("")
-        var str = this.bodyContentArray.join("")
-        if (this.spanString == "") {
-            this.spanString = str.replace(re, function(x) {
-                return '<span class="line-structureSuggest">' + x + '</span>';
-            });
-        } 
-        else {
-            this.spanString = this.spanString.replace(re, function(x) {
-                return '<span class="line-structureSuggest">' + x + '</span>';
-            });
-        }
-        this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
-        console.log(this.spanString)
-    },
-    changeEditor(text) {
-        //加p标签
-        
-        if (text.trim().length === 0) {
-            this.htmlContent = text
-        }
-        else {
-            this.htmlContent = `<p>${text}</p>`
-        }
-        console.log('htmlContent', this.htmlContent)
-        var length = this.editor.getLength()
-        this.editor.deleteText(0, length-1)
-        //插入html
-        this.editor.clipboard.dangerouslyPasteHTML(0,this.htmlContent)
-    }
+    // //给拼写错误的部分加span显示
+    // addErrorSpellingTag(L,R,content) {
+    //     this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
+    //     for (let m = L; m<=R ; m++) {
+    //         this.spanArray.push(this.bodyContentArray[m])
+    //     }
+    //     // 加span
+    //     var re = this.spanArray.join("")
+    //     var str = this.bodyContentArray.join("")
+    //     if (this.spanString == "") {
+    //         this.spanString = str.replace(re, function(x) {
+    //             return '<span class="line-spellingError">' + x + '</span>';
+    //         });
+    //     } 
+    //     else {
+    //         this.spanString = this.spanString.replace(re, function(x) {
+    //             return '<span class="line-spellingError">' + x + '</span>';
+    //         });
+    //     }
+    //     this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
+    //     console.log(this.spanString)
+    // },
+    // //给语法错误的部分加span显示
+    // addErrorGrammarTag(L,R,content) {
+    //     this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
+    //     for (let m = L; m<=R ; m++) {
+    //         this.spanArray.push(this.bodyContentArray[m])
+    //     }
+    //     // 加span
+    //     var re = this.spanArray.join("")
+    //     var str = this.bodyContentArray.join("")
+    //     if (this.spanString == "") {
+    //         this.spanString = str.replace(re, function(x) {
+    //             return '<span class="line-grammarError">' + x + '</span>';
+    //         });
+    //     } 
+    //     else {
+    //         this.spanString = this.spanString.replace(re, function(x) {
+    //             return '<span class="line-grammarError">'  + x + '</span>';
+    //         });
+    //     }
+    //     this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
+    //     console.log(this.spanString)
+    // },
+    // //给语意错误的部分加span显示
+    // addErrorLexemeTag(L,R,content) {
+    //     this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
+    //     for (let m = L; m<=R ; m++) {
+    //         this.spanArray.push(this.bodyContentArray[m])
+    //     }
+    //     // 加span
+    //     var re = this.spanArray.join("")
+    //     var str = this.bodyContentArray.join("")
+    //     if (this.spanString == "") {
+    //         this.spanString = str.replace(re, function(x) {
+    //             return '<span class="line-semanticError">' + x + '</span>';
+    //         });
+    //     } 
+    //     else {
+    //         this.spanString = this.spanString.replace(re, function(x) {
+    //             return '<span class="line-semanticError">' + x + '</span>';
+    //         });
+    //     }
+    //     this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
+    //     console.log(this.spanString)
+    // },
+    // //给需要提建议的语意部分加span显示
+    // addSuggestLexemeTag(L,R,content) {
+    //     this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
+    //     for (let m = L; m<=R ; m++) {
+    //         this.spanArray.push(this.bodyContentArray[m])
+    //     }
+    //     // 加span
+    //     var re = this.spanArray.join("")
+    //     var str = this.bodyContentArray.join("")
+    //     if (this.spanString == "") {
+    //         this.spanString = str.replace(re, function(x) {
+    //             return '<span class="line-semanticSuggest">' + x + '</span>';
+    //         });
+    //     } 
+    //     else {
+    //         this.spanString = this.spanString.replace(re, function(x) {
+    //             return '<span class="line-semanticSuggest">' + x + '</span>';
+    //         });
+    //     }
+    //     this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
+    //     console.log(this.spanString)
+    // },
+    // //给需要提建议的结构部分加span显示
+    // addSuggestStructureTag(L,R,content) {
+    //     this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
+    //     for (let m = L; m<=R ; m++) {
+    //         this.spanArray.push(this.bodyContentArray[m])
+    //     }
+    //     // 加span
+    //     var re = this.spanArray.join("")
+    //     var str = this.bodyContentArray.join("")
+    //     if (this.spanString == "") {
+    //         this.spanString = str.replace(re, function(x) {
+    //             return '<span class="line-structureSuggest">' + x + '</span>';
+    //         });
+    //     } 
+    //     else {
+    //         this.spanString = this.spanString.replace(re, function(x) {
+    //             return '<span class="line-structureSuggest">' + x + '</span>';
+    //         });
+    //     }
+    //     this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
+    //     console.log(this.spanString)
+    // },
+    // changeEditor(text) {
+    //     //加p标签
+    //     // if (text.trim().length === 0) {
+    //     //     this.htmlContent = text
+    //     // }
+    //     // else {
+    //     //     this.htmlContent = `<p>${text}</p>`
+    //     // }
+    //     this.editor.deleteText(0, this.editor.getLength()+1)
+    //     //插入html
+    //     this.editor.clipboard.dangerouslyPasteHTML(0,this.htmlContent.trim())
+    //     console.log("ok"+this.htmlContent.trim())
+    // }
   },
   created() {
   },
