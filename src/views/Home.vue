@@ -12,17 +12,17 @@
         <div class="show-all" @click="toShowAll()">
             <div class="show-all-circle">
             </div>
-            <span class="show-all-title">SHOW ALL</span>
+            <span class="show-all-title">显示全部</span>
         </div>
         <div class="clear-float">
         </div>
         <div class="mistakes">
             <div class="mistakes-circle">
             </div>
-            <span class="mistakes-title">MISTAKES</span>
+            <span class="mistakes-title">错误</span>
             <ul class="mistakes-list">
                 <li id="mistakes-spelling" @mouseover="changeMS()" @mouseout="returnMS()" @click="toShowESpelling()">
-                    <span class="list-title">SPELLING</span>
+                    <span class="list-title">拼写</span>
                     <div id="mistakes-spelling-circle" v-if="paperOn">
                         <span id="mistakes-spelling-num">{{errorSpelling}}</span>
                     </div>
@@ -30,7 +30,7 @@
                     </div>
                 </li>
                 <li id="mistakes-grammar" @mouseover="changeMG()" @mouseout="returnMG()" @click="toShowEGrammar()">
-                    <span class="list-title">GRAMMAR</span>
+                    <span class="list-title">语法</span>
                     <div id="mistakes-grammar-circle" v-if="paperOn">
                         <span id="mistakes-grammar-num">{{errorGrammar}}</span>
                     </div>
@@ -38,7 +38,7 @@
                     </div>
                 </li>
                 <li id="mistakes-lexeme" @mouseover="changeML()" @mouseout="returnML()" @click="toShowESemantic()">
-                    <span class="list-title">SEMANTIC</span>
+                    <span class="list-title">语义</span>
                     <div id="mistakes-lexeme-circle" v-if="paperOn">
                         <span id="mistakes-lexeme-num">{{errorSemantic}}</span>
                     </div>
@@ -52,10 +52,10 @@
         <div class="suggestions">
             <div class="suggestions-circle">
             </div>
-            <span class="suggestions-title">SUGGESTIONS</span>
+            <span class="suggestions-title">建议</span>
             <ul class="suggestions-list">
                 <li id="suggestions-lexeme" @mouseover="changeSL()" @mouseout="returnSL()" @click="toShowSSemantic()">
-                    <span class="list-title">SEMANTIC</span>
+                    <span class="list-title">语义</span>
                     <div id="suggestions-lexeme-circle" v-if="paperOn">
                         <span id="suggestions-lexeme-num">{{suggestSemantic}}</span>
                     </div>
@@ -63,7 +63,7 @@
                     </div>
                 </li>
                 <li id="suggestions-structure" @mouseover="changeSS()" @mouseout="returnSS()" @click="toShowSStructure()">
-                    <span class="list-title">SENTENCE STRUCTURE</span>
+                    <span class="list-title">句子结构</span>
                     <div id="suggestion-structure-circle" v-if="paperOn">
                         <span id="suggestion-structure-num">{{suggestStructure}}</span>
                     </div>
@@ -76,7 +76,7 @@
         </div>
         <div class="advanced-issues">
             <img class="advanced-issues-img" src="/static/img/more.png">
-            <span class="advanced-issues-title">ADVANCED ISSUES</span>
+            <span class="advanced-issues-title">更多修改建议</span>
         </div>
     </div>
     <div class="splender-left">
@@ -462,130 +462,7 @@ export default {
         this.showESemantic = false,
         this.showSSemantic = false,
         this.showSStructure = true
-    },
-    // //给拼写错误的部分加span显示
-    // addErrorSpellingTag(L,R,content) {
-    //     this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
-    //     for (let m = L; m<=R ; m++) {
-    //         this.spanArray.push(this.bodyContentArray[m])
-    //     }
-    //     // 加span
-    //     var re = this.spanArray.join("")
-    //     var str = this.bodyContentArray.join("")
-    //     if (this.spanString == "") {
-    //         this.spanString = str.replace(re, function(x) {
-    //             return '<span class="line-spellingError">' + x + '</span>';
-    //         });
-    //     } 
-    //     else {
-    //         this.spanString = this.spanString.replace(re, function(x) {
-    //             return '<span class="line-spellingError">' + x + '</span>';
-    //         });
-    //     }
-    //     this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
-    //     console.log(this.spanString)
-    // },
-    // //给语法错误的部分加span显示
-    // addErrorGrammarTag(L,R,content) {
-    //     this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
-    //     for (let m = L; m<=R ; m++) {
-    //         this.spanArray.push(this.bodyContentArray[m])
-    //     }
-    //     // 加span
-    //     var re = this.spanArray.join("")
-    //     var str = this.bodyContentArray.join("")
-    //     if (this.spanString == "") {
-    //         this.spanString = str.replace(re, function(x) {
-    //             return '<span class="line-grammarError">' + x + '</span>';
-    //         });
-    //     } 
-    //     else {
-    //         this.spanString = this.spanString.replace(re, function(x) {
-    //             return '<span class="line-grammarError">'  + x + '</span>';
-    //         });
-    //     }
-    //     this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
-    //     console.log(this.spanString)
-    // },
-    // //给语意错误的部分加span显示
-    // addErrorLexemeTag(L,R,content) {
-    //     this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
-    //     for (let m = L; m<=R ; m++) {
-    //         this.spanArray.push(this.bodyContentArray[m])
-    //     }
-    //     // 加span
-    //     var re = this.spanArray.join("")
-    //     var str = this.bodyContentArray.join("")
-    //     if (this.spanString == "") {
-    //         this.spanString = str.replace(re, function(x) {
-    //             return '<span class="line-semanticError">' + x + '</span>';
-    //         });
-    //     } 
-    //     else {
-    //         this.spanString = this.spanString.replace(re, function(x) {
-    //             return '<span class="line-semanticError">' + x + '</span>';
-    //         });
-    //     }
-    //     this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
-    //     console.log(this.spanString)
-    // },
-    // //给需要提建议的语意部分加span显示
-    // addSuggestLexemeTag(L,R,content) {
-    //     this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
-    //     for (let m = L; m<=R ; m++) {
-    //         this.spanArray.push(this.bodyContentArray[m])
-    //     }
-    //     // 加span
-    //     var re = this.spanArray.join("")
-    //     var str = this.bodyContentArray.join("")
-    //     if (this.spanString == "") {
-    //         this.spanString = str.replace(re, function(x) {
-    //             return '<span class="line-semanticSuggest">' + x + '</span>';
-    //         });
-    //     } 
-    //     else {
-    //         this.spanString = this.spanString.replace(re, function(x) {
-    //             return '<span class="line-semanticSuggest">' + x + '</span>';
-    //         });
-    //     }
-    //     this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
-    //     console.log(this.spanString)
-    // },
-    // //给需要提建议的结构部分加span显示
-    // addSuggestStructureTag(L,R,content) {
-    //     this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
-    //     for (let m = L; m<=R ; m++) {
-    //         this.spanArray.push(this.bodyContentArray[m])
-    //     }
-    //     // 加span
-    //     var re = this.spanArray.join("")
-    //     var str = this.bodyContentArray.join("")
-    //     if (this.spanString == "") {
-    //         this.spanString = str.replace(re, function(x) {
-    //             return '<span class="line-structureSuggest">' + x + '</span>';
-    //         });
-    //     } 
-    //     else {
-    //         this.spanString = this.spanString.replace(re, function(x) {
-    //             return '<span class="line-structureSuggest">' + x + '</span>';
-    //         });
-    //     }
-    //     this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
-    //     console.log(this.spanString)
-    // },
-    // changeEditor(text) {
-    //     //加p标签
-    //     // if (text.trim().length === 0) {
-    //     //     this.htmlContent = text
-    //     // }
-    //     // else {
-    //     //     this.htmlContent = `<p>${text}</p>`
-    //     // }
-    //     this.editor.deleteText(0, this.editor.getLength()+1)
-    //     //插入html
-    //     this.editor.clipboard.dangerouslyPasteHTML(0,this.htmlContent.trim())
-    //     console.log("ok"+this.htmlContent.trim())
-    // }
+    }
   },
   created() {
   },
@@ -611,36 +488,38 @@ export default {
 }
 .topper {
     height:20px;
-    background-color:rgb(76,162,175);
+    background-color:rgb(79,145,210);
 }
 /* 左边栏样式 */
 .left {
     float: left;
+    margin-left: 15px;
     width:20%;
     height: 100%;
+    min-width: 245px;
 }
 .reload {
     border-bottom:1px solid rgb(218,218,218);
-    width:70%;
+    width:50%;
     float:left;
     margin-left: 20px;
 }
 .reload-img {
-    margin:20px auto -10px auto;
-    width:40%;
-    height:100%;
+    margin:25px auto 15px 20px;
+    width:15px;
+    height:60px;
     display: block;
     float: left;
 }
 .reload-num {
     display: block;
     float: left;
-    font-size:65px;
+    font-size:75px;
     color:rgb(126,126,126);
-    margin:38px 0px -10px 10px;
+    margin:10px 0px 0px 20px;
 }
 .show-all {
-    width:70%;
+    width:50%;
     float:left;
     margin-left: 20px;
     padding-bottom:10px;
@@ -656,21 +535,21 @@ export default {
     width:12px;
     height:12px;
     border-radius:50%;
-    background-color:rgb(76,162,175);
+    background-color:rgb(79,145,210);
 }
 .show-all-title {
     display: block;
     float: left;
-    color: rgb(92,92,92);
-    margin:15px 0 0 0;
-    font-weight:lighter;
+    color: rgb(79,145,210);
+    margin:13px 0 0 0;
+    font-size: 18px;
 }
 .mistakes {
     border-bottom:1px solid rgb(218,218,218);
-    width:60%;
+    width:50%;
     float:left;
     margin-left: 20px;
-    padding-bottom:30px;
+    padding-bottom:10px;
 }
 .mistakes-circle {
     float: left;
@@ -683,9 +562,9 @@ export default {
 .mistakes-title {
     display: block;
     float: left;
-    color: rgb(92,92,92);
-    margin:15px 0 0 0;
-    font-weight:lighter;
+    color: rgb(232,78,61);
+    margin:13px 0 0 0;
+    font-size:18px;
 }
 .mistakes-title:hover {
     font-weight: bolder;
@@ -719,7 +598,7 @@ export default {
     margin: 8px 0 0 10px;
 }
 .mistakes-list {
-    width:140%;
+    width: 140%;
     float: left;
     list-style: none;
     margin: 5px 0 0 -40px;
@@ -727,13 +606,12 @@ export default {
 }
 .list-title {
     width:80%;
-    font-size:14px;
-    color:rgb(169,169,169);
+    font-size:16px;
+    color:rgb(137,137,137);
     display: block;
     float:left;
     margin:0 0 10px 0;
     padding-top: 10px;
-    font-weight:lighter;
 }
 #mistakes-spelling-num {
     display: block; 
@@ -784,7 +662,7 @@ export default {
 }
 .suggestions {
     border-bottom:1px solid rgb(218,218,218);
-    width:60%;
+    width:50%;
     float:left;
     margin-left: 20px;
     padding-bottom:30px;
@@ -800,9 +678,9 @@ export default {
 .suggestions-title {
     display: block;
     float: left;
-    color: rgb(92,92,92);
+    color:rgb(253,182,75);
     margin:15px 0 0 0;
-    font-weight:lighter;
+    font-size:18px;
 }
 .suggestions-title:hover {
     font-weight: bolder;
@@ -854,29 +732,24 @@ export default {
 .advanced-issues {
     width:100%;
     float:left;
-    margin-left: 20px;
-    padding-bottom:30px;
 }
 .advanced-issues-img {
-    width:14%;
-    height:100%;
+    width:24px;
+    height:22px;
     float: left;
-    position: relative;
-    left:-30px;
+    margin: 15px 0 0 0;
 }
 .advanced-issues-title {
     display: block;
     float: left;
     color: rgb(92,92,92);
     margin:15px 0 0 0;
-    position: relative;
-    left:-35px;
-    font-weight:lighter;
+    font-size: 18px;
 }
 /* 中间栏样式 */
 .middle {
     float: left;
-    width:44%;
+    width:40%;
     height:100%;
 }
 .line-error {
@@ -889,9 +762,6 @@ export default {
     width:80%;
     height:50px;
     margin: 50px 0 25px 0;
-    font-size:30px;
-    color:rgb(180,180,180);
-    border: 0px;
     outline:none;
 }
 .body-paste {
@@ -900,9 +770,9 @@ export default {
     border: 0px;
     outline:none;
     color:rgb(92,92,92);
-    font-size:20px;
-    line-height: 200%;
-    letter-spacing: 1px;
+}
+.ql-editor {
+    font-size:16px;
 }
 /* 右边栏样式 */
 .right {
@@ -910,11 +780,15 @@ export default {
     width: 30%;
     height: 100%;
     margin-top: 125px;
+    margin-left:10px;
 }
 .el-collapse {
     border: none;
     width:96%;
     margin: 0 auto 0 auto;
+}
+.el-collapse-item__header {
+    font-size: 16px;
 }
 .right-spelling {
     color: red;
