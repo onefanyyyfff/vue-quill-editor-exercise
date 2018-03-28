@@ -624,7 +624,7 @@ export default {
 .left {
     float: left;
     margin-left: 15px;
-    width:20%;
+    width:21%;
     height: 100%;
     min-width: 245px;
 }
@@ -907,43 +907,44 @@ export default {
 /* 右边栏样式 */
 .right {
     float: left;
-    width: 30%;
-    height: 100%;
+    width: 31%;
     margin-top: 125px;
-    margin-left:10px;
+    margin-left:1px;
 }
 .el-collapse {
     border: none;
     width:96%;
-    margin: 0 auto 0 auto;
-}
-.el-collapse-item__header {
-    font-size: 16px;
+    margin: 0 auto 0  0;
 }
 .right-spelling {
     color: red;
     height: 30px;
-    margin: 0 40px 10px -3px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
 }
 .right-grammar {
     color: red;
     height: 30px;
-    margin: 0 40px 10px -3px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
 }
 .right-semantic {
     color: red;
     height: 30px;
-    margin: 0 40px 10px -3px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
 }
 .suggest-semantic {
     color: rgb(238,188,80);
     height: 30px;
-    margin: 0 40px 10px -3px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
 }
 .suggest-structure {
     color: rgb(238,188,80);
     height: 30px;
-    margin: 0 40px 10px -3px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
 }
 .es-second-floor {
     position: relative;
