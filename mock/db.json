@@ -21,7 +21,7 @@
                     "rep": "spelling err rep",
                     "start": [4],
                     "type": 1,
-                    "exp":"spelling err exp"
+                    "exp":"<p style=\"color:red\">hhhh</p>"
                 }
             ],
             "sug": []

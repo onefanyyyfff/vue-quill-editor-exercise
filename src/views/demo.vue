@@ -63,7 +63,7 @@
       getHtml() {
           setInterval(() => {
             //console.log('init html', this.editor.container.firstChild.innerHTML)
-            if(this.editor.container.firstChild.innerHTML.trim() == this.htmlContent.trim() || this.editor.container.firstChild.innerHTML.trim()=="") return
+            if(this.editor.container.firstChild.innerHTML.trim() == this.htmlContent.trim() || this.editor.container.firstChild.innerText.trim()=="") return
             console.log('1',this.htmlContent)
             console.log('2',this.editor.container.firstChild.innerHTML)
             this.htmlContent = this.editor.container.firstChild.innerHTML.trim().replace('abc', 'fff')
@@ -75,9 +75,6 @@
             //console.log('paste html', this.editor.container.firstChild.innerHTML)
 
             this.editor.setSelection(this.cursorIndex, 0)
-            console.log('3',this.htmlContent)
-            console.log('4',this.editor.container.firstChild.innerHTML)
-
           }, 3000)
       }
     },

@@ -89,9 +89,13 @@
         </quill-editor>
         <quill-editor class="body-paste"
                       ref="myTextEditor"
+                      readonly="readonly"
                       :content="bodyContent"
-                      :options="bodyEditorOption">
+                      :options="bodyEditorOption"
+                      @focus="onEditorFocus()"
+                      @change="onBodyEditorChange($event)">
         </quill-editor>
+        <!-- <input type="text" readonly="readonly" @change="onBodyEditorChange()"> -->
     </div>
     <div class="splender-right">
     </div>
@@ -102,39 +106,39 @@
                     <li class="right-spelling">{{el.rep}}</li>
                 </template>
                 <div class="es-second-floor">
-                    <span>{{el.exp}}</span>
+                    <span v-html="el.exp"></span>
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in errorGrammarArr" :key="index"  v-if="showEGrammar">
+            <el-collapse-item v-for="(el,index) in errorGrammarArr" :key="`A-${index}`"  v-if="showEGrammar">
                 <template slot="title">
                     <li class="right-grammar">{{el.rep}}</li>
                 </template>
                 <div class="eg-second-floor">
-                    <span>{{el.exp}}</span>
+                    <span v-html="el.exp"></span>
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in errorSemanticArr" :key="index" v-if="showESemantic">
+            <el-collapse-item v-for="(el,index) in errorSemanticArr" :key="`B-${index}`" v-if="showESemantic">
                 <template slot="title">
                     <li class="right-semantic">{{el.rep}}</li>
                 </template>
                 <div class="ese-second-floor">
-                    <span>{{el.exp}}</span>
+                    <span v-html="el.exp"></span>
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestSemanticArr" :key="index" v-if="showSSemantic">
+            <el-collapse-item v-for="(el,index) in suggestSemanticArr" :key="`C-${index}`" v-if="showSSemantic">
                 <template slot="title">
                     <li class="suggest-semantic">{{el.rep}}</li>
                 </template>
                 <div class="ss-second-floor">
-                    <span>{{el.exp}}</span>
+                    <span v-html="el.exp"></span>
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestStructureArr" :key="index" v-if="showSStructure">
+            <el-collapse-item v-for="(el,index) in suggestStructureArr" :key="`D-${index}`" v-if="showSStructure">
                 <template slot="title">
                     <li class="suggest-structure">{{el.rep}}</li>
                 </template>
                 <div class="sst-second-floor">
-                    <span>{{el.exp}}</span>
+                    <span v-html="el.exp"></span>
                 </div>
             </el-collapse-item>
         </el-collapse>
@@ -203,6 +207,7 @@ export default {
         spanArray:[],
         spanString:'',
         htmlContent:'',
+        judgeFlag: 0,
         titleEditorOption: {
           theme: 'bubble',
           placeholder: "PASTE TITLE",
@@ -218,7 +223,6 @@ export default {
     }
   },
   mounted () {
-      this.changeHtml()
   },
   methods: {
     changeMS() {
@@ -341,79 +345,74 @@ export default {
             SSN.style.color = "#898989";
         } 
     },
-    changeHtml() {
-        setInterval(() => {
-            if(this.editor.container.firstChild.innerText.trim() == this.htmlContent.trim() || this.editor.container.firstChild.innerText.trim()=="") return     
-            let originContent = this.editor.container.firstChild.innerText
-            this.$http.post('/api/num', {
-                paperBody: this.editor.getText()
-            }).then(res => {
-                if(res.body.success) {
-                    let text = this.editor.getText()
-                    console.log("aaa:"+text)
-                    this.paperOn = true,
-                    this.errorSpelling = res.body.count.errorSpelling,
-                    this.errorGrammar = res.body.count.errorGrammar,
-                    this.errorSemantic = res.body.count.errorSemantic,
-                    this.suggestSemantic = res.body.count.suggestSemantic,
-                    this.suggestStructure = res.body.count.suggestStructure,
-                    this.sumNum = res.body.count.sumNum,
-                    this.errorSpellingArr = res.body.spelling.err,
-                    this.errorGrammarArr = res.body.grammar.err,
-                    this.errorSemanticArr = res.body.semantic.err,
-                    this.suggestSemanticArr = res.body.semantic.sug,
-                    this.suggestStructureArr = res.body.structure.sug
-                    let resArr = []
-                    let catArr = [this.errorSpellingArr, this.errorGrammarArr, this.errorSemanticArr, 
-                    this.suggestSemanticArr, this.suggestStructureArr]
-                    catArr.forEach(cat => {                        
-                        cat.forEach(item => {
-                            if(item.end) {
-                               for(let i = 0; i< item.end.length; i++) {
-                                resArr.push({
-                                    start: item.start[i],
-                                    end: item.end[i],
-                                    type: item.type
-                                })
-                            } 
-                            }
-                        })
-                    });
-                    resArr.sort((a,b) => a.end < b.end)
-                    function insert_flg(str,idx,insert){
-                        let a = str.substring(0, idx)
-                        let b = str.substring(idx, str.length)
-                        return a+insert+b
-                    };
-                    resArr.forEach(item => {
-                        if (item.type == 1) {
-                            if(item.end > text.length) return
-                            text = insert_flg(text, item.end, '</span>')
-                            text = insert_flg(text, item.start, '<span class="line-error">')
-                            console.log("2"+text)
-                        }
-                        else {
-                            if(item.end > text.length) return
-                            text = insert_flg(text, item.end, '</span>')
-                            text = insert_flg(text, item.start, '<span class="line-suggest">')
-                            console.log("3"+text)
-                        }
-                    });
-                    for (let i=0 ; i<text.length ; i++) {
-                        if(text.charAt(i) == '\n') {
-                            insert_flg(text,i,'<br>')
+    onBodyEditorChange({ editor, html, text }) {
+        this.$http.post('/api/num', {
+            paperBody: text
+        }).then(res => {
+            if(res.body.success) {
+                this.paperOn = true,
+                this.errorSpelling = res.body.count.errorSpelling,
+                this.errorGrammar = res.body.count.errorGrammar,
+                this.errorSemantic = res.body.count.errorSemantic,
+                this.suggestSemantic = res.body.count.suggestSemantic,
+                this.suggestStructure = res.body.count.suggestStructure,
+                this.sumNum = res.body.count.sumNum,
+                this.errorSpellingArr = res.body.spelling.err,
+                this.errorGrammarArr = res.body.grammar.err,
+                this.errorSemanticArr = res.body.semantic.err,
+                this.suggestSemanticArr = res.body.semantic.sug,
+                this.suggestStructureArr = res.body.structure.sug
+                if ((this.judgeAdd != text) && text.length != 1) {
+                    for (let i=0 ; i<this.errorSpellingArr.length ; i++) {
+                        for(let j=0; j<this.errorSpellingArr[i].start.length; j++) {
+                            this.addErrorSpellingTag(this.errorSpellingArr[i].start[j],this.errorSpellingArr[i].end[j],text)//给带修改的部分加span
                         }
                     }
-                    this.cursorIndex = this.editor.getSelection().index
-                    this.editor.deleteText(0, this.editor.getLength()+1)
-                    console.log("last:"+text)
-                    //插入html
-                    this.editor.clipboard.dangerouslyPasteHTML(0,text)
-                    this.editor.setSelection(this.cursorIndex, 0)
-                    this.htmlContent = originContent
+                    for (let i=0 ; i<this.errorGrammarArr.length ; i++) {
+                        for(let j=0 ; j<this.errorGrammarArr[i].start.length ; j++) {
+                            this.addErrorGrammarTag(this.errorGrammarArr[i].start[j],this.errorGrammarArr[i].end[j],text)//给带修改的部分加span
+                        }
+                    }
+                    for (let i=0; i<this.errorSemanticArr.length ; i++) {
+                        for(let j=0 ; j<this.errorSemanticArr[i].start.length ; j++) {
+                            this.addErrorLexemeTag(this.errorSemanticArr[i].start[j],this.errorSemanticArr[i].end[j],text)//给带修改的部分加span
+                        }
+                    }
+                    for (let i=0; i<this.suggestSemanticArr.length ; i++) {
+                        for(let j=0 ; j<this.suggestSemanticArr[i].start.length ; j++) {
+                            this.addSuggestLexemeTag(this.suggestSemanticArr[i].start[j],this.suggestSemanticArr[i].end[j],text)//给带修改的部分加span
+                        }
+                    }
+                    for (let i=0; i<this.suggestStructureArr.length ; i++) {
+                        for(let j=0 ; j<this.suggestStructureArr[i].start.length ; j++) {
+                            this.addSuggestStructureTag(this.suggestStructureArr[i].start[j],this.suggestStructureArr[i].end[j],text)//给带修改的部分加span
+                        }
+                    }
+                    this.changeEditor()
+                    this.judgeAdd = text
+                }
+            }
+            else {
+                alert(error)
+            }
+        })
+    },
+    onEditorFocus() {
+        if (this.judgeFlag == 0) {
+            this.$alert('这里只能粘贴内容', '不好意思～', {
+                confirmButtonText: '确定',
+                callback: action => {
+                    this.$message({
+                    type: 'info',
+                    message: '谢谢您的配合！'
+                    });
                 }
             })
-        },3000)
+        }
+        this.judgeFlag = 1
+    },
+    handleChange(val) {
+        console.log(val);
     },
     toShowAll() {
         this.showESpelling = true,
@@ -463,6 +462,136 @@ export default {
         this.showESemantic = false,
         this.showSSemantic = false,
         this.showSStructure = true
+    },
+    //给拼写错误的部分加span显示
+    addErrorSpellingTag(L,R,content) {
+        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
+        for (let m = L; m<=R ; m++) {
+            this.spanArray.push(this.bodyContentArray[m])
+        }
+        // 加span
+        var re = this.spanArray.join("")
+        var str = this.bodyContentArray.join("")
+        if (this.spanString == "") {
+            this.spanString = str.replace(re, function(x) {
+                return '<span class="line-error">' + x + '</span>';
+            });
+        } 
+        else {
+            this.spanString = this.spanString.replace(re, function(x) {
+                return '<span class="line-error">' + x + '</span>';
+            });
+        }
+        this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
+        console.log(this.spanString)
+    },
+    //给语法错误的部分加span显示
+    addErrorGrammarTag(L,R,content) {
+        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
+        for (let m = L; m<=R ; m++) {
+            this.spanArray.push(this.bodyContentArray[m])
+        }
+        // 加span
+        var re = this.spanArray.join("")
+        var str = this.bodyContentArray.join("")
+        if (this.spanString == "") {
+            this.spanString = str.replace(re, function(x) {
+                return '<span class="line-error">' + x + '</span>';
+            });
+        } 
+        else {
+            this.spanString = this.spanString.replace(re, function(x) {
+                return '<span class="line-error">'  + x + '</span>';
+            });
+        }
+        this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
+        console.log(this.spanString)
+    },
+    //给语意错误的部分加span显示
+    addErrorLexemeTag(L,R,content) {
+        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
+        for (let m = L; m<=R ; m++) {
+            this.spanArray.push(this.bodyContentArray[m])
+        }
+        // 加span
+        var re = this.spanArray.join("")
+        var str = this.bodyContentArray.join("")
+        if (this.spanString == "") {
+            this.spanString = str.replace(re, function(x) {
+                return '<span class="line-error">' + x + '</span>';
+            });
+        } 
+        else {
+            this.spanString = this.spanString.replace(re, function(x) {
+                return '<span class="line-error">' + x + '</span>';
+            });
+        }
+        this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
+        console.log(this.spanString)
+    },
+    //给需要提建议的语意部分加span显示
+    addSuggestLexemeTag(L,R,content) {
+        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
+        for (let m = L; m<=R ; m++) {
+            this.spanArray.push(this.bodyContentArray[m])
+        }
+        // 加span
+        var re = this.spanArray.join("")
+        var str = this.bodyContentArray.join("")
+        if (this.spanString == "") {
+            this.spanString = str.replace(re, function(x) {
+                return '<span class="line-suggest">' + x + '</span>';
+            });
+        } 
+        else {
+            this.spanString = this.spanString.replace(re, function(x) {
+                return '<span class="line-suggest">' + x + '</span>';
+            });
+        }
+        this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
+        console.log(this.spanString)
+    },
+    //给需要提建议的结构部分加span显示
+    addSuggestStructureTag(L,R,content) {
+        this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
+        for (let m = L; m<=R ; m++) {
+            this.spanArray.push(this.bodyContentArray[m])
+        }
+        // 加span
+        var re = this.spanArray.join("")
+        var str = this.bodyContentArray.join("")
+        if (this.spanString == "") {
+            this.spanString = str.replace(re, function(x) {
+                return '<span class="line-suggest">' + x + '</span>';
+            });
+        } 
+        else {
+            this.spanString = this.spanString.replace(re, function(x) {
+                return '<span class="line-suggest">' + x + '</span>';
+            });
+        }
+        this.spanArray.splice(0,this.spanArray.length)//数组清空，寻找下一个待指正数组
+        console.log(this.spanString)
+    },
+    changeEditor() {
+        //加p标签
+        if (this.spanString.trim().length === 0) {
+            this.htmlContent = this.spanString
+        }
+        else {
+            this.htmlContent = this.spanString.replace(this.spanString, function(x) {
+                return '<p>' + x + '</p>';
+            });
+        }
+        if((this.htmlContent.trim().length ===0 )&& (this.bodyContent.trim().length === 0)){
+        }
+        else {
+            //删除editor内容
+            var length = this.editor.getLength()
+            this.editor.deleteText(0, length-1)
+            //插入html
+            this.editor.clipboard.dangerouslyPasteHTML(0,this.htmlContent)
+        }
     }
   },
   created() {
