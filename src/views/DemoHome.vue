@@ -95,7 +95,6 @@
                       @focus="onEditorFocus()"
                       @change="onBodyEditorChange($event)">
         </quill-editor>
-        <!-- <input type="text" readonly="readonly" @change="onBodyEditorChange()"> -->
     </div>
     <div class="splender-right">
     </div>
@@ -411,9 +410,6 @@ export default {
         }
         this.judgeFlag = 1
     },
-    handleChange(val) {
-        console.log(val);
-    },
     toShowAll() {
         this.showESpelling = true,
         this.showEGrammar = true,
@@ -463,6 +459,9 @@ export default {
         this.showSSemantic = false,
         this.showSStructure = true
     },
+    show() {
+        console.log(132)
+    },
     //给拼写错误的部分加span显示
     addErrorSpellingTag(L,R,content) {
         this.bodyContentArray=content.replace(/(.)(?=[^$])/g,"$1,").split(",")//将内容变成数组
@@ -474,7 +473,7 @@ export default {
         var str = this.bodyContentArray.join("")
         if (this.spanString == "") {
             this.spanString = str.replace(re, function(x) {
-                return '<span class="line-error">' + x + '</span>';
+                return '<span class="line-error" @click="show()">' + x + '</span>';
             });
         } 
         else {

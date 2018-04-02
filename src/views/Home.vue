@@ -54,10 +54,26 @@
             </div>
             <span class="suggestions-title">建议</span>
             <ul class="suggestions-list">
+                <li id="suggestions-spelling" @mouseover="changeSSP()" @mouseout="returnSSP()" @click="toShowSSpelling()">
+                    <span class="list-title">拼写</span>
+                    <div id="suggestion-spelling-circle" v-if="paperOn">
+                        <span id="suggestion-spelling-num">{{suggestSpelling}}</span>
+                    </div>
+                    <div class="clear-float">
+                    </div>
+                </li>
+                <li id="suggestions-grammar" @mouseover="changeSG()" @mouseout="returnSG()" @click="toShowSGrammar()">
+                    <span class="list-title">语法</span>
+                    <div id="suggestion-grammar-circle" v-if="paperOn">
+                        <span id="suggestion-grammar-num">{{suggestGrammar}}</span>
+                    </div>
+                    <div class="clear-float">
+                    </div>
+                </li>
                 <li id="suggestions-lexeme" @mouseover="changeSL()" @mouseout="returnSL()" @click="toShowSSemantic()">
                     <span class="list-title">语义</span>
-                    <div id="suggestions-lexeme-circle" v-if="paperOn">
-                        <span id="suggestions-lexeme-num">{{suggestSemantic}}</span>
+                    <div id="suggestion-lexeme-circle" v-if="paperOn">
+                        <span id="suggestion-lexeme-num">{{suggestSemantic}}</span>
                     </div>
                     <div class="clear-float">
                     </div>
@@ -102,39 +118,140 @@
                     <li class="right-spelling">{{el.rep}}</li>
                 </template>
                 <div class="es-second-floor">
-                    <span>{{el.exp}}</span>
+                    <!-- <span v-html="el.exp"></span> -->
+                    
+                    <!-- 以下是后端传回的html样式 -->
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                        <li style="color:#fff;text-indent:5px;">单词拼写错误</li>
+                    </div>
+                    <div style="margin:0 10px 0 20px;font-size:18px">
+                        <span style="text-decoration:line-through; color:#FF0000"><span style="color:#000">efficiant</span></span>
+                        <img src="/static/img/array.png" style="width:40px;">
+                        <span style="background:rgb(79,145,210);color:#fff;padding:4px;">efficient</span>
+                    </div>
+                    <div style="margin:10px 10px 10px 20px;">One cares about making the process repeatable and <span style="color:rgb(79,145,210);font-weight:bold">efficient</span></div>
+                
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in errorGrammarArr" :key="index"  v-if="showEGrammar">
+            <el-collapse-item v-for="(el,index) in errorGrammarArr" :key="`A-${index}`"  v-if="showEGrammar">
                 <template slot="title">
                     <li class="right-grammar">{{el.rep}}</li>
                 </template>
                 <div class="eg-second-floor">
-                    <span>{{el.exp}}</span>
+                    <!-- <span v-html="el.exp"></span> -->
+                    
+                    <!-- 以下是后端传回的html样式 -->
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                        <li style="color:#fff;text-indent:5px;">词组搭配错误</li>
+                    </div>
+                    <div style="margin-left:20px;font-size:18px">
+                        <span style="text-decoration:line-through; color:#FF0000"><span style="color:#000">convenient for</span></span>
+                        <img src="/static/img/array.png" style="width:40px;">
+                        <span style="background:rgb(79,145,210);color:#fff;padding:4px;">convenient to</span>
+                    </div>
+                    <div style="font-weight:bold;color:rgb(113,113,113);margin:10px 10px 0 20px;">A <span style="background:rgb(79,145,210);color:#fff">convenient</span> time <span style="background:rgb(79,145,210);color:#fff">for</span> receive guests.</div>
+                    <div style="color:rgb(117,117,117);margin:0 10px 0 20px;line-height:15px;">suitable for your purpose and needs and causing xxx</div>
+                    <div style="color:rgb(79,145,210);font-weight:bold;font-size:17px;margin:0 10px 0 20px;">examples</div>
+                    <div style="color:rgb(117,117,117);font-style:oblique;margin:0 10px 10px 20px;line-height:15px;">
+                        <span>This place is close and <span>convenient to</span> the street car</span>
+                    </div>
+                
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in errorSemanticArr" :key="index" v-if="showESemantic">
+            <el-collapse-item v-for="(el,index) in errorSemanticArr" :key="`B-${index}`" v-if="showESemantic">
                 <template slot="title">
                     <li class="right-semantic">{{el.rep}}</li>
                 </template>
                 <div class="ese-second-floor">
-                    <span>{{el.exp}}</span>
+                    <!-- <span v-html="el.exp"></span> -->
+
+                    <!-- 以下是后端传回的html样式 -->
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                        <li style="color:#fff;text-indent:5px;">知识性错误</li>
+                    </div>
+                    <div style="margin:0 10px 0 20px">整句话无语法性错误，但语义有知识性错误</div>
+                    <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color:#ff0000">Imperial Palace</span> has a long history originated in <span style="color:#ff0000;text-decoration:line-through;">Qing</span> Dynasty</div>
+                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
+
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestSemanticArr" :key="index" v-if="showSSemantic">
+            <el-collapse-item v-for="(el,index) in suggestSpellingArr" :key="`C-${index}`" v-if="showESpelling">
+                <template slot="title">
+                    <li class="suggest-spelling">{{el.rep}}</li>
+                </template>
+                <div class="ese-second-floor">
+                    <!-- <span v-html="el.exp"></span> -->
+
+                    <!-- 以下是后端传回的html样式 -->
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                        <li style="color:#fff;text-indent:5px;">单词拼写错误</li>
+                    </div>
+                    <div style="margin:0 10px 0 20px;font-size:18px">
+                        <span style="text-decoration:line-through; color:rgb(238,188,80)"><span style="color:#000">efficiant</span></span>
+                        <img src="/static/img/array.png" style="width:40px;">
+                        <span style="background:rgb(79,145,210);color:#fff;padding:4px;">efficient</span>
+                    </div>
+                    <div style="margin:10px 10px 10px 20px;">One cares about making the process repeatable and <span style="color:rgb(79,145,210);font-weight:bold">efficient</span></div>
+                
+                </div>
+            </el-collapse-item>
+            <el-collapse-item v-for="(el,index) in suggestGrammarArr" :key="`D-${index}`" v-if="showEGrammar">
+                <template slot="title">
+                    <li class="suggest-grammar">{{el.rep}}</li>
+                </template>
+                <div class="ese-second-floor">
+                    <!-- <span v-html="el.exp"></span> -->
+
+                    <!-- 以下是后端传回的html样式 -->
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                        <li style="color:#fff;text-indent:5px;">词组搭配错误</li>
+                    </div>
+                    <div style="margin-left:20px;font-size:18px">
+                        <span style="text-decoration:line-through; color: rgb(238,188,80);"><span style="color:#000">convenient for</span></span>
+                        <img src="/static/img/array.png" style="width:40px;">
+                        <span style="background:rgb(79,145,210);color:#fff;padding:4px;">convenient to</span>
+                    </div>
+                    <div style="font-weight:bold;color:rgb(113,113,113);margin:10px 10px 0 20px;">A <span style="background:rgb(79,145,210);color:#fff">convenient</span> time <span style="background:rgb(79,145,210);color:#fff">for</span> receive guests.</div>
+                    <div style="color:rgb(117,117,117);margin:0 10px 0 20px;line-height:15px;">suitable for your purpose and needs and causing xxx</div>
+                    <div style="color:rgb(79,145,210);font-weight:bold;font-size:17px;margin:0 10px 0 20px;">examples</div>
+                    <div style="color:rgb(117,117,117);font-style:oblique;margin:0 10px 10px 20px;line-height:15px;">
+                        <span>This place is close and <span>convenient to</span> the street car</span>
+                    </div>
+                
+                </div>
+            </el-collapse-item>
+            <el-collapse-item v-for="(el,index) in suggestSemanticArr" :key="`E-${index}`" v-if="showSSemantic">
                 <template slot="title">
                     <li class="suggest-semantic">{{el.rep}}</li>
                 </template>
                 <div class="ss-second-floor">
-                    <span>{{el.exp}}</span>
+                    <!-- <span v-html="el.exp"></span> -->
+
+                    <!-- 以下是后端传回的html样式 -->
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                        <li style="color:#fff;text-indent:5px;">知识性错误</li>
+                    </div>
+                    <div style="margin:0 10px 0 20px">整句话无语法性错误，但语义有知识性错误</div>
+                    <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color: rgb(238,188,80);">Imperial Palace</span> has a long history originated in <span style="color:rgb(238,188,80);text-decoration:line-through;">Qing</span> Dynasty</div>
+                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
+
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestStructureArr" :key="index" v-if="showSStructure">
+            <el-collapse-item v-for="(el,index) in suggestStructureArr" :key="`F-${index}`" v-if="showSStructure">
                 <template slot="title">
                     <li class="suggest-structure">{{el.rep}}</li>
                 </template>
                 <div class="sst-second-floor">
-                    <span>{{el.exp}}</span>
+                    <!-- <span v-html="el.exp"></span> -->
+
+                    <!-- 以下是后端传回的html样式 -->
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                        <li style="color:#fff;text-indent:5px;">句式结构错误</li>
+                    </div>
+                    <div style="margin:0 10px 0 20px">从句式结构考虑，整句话有累赘错误</div>
+                    <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color:rgb(238,188,80);text-decoration:line-through;">Imperial Palace</span> has a long history originated in Dynasty</div>
+                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
+
                 </div>
             </el-collapse-item>
         </el-collapse>
@@ -161,6 +278,8 @@ export default {
         showESpelling: true,
         showEGrammar: true,
         showESemantic: true,
+        showSSpelling:true,
+        showSGrammar:true,
         showSSemantic: true,
         showSStructure: true,
         paperTitle:'',
@@ -168,6 +287,8 @@ export default {
         errorSpelling: '',
         errorGrammar: '',
         errorSemantic: '',
+        suggestSpelling:'',
+        suggestGrammar:'',
         suggestSemantic: '',
         suggestStructure: '',
         sumNum: '' ,
@@ -187,16 +308,18 @@ export default {
         errorSemanticPosR:[],
         errorSemanticRight:[],
         errorSemanticExplain:[],
+        suggestSpellingArr: [],
+        suggestGrammarArr: [],
         suggestSemanticArr: [],
-        suggestSemanticPosL:[],
-        suggestSemanticPosR:[],
-        suggestSemanticRight:[],
-        suggestSemanticExplain:[],
+        // suggestSemanticPosL:[],
+        // suggestSemanticPosR:[],
+        // suggestSemanticRight:[],
+        // suggestSemanticExplain:[],
         suggestStructureArr: [],
-        suggestStructurePosL:[],
-        suggestStructurePosR:[],
-        suggestStructureRight:[],
-        suggestStructureExplain:[],
+        // suggestStructurePosL:[],
+        // suggestStructurePosR:[],
+        // suggestStructureRight:[],
+        // suggestStructureExplain:[],
         titleContent: '',
         bodyContent:'',
         bodyContentArray: [],
@@ -293,14 +416,62 @@ export default {
             MLN.style.color = "#898989"; 
         }
     },
-    changeSL() {
-        var SLli = document.getElementById("suggestions-lexeme");
+    changeSSP() {
+        var SLli = document.getElementById("suggestions-spelling");
         SLli.style.backgroundColor = "#eaeaea";
-        var SLC = document.getElementById("suggestions-lexeme-circle");
+        var SLC = document.getElementById("suggestion-spelling-circle");
         if (SLC) {
             SLC.style.backgroundColor = "#ef4632";
         };
-        var SLN = document.getElementById("suggestions-lexeme-num");
+        var SLN = document.getElementById("suggestion-spelling-num");
+        if (SLN) {
+            SLN.style.color = "white"; 
+        }
+    },
+    returnSSP() {
+        var SLli = document.getElementById("suggestions-spelling");
+        SLli.style.backgroundColor = "white";
+        var SLC = document.getElementById("suggestion-spelling-circle");
+        if (SLC) {
+            SLC.style.backgroundColor = "#ededed";
+        };
+        var SLN = document.getElementById("suggestion-spelling-num");
+        if (SLN) {
+            SLN.style.color = "#898989"; 
+        }
+    },
+    changeSG() {
+        var SLli = document.getElementById("suggestions-grammar");
+        SLli.style.backgroundColor = "#eaeaea";
+        var SLC = document.getElementById("suggestion-grammar-circle");
+        if (SLC) {
+            SLC.style.backgroundColor = "#ef4632";
+        };
+        var SLN = document.getElementById("suggestion-grammar-num");
+        if (SLN) {
+            SLN.style.color = "white"; 
+        }
+    },
+    returnSG() {
+        var SLli = document.getElementById("suggestions-grammar");
+        SLli.style.backgroundColor = "white";
+        var SLC = document.getElementById("suggestion-grammar-circle");
+        if (SLC) {
+            SLC.style.backgroundColor = "#ededed";
+        };
+        var SLN = document.getElementById("suggestion-grammar-num");
+        if (SLN) {
+            SLN.style.color = "#898989"; 
+        }
+    },
+    changeSL() {
+        var SLli = document.getElementById("suggestions-lexeme");
+        SLli.style.backgroundColor = "#eaeaea";
+        var SLC = document.getElementById("suggestion-lexeme-circle");
+        if (SLC) {
+            SLC.style.backgroundColor = "#ef4632";
+        };
+        var SLN = document.getElementById("suggestion-lexeme-num");
         if (SLN) {
             SLN.style.color = "white"; 
         }
@@ -308,11 +479,11 @@ export default {
     returnSL() {
         var SLli = document.getElementById("suggestions-lexeme");
         SLli.style.backgroundColor = "white";
-        var SLC = document.getElementById("suggestions-lexeme-circle");
+        var SLC = document.getElementById("suggestion-lexeme-circle");
         if (SLC) {
             SLC.style.backgroundColor = "#ededed";
         };
-        var SLN = document.getElementById("suggestions-lexeme-num");
+        var SLN = document.getElementById("suggestion-lexeme-num");
         if (SLN) {
             SLN.style.color = "#898989"; 
         }
@@ -350,17 +521,20 @@ export default {
             }).then(res => {
                 if(res.body.success) {
                     let text = this.editor.getText()
-                    console.log("aaa:"+text)
                     this.paperOn = true,
                     this.errorSpelling = res.body.count.errorSpelling,
                     this.errorGrammar = res.body.count.errorGrammar,
                     this.errorSemantic = res.body.count.errorSemantic,
+                    this.suggestSpelling = res.body.count.suggestSpelling,
+                    this.suggestGrammar = res.body.count.suggestGrammar,
                     this.suggestSemantic = res.body.count.suggestSemantic,
                     this.suggestStructure = res.body.count.suggestStructure,
                     this.sumNum = res.body.count.sumNum,
                     this.errorSpellingArr = res.body.spelling.err,
                     this.errorGrammarArr = res.body.grammar.err,
                     this.errorSemanticArr = res.body.semantic.err,
+                    this.suggestSpellingArr = res.body.spelling.sug,
+                    this.suggestGrammarArr = res.body.grammar.sug,
                     this.suggestSemanticArr = res.body.semantic.sug,
                     this.suggestStructureArr = res.body.structure.sug
                     let resArr = []
@@ -390,13 +564,11 @@ export default {
                             if(item.end > text.length) return
                             text = insert_flg(text, item.end, '</span>')
                             text = insert_flg(text, item.start, '<span class="line-error">')
-                            console.log("2"+text)
                         }
                         else {
                             if(item.end > text.length) return
                             text = insert_flg(text, item.end, '</span>')
                             text = insert_flg(text, item.start, '<span class="line-suggest">')
-                            console.log("3"+text)
                         }
                     });
                     for (let i=0 ; i<text.length ; i++) {
@@ -406,7 +578,6 @@ export default {
                     }
                     this.cursorIndex = this.editor.getSelection().index
                     this.editor.deleteText(0, this.editor.getLength()+1)
-                    console.log("last:"+text)
                     //插入html
                     this.editor.clipboard.dangerouslyPasteHTML(0,text)
                     this.editor.setSelection(this.cursorIndex, 0)
@@ -419,6 +590,8 @@ export default {
         this.showESpelling = true,
         this.showEGrammar = true,
         this.showESemantic = true,
+        this.showSSpelling = true,
+        this.showSGrammar = true,
         this.showSSemantic = true,
         this.showSStructure = true
     },
@@ -426,6 +599,8 @@ export default {
         this.showESpelling = true,
         this.showEGrammar = true,
         this.showESemantic = true,
+        this.showSSpelling = false,
+        this.showSGrammar = false,
         this.showSSemantic = false,
         this.showSStructure = false
     },
@@ -433,6 +608,8 @@ export default {
         this.showESpelling = true,
         this.showEGrammar = false,
         this.showESemantic = false,
+        this.showSSpelling = false,
+        this.showSGrammar = false,
         this.showSSemantic = false,
         this.showSStructure = false
     },
@@ -440,6 +617,8 @@ export default {
         this.showESpelling = false,
         this.showEGrammar = true,
         this.showESemantic = false,
+        this.showSSpelling = false,
+        this.showSGrammar = false,
         this.showSSemantic = false,
         this.showSStructure = false
     },
@@ -447,6 +626,26 @@ export default {
         this.showESpelling = false,
         this.showEGrammar = false,
         this.showESemantic = true,
+        this.showSSpelling = false,
+        this.showSGrammar = false,
+        this.showSSemantic = false,
+        this.showSStructure = false
+    },
+    toShowSSpelling() {
+        this.showESpelling = false,
+        this.showEGrammar = false,
+        this.showESemantic = false,
+        this.showSSpelling = true,
+        this.showSGrammar = false,
+        this.showSSemantic = false,
+        this.showSStructure = false
+    },
+    toShowSGrammar() {
+        this.showESpelling = false,
+        this.showEGrammar = false,
+        this.showESemantic = false,
+        this.showSSpelling = false,
+        this.showSGrammar = true,
         this.showSSemantic = false,
         this.showSStructure = false
     },
@@ -454,6 +653,8 @@ export default {
         this.showESpelling = false,
         this.showEGrammar = false,
         this.showESemantic = false,
+        this.showSSpelling = false,
+        this.showSGrammar = false,
         this.showSSemantic = true,
         this.showSStructure = false
     },
@@ -461,6 +662,8 @@ export default {
         this.showESpelling = false,
         this.showEGrammar = false,
         this.showESemantic = false,
+        this.showSSpelling = false,
+        this.showSGrammar = false,
         this.showSSemantic = false,
         this.showSStructure = true
     }
@@ -495,7 +698,7 @@ export default {
 .left {
     float: left;
     margin-left: 15px;
-    width:20%;
+    width:21%;
     height: 100%;
     min-width: 245px;
 }
@@ -641,26 +844,6 @@ export default {
     top:2px;
     z-index: 10;
 }
-.suggestions-lexeme-circle {
-    float: left;
-    width:24px;
-    height:24px;
-    border-radius:50%;
-    background-color:rgb(237,237,237);
-    z-index: -1;
-    position: relative;
-    left:20px;
-}
-.suggestion-structure-circle {
-    float: left;
-    width:24px;
-    height:24px;
-    border-radius:50%;
-    background-color:rgb(237,237,237);
-    z-index: -1;
-    position: relative;
-    left:20px;
-}
 .suggestions {
     border-bottom:1px solid rgb(218,218,218);
     width:50%;
@@ -687,7 +870,25 @@ export default {
     font-weight: bolder;
     cursor: pointer;
 }
-#suggestions-lexeme-circle {
+#suggestion-spelling-circle {
+    float: right;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    background-color:rgb(237,237,237);
+    z-index: 1;
+    margin: 8px 0 0 10px;
+}
+#suggestion-grammar-circle {
+    float: right;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    background-color:rgb(237,237,237);
+    z-index: 1;
+    margin: 8px 0 0 10px;
+}
+#suggestion-lexeme-circle {
     float: right;
     width:24px;
     height:24px;
@@ -712,7 +913,25 @@ export default {
     margin: 5px 0 0 -40px;
     padding-top:10px;
 }
-#suggestions-lexeme-num {
+#suggestion-spelling-num {
+    display: block; 
+    float:right;
+    color:rgb(137,137,137);
+    position: relative;
+    left:-6px;
+    top:2px;
+    z-index: 10;
+}
+#suggestion-grammar-num {
+    display: block; 
+    float:right;
+    color:rgb(137,137,137);
+    position: relative;
+    left:-6px;
+    top:2px;
+    z-index: 10;
+}
+#suggestion-lexeme-num {
     display: block; 
     float:right;
     color:rgb(137,137,137);
@@ -778,66 +997,82 @@ export default {
 /* 右边栏样式 */
 .right {
     float: left;
-    width: 30%;
-    height: 100%;
+    width: 31%;
     margin-top: 125px;
-    margin-left:10px;
+    margin-left:1px;
 }
 .el-collapse {
     border: none;
     width:96%;
-    margin: 0 auto 0 auto;
-}
-.el-collapse-item__header {
-    font-size: 16px;
+    margin: 0 auto 0  0;
 }
 .right-spelling {
     color: red;
     height: 30px;
-    margin: 0 40px 10px -3px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
 }
 .right-grammar {
     color: red;
     height: 30px;
-    margin: 0 40px 10px -3px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
 }
 .right-semantic {
     color: red;
     height: 30px;
-    margin: 0 40px 10px -3px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
+}
+.suggest-spelling {
+    color: rgb(238,188,80);
+    height: 30px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
+}
+.suggest-grammar {
+    color: rgb(238,188,80);
+    height: 30px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
 }
 .suggest-semantic {
     color: rgb(238,188,80);
     height: 30px;
-    margin: 0 40px 10px -3px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
 }
 .suggest-structure {
     color: rgb(238,188,80);
     height: 30px;
-    margin: 0 40px 10px -3px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
 }
 .es-second-floor {
     position: relative;
-    top:10px;
+    top:-5px;
     width: 98%;
     height: 95%;
     margin: auto auto;
+    font-size: 15px;
     box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.1);
 }
 .eg-second-floor {
     position: relative;
-    top:10px;
+    top:-5px;
     width: 98%;
     height: 95%;
     margin: auto auto;
+    font-size: 15px;
     box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.1);
 }
 .ese-second-floor {
     position: relative;
-    top:10px;
+    top:-5px;
     width: 98%;
     height: 95%;
     margin: auto auto;
+    font-size: 15px;
     box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.1);
 }
 .ss-second-floor {

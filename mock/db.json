@@ -21,10 +21,20 @@
                     "rep": "spelling err rep",
                     "start": [4],
                     "type": 1,
-                    "exp":"<p style=\"color:red\">hhhh</p>"
+                    "exp":"<img src=\"/static/img/array.png\">"
                 }
             ],
-            "sug": []
+            "sug": [
+                {
+                    "cat": 1,
+                    "eid": 3,
+                    "end": [16],
+                    "rep": "spelling sug rep",
+                    "start": [14],
+                    "type": 2,
+                    "exp":"<p style=\"color:red\">hhhh</p>"
+                }
+            ]
         },
         "grammar": {
             "err": [
@@ -39,14 +49,53 @@
             }
             ],
             "sug": [
+            {
+                "cat": 2,
+                "eid": 3,
+                "end": [50],
+                "rep": "grammar sug rep",
+                "start": [40],
+                "type": 2,
+                "exp":"grammar sug exp"
+            }
             ]
         },
         "semantic": {
-            "err":[],
-            "sug":[]
+            "err":[
+                {
+                    "cat": 3,
+                    "eid": 3,
+                    "end": [33],
+                    "rep": "semantic err rep",
+                    "start": [30],
+                    "type": 1,
+                    "exp":"semantic err exp"
+                }
+            ],
+            "sug":[
+                {
+                    "cat": 3,
+                    "eid": 3,
+                    "end": [23],
+                    "rep": "semantic sug rep",
+                    "start": [24],
+                    "type": 2,
+                    "exp":"semantic sug exp"
+                }
+            ]
         },
         "structure": {
-            "err": [],
+            "err": [
+                {
+                    "cat": 4,
+                    "eid": 3,
+                    "end": [90],
+                    "rep": "structure err rep",
+                    "start": [94],
+                    "type": 1,
+                    "exp":"structure err exp"
+                }
+            ],
             "sug": [
                 {
                     "cat": 4,
