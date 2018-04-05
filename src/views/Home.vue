@@ -119,10 +119,10 @@
                     <li class="right-spelling">{{el.rep}}</li>
                 </template>
                 <div class="es-second-floor">
-                    <!-- <span v-html="el.exp"></span> -->
+                    <span v-html="el.exp"></span>
                     
                     <!-- 以下是后端传回的html样式 -->
-                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px">
+                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px">
                         <li style="color:#fff;text-indent:5px;">单词拼写错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px;font-size:18px">
@@ -130,8 +130,8 @@
                         <img src="/static/img/array.png" style="width:40px;">
                         <span style="background:rgb(79,145,210);color:#fff;padding:4px;">efficient</span>
                     </div>
-                    <div style="margin:10px 10px 10px 20px;">One cares about making the process repeatable and <span style="color:rgb(79,145,210);font-weight:bold">efficient</span></div> -->
-                
+                    <div style="margin:10px 10px 10px 20px;">One cares about making the process repeatable and <span style="color:rgb(79,145,210);font-weight:bold">efficient</span></div>
+                 -->
                 </div>
             </el-collapse-item>
             <el-collapse-item v-for="(el,index) in errorGrammarArr" :key="`A-${index}`"  v-if="showEGrammar">
@@ -139,10 +139,10 @@
                     <li class="right-grammar">{{el.rep}}</li>
                 </template>
                 <div class="eg-second-floor">
-                    <!-- <span v-html="el.exp"></span> -->
+                    <span v-html="el.exp"></span>
                     
                     <!-- 以下是后端传回的html样式 -->
-                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">词组搭配错误</li>
                     </div>
                     <div style="margin-left:20px;font-size:18px">
@@ -155,7 +155,7 @@
                     <div style="color:rgb(79,145,210);font-weight:bold;font-size:17px;margin:0 10px 0 20px;">examples</div>
                     <div style="color:rgb(117,117,117);font-style:oblique;margin:0 10px 10px 20px;line-height:15px;">
                         <span>This place is close and <span>convenient to</span> the street car</span>
-                    </div>
+                    </div> -->
                 
                 </div>
             </el-collapse-item>
@@ -164,16 +164,15 @@
                     <li class="right-semantic">{{el.rep}}</li>
                 </template>
                 <div class="ese-second-floor">
-                    <!-- <span v-html="el.exp"></span> -->
+                    <span v-html="el.exp"></span>
 
                     <!-- 以下是后端传回的html样式 -->
-                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                   <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">知识性错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px">整句话无语法性错误，但语义有知识性错误</div>
                     <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color:#ff0000">Imperial Palace</span> has a long history originated in <span style="color:#ff0000;text-decoration:line-through;">Qing</span> Dynasty</div>
-                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
-
+                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>-->
                 </div>
             </el-collapse-item>
             <el-collapse-item v-for="(el,index) in suggestSpellingArr" :key="`C-${index}`" v-if="showESpelling">
@@ -181,10 +180,10 @@
                     <li class="suggest-spelling">{{el.rep}}</li>
                 </template>
                 <div class="ese-second-floor">
-                    <!-- <span v-html="el.exp"></span> -->
+                    <span v-html="el.exp"></span>
 
                     <!-- 以下是后端传回的html样式 -->
-                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">单词拼写错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px;font-size:18px">
@@ -193,7 +192,7 @@
                         <span style="background:rgb(79,145,210);color:#fff;padding:4px;">efficient</span>
                     </div>
                     <div style="margin:10px 10px 10px 20px;">One cares about making the process repeatable and <span style="color:rgb(79,145,210);font-weight:bold">efficient</span></div>
-                
+                 -->
                 </div>
             </el-collapse-item>
             <el-collapse-item v-for="(el,index) in suggestGrammarArr" :key="`D-${index}`" v-if="showEGrammar">
@@ -201,10 +200,10 @@
                     <li class="suggest-grammar">{{el.rep}}</li>
                 </template>
                 <div class="ese-second-floor">
-                    <!-- <span v-html="el.exp"></span> -->
+                    <span v-html="el.exp"></span>
 
                     <!-- 以下是后端传回的html样式 -->
-                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">词组搭配错误</li>
                     </div>
                     <div style="margin-left:20px;font-size:18px">
@@ -217,7 +216,7 @@
                     <div style="color:rgb(79,145,210);font-weight:bold;font-size:17px;margin:0 10px 0 20px;">examples</div>
                     <div style="color:rgb(117,117,117);font-style:oblique;margin:0 10px 10px 20px;line-height:15px;">
                         <span>This place is close and <span>convenient to</span> the street car</span>
-                    </div>
+                    </div> -->
                 
                 </div>
             </el-collapse-item>
@@ -226,15 +225,15 @@
                     <li class="suggest-semantic">{{el.rep}}</li>
                 </template>
                 <div class="ss-second-floor">
-                    <!-- <span v-html="el.exp"></span> -->
+                    <span v-html="el.exp"></span>
 
                     <!-- 以下是后端传回的html样式 -->
-                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">知识性错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px">整句话无语法性错误，但语义有知识性错误</div>
                     <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color: rgb(238,188,80);">Imperial Palace</span> has a long history originated in <span style="color:rgb(238,188,80);text-decoration:line-through;">Qing</span> Dynasty</div>
-                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
+                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div> -->
 
                 </div>
             </el-collapse-item>
@@ -243,15 +242,15 @@
                     <li class="suggest-structure">{{el.rep}}</li>
                 </template>
                 <div class="sst-second-floor">
-                    <!-- <span v-html="el.exp"></span> -->
+                    <span v-html="el.exp"></span>
 
                     <!-- 以下是后端传回的html样式 -->
-                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">句式结构错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px">从句式结构考虑，整句话有累赘错误</div>
                     <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color:rgb(238,188,80);text-decoration:line-through;">Imperial Palace</span> has a long history originated in Dynasty</div>
-                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
+                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div> -->
 
                 </div>
             </el-collapse-item>
@@ -316,7 +315,7 @@ export default {
         // suggestSemanticPosR:[],
         // suggestSemanticRight:[],
         // suggestSemanticExplain:[],
-        judgeFlag: '',
+        judgeFlag: 0,
         suggestStructureArr: [],
         // suggestStructurePosL:[],
         // suggestStructurePosR:[],
@@ -1144,7 +1143,274 @@ export default {
 :-ms-input-placeholder { /* Internet Explorer 10+ */  
     color:rgb(180,180,180); 
 } 
-.demo {
-    color:red;
+/* 右边栏方框样式 */
+/* 拼写错误 */
+.es-tag {
+    background:rgb(79,145,210);
+    width:140px;
+    margin:20px;
+    position:relative;
+    top:10px;
+}
+.es-tag-li {
+    color:#fff;
+    text-indent:5px;
+}
+.es-word {
+    margin:0 10px 0 20px;
+    font-size:18px;
+}
+.es-origin-line {
+    text-decoration:line-through; 
+    color:#FF0000;
+}
+.es-origin-word {
+    color:#000;
+}
+.es-now-word {
+    background:rgb(79,145,210);
+    color:#fff;padding:4px;
+}
+.es-example {
+    margin:10px 10px 10px 20px;
+}
+.es-example-word {
+    color:rgb(79,145,210);
+    font-weight:bold
+}
+/* 语法错误 */
+.eg-tag {
+    background:rgb(79,145,210);
+    width:140px;
+    margin:20px;
+    position:relative;
+    top:10px;
+}
+.eg-tag-li {
+    color:#fff;
+    text-indent:5px;
+}
+.eg-grammar {
+    margin-left:20px;
+    font-size:18px;
+}
+.eg-origin-line {
+    text-decoration:line-through; 
+    color:#FF0000;
+}
+.eg-origin-grammar {
+    color:#000;
+}
+.eg-now-grammar {
+    background:rgb(79,145,210);
+    color:#fff;
+    padding:4px;
+}
+.eg-origin-example {
+    font-weight:bold;
+    color:rgb(113,113,113);
+    margin:10px 10px 0 20px;
+}
+.eg-origin-example-grammar {
+    background:rgb(79,145,210);
+    color:#fff;
+}
+.eg-origin-exp {
+    color:rgb(117,117,117);
+    margin:0 10px 0 20px;
+    line-height:15px;
+}
+.eg-example-tag {
+    color:rgb(79,145,210);
+    font-weight:bold;
+    font-size:17px;
+    margin:0 10px 0 20px;
+}
+.eg-example {
+    color:rgb(117,117,117);
+    font-style:oblique;
+    margin:0 10px 10px 20px;
+    line-height:15px;
+}
+.eg-example-grammar {
+    color:rgb(79,145,210);
+}
+/* 语义错误 */
+.ese-tag {
+    background:rgb(79,145,210);
+    width:140px;
+    margin:20px;
+    position:relative;
+    top:10px;
+}
+.ese-tag-li {
+    color:#fff;
+    text-indent:5px;
+}
+.ese-exp {
+    margin:0 10px 0 20px
+}
+.ese-origin {
+    margin:0 10px 0 20px;
+    color:rgb(117,117,117);
+}
+.ese-origin-semantic {
+    color:#ff0000;
+}
+.ese-origin-line {
+   color:#ff0000;
+   text-decoration:line-through;
+}
+.ese-now-semantic {
+    margin:0 10px 0 20px;
+    color:rgb(79,145,210);
+}
+/* 拼写建议 */
+.ss-tag {
+    background:rgb(79,145,210);
+    width:140px;
+    margin:20px;
+    position:relative;
+    top:10px;
+}
+.ss-tag-li {
+    color:#fff;
+    text-indent:5px;
+}
+.ss-word {
+    margin:0 10px 0 20px;
+    font-size:18px;
+}
+.ss-origin-line {
+    text-decoration:line-through; 
+    color:rgb(238,188,80);
+}
+.ss-origin-word {
+    color:#000;
+}
+.ss-now-word {
+    background:rgb(79,145,210);
+    color:#fff;padding:4px;
+}
+.ss-example {
+    margin:10px 10px 10px 20px;
+}
+.ss-example-word {
+    color:rgb(79,145,210);
+    font-weight:bold
+}
+/* 语法建议 */
+.sg-tag {
+    background:rgb(79,145,210);
+    width:140px;
+    margin:20px;
+    position:relative;
+    top:10px;
+}
+.sg-tag-li {
+    color:#fff;
+    text-indent:5px;
+}
+.sg-grammar {
+    margin-left:20px;
+    font-size:18px;
+}
+.sg-origin-line {
+    text-decoration:line-through; 
+    color:rgb(238,188,80);
+}
+.sg-origin-grammar {
+    color:#000;
+}
+.sg-now-grammar {
+    background:rgb(79,145,210);
+    color:#fff;
+    padding:4px;
+}
+.sg-origin-example {
+    font-weight:bold;
+    color:rgb(113,113,113);
+    margin:10px 10px 0 20px;
+}
+.sg-origin-example-grammar {
+    background:rgb(79,145,210);
+    color:#fff;
+}
+.sg-origin-exp {
+    color:rgb(117,117,117);
+    margin:0 10px 0 20px;
+    line-height:15px;
+}
+.sg-example-tag {
+    color:rgb(79,145,210);
+    font-weight:bold;
+    font-size:17px;
+    margin:0 10px 0 20px;
+}
+.sg-example {
+    color:rgb(117,117,117);
+    font-style:oblique;
+    margin:0 10px 10px 20px;
+    line-height:15px;
+}
+.sg-example-grammar {
+    color:rgb(79,145,210);
+}
+/* 语义建议 */
+.sse-tag {
+    background:rgb(79,145,210);
+    width:140px;
+    margin:20px;
+    position:relative;
+    top:10px;
+}
+.sse-tag-li {
+    color:#fff;
+    text-indent:5px;
+}
+.sse-exp {
+    margin:0 10px 0 20px
+}
+.sse-origin {
+    margin:0 10px 0 20px;
+    color:rgb(117,117,117);
+}
+.sse-origin-semantic {
+    color:rgb(238,188,80)
+}
+.sse-origin-line {
+   color:rgb(238,188,80);
+   text-decoration:line-through;
+}
+.sse-now-semantic {
+    margin:0 10px 0 20px;
+    color:rgb(79,145,210);
+}
+/* 句式结构建议 */ 
+.sst-tag {
+    background:rgb(79,145,210);
+    width:140px;
+    margin:20px;
+    position:relative;
+    top:10px;
+}
+.sst-tag-li {
+    color:#fff;
+    text-indent:5px;
+}
+.sst-exp {
+    margin:0 10px 0 20px;
+}
+.sst-origin {
+    margin:0 10px 0 20px;
+    color:rgb(117,117,117);
+}
+.sst-origin-word {
+    color:rgb(238,188,80);
+    text-decoration:line-through;
+}
+.sst-now {
+    margin:0 10px 0 20px;
+    color:rgb(79,145,210);
 }
 </style>
