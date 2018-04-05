@@ -105,6 +105,7 @@
         </quill-editor>
         <quill-editor class="body-paste"
                       ref="myTextEditor"
+                      @focus="onEditorFocus()"
                       :content="bodyContent"
                       :options="bodyEditorOption">
         </quill-editor>
@@ -121,7 +122,7 @@
                     <!-- <span v-html="el.exp"></span> -->
                     
                     <!-- 以下是后端传回的html样式 -->
-                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px">
                         <li style="color:#fff;text-indent:5px;">单词拼写错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px;font-size:18px">
@@ -129,7 +130,7 @@
                         <img src="/static/img/array.png" style="width:40px;">
                         <span style="background:rgb(79,145,210);color:#fff;padding:4px;">efficient</span>
                     </div>
-                    <div style="margin:10px 10px 10px 20px;">One cares about making the process repeatable and <span style="color:rgb(79,145,210);font-weight:bold">efficient</span></div>
+                    <div style="margin:10px 10px 10px 20px;">One cares about making the process repeatable and <span style="color:rgb(79,145,210);font-weight:bold">efficient</span></div> -->
                 
                 </div>
             </el-collapse-item>
@@ -315,6 +316,7 @@ export default {
         // suggestSemanticPosR:[],
         // suggestSemanticRight:[],
         // suggestSemanticExplain:[],
+        judgeFlag: '',
         suggestStructureArr: [],
         // suggestStructurePosL:[],
         // suggestStructurePosR:[],
@@ -511,6 +513,20 @@ export default {
         if (SSN) {
             SSN.style.color = "#898989";
         } 
+    },
+    onEditorFocus() {
+        if (this.judgeFlag == 0) {
+            this.$alert('暂时不能输入空格和回车', '不好意思～', {
+                confirmButtonText: '确定',
+                callback: action => {
+                    this.$message({
+                    type: 'info',
+                    message: '谢谢您的理解！'
+                    });
+                }
+            })
+        }
+        this.judgeFlag = 1
     },
     changeHtml() {
         setInterval(() => {
@@ -1127,5 +1143,8 @@ export default {
 }  
 :-ms-input-placeholder { /* Internet Explorer 10+ */  
     color:rgb(180,180,180); 
-}  
+} 
+.demo {
+    color:red;
+}
 </style>
