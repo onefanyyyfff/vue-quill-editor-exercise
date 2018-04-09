@@ -9,7 +9,7 @@
         </div>
         <div class="clear-float">
         </div>
-        <div class="show-all" @click="toShowAll()">
+        <div class="show-all" id="all" @mouseover="changeAll()" @mouseout="returnAll()" @click="toShowAll()">
             <div class="show-all-circle">
             </div>
             <span class="show-all-title">显示全部</span>
@@ -17,12 +17,13 @@
         <div class="clear-float">
         </div>
         <div class="mistakes">
-            <div class="mistakes-all">
+            <div class="mistakes-all" id="mistake" @mouseover="changeM()" @mouseout="returnM()" @click="toShowMistake()">
                 <div class="mistakes-circle">
                 </div>
-                <span class="mistakes-title" @click="toShowMistake()">错误</span>
+                <span class="mistakes-title">错误</span>
             </div>
             <ul class="mistakes-list">
+                <!-- <li id="mistakes-spelling" @mouseover="changeMS()" @mouseout="returnMS()" @click="toShowESpelling()"> -->
                 <li id="mistakes-spelling" @mouseover="changeMS()" @mouseout="returnMS()" @click="toShowESpelling()">
                     <span class="list-title">拼写</span>
                     <div id="mistakes-spelling-circle" v-if="paperOn">
@@ -52,10 +53,10 @@
         <div class="clear-float">
         </div>
         <div class="suggestions">
-            <div class="suggestions-all">
+            <div class="suggestions-all" id="suggestion" @mouseover="changeS()" @mouseout="returnS()" @click="toShowSuggestion()">
                 <div class="suggestions-circle">
                 </div>
-                <span class="suggestions-title" @click="toShowSuggestion()">建议</span>
+                <span class="suggestions-title">建议</span>
             </div>
             <ul class="suggestions-list">
                 <li id="suggestions-spelling" @mouseover="changeSSP()" @mouseout="returnSSP()" @click="toShowSSpelling()">
@@ -323,6 +324,16 @@ export default {
         suggestGrammarArr: [],
         suggestSemanticArr: [],
         judgeFlag: 0,
+        all: 0,
+        m: 0,
+        s: 0,
+        es: 0,
+        eg: 0,
+        ese: 0,
+        ss: 0,
+        sg: 0,
+        sse: 0,
+        sst: 0,
         suggestStructureArr: [],
         titleContent: '',
         bodyContent:'',
@@ -359,6 +370,42 @@ export default {
     handleChange(va) {
         // console.log(va)
     },
+    changeAll() {
+        var M = document.getElementById("all");
+        M.style.backgroundColor = "#eaeaea";
+        M.style.fontWeight = "bolder";
+    },
+    returnAll() {
+        if (this.all == 0) {
+            var M = document.getElementById("all");
+            M.style.backgroundColor = "#ffffff";
+            M.style.fontWeight = "normal";
+        }
+    },
+    changeM() {
+        var M = document.getElementById("mistake");
+        M.style.backgroundColor = "#eaeaea";
+        M.style.fontWeight = "bolder";
+    },
+    returnM() {
+        if (this.m == 0) {
+            var M = document.getElementById("mistake");
+            M.style.backgroundColor = "#ffffff";
+            M.style.fontWeight = "normal";
+        }
+    },
+    changeS() {
+        var M = document.getElementById("suggestion");
+        M.style.backgroundColor = "#eaeaea";
+        M.style.fontWeight = "bolder";
+    },
+    returnS() {
+        if (this.s == 0) {
+            var M = document.getElementById("suggestion");
+            M.style.backgroundColor = "#ffffff";
+            M.style.fontWeight = "normal";
+        }
+    },
     changeMS() {
         var MSli = document.getElementById("mistakes-spelling");
         MSli.style.backgroundColor = "#eaeaea";
@@ -373,15 +420,17 @@ export default {
         }
     },
     returnMS() {
-        var MSli = document.getElementById("mistakes-spelling");
-        MSli.style.backgroundColor = "white";
-        var MSC = document.getElementById("mistakes-spelling-circle");
-        if (MSC) {
-            MSC.style.backgroundColor = "#ededed";
-        };
-        var MSN = document.getElementById("mistakes-spelling-num");
-        if (MSN) {
-            MSN.style.color = "#898989";
+        if (this.es == 0) {
+            var MSli = document.getElementById("mistakes-spelling");
+            MSli.style.backgroundColor = "white";
+            var MSC = document.getElementById("mistakes-spelling-circle");
+            if (MSC) {
+                MSC.style.backgroundColor = "#ededed";
+            };
+            var MSN = document.getElementById("mistakes-spelling-num");
+            if (MSN) {
+                MSN.style.color = "#898989";
+            }
         }
     },
     changeMG() {
@@ -398,15 +447,17 @@ export default {
         }
     },
     returnMG() {
-        var MGli = document.getElementById("mistakes-grammar");
-        MGli.style.backgroundColor = "white";
-        var MGC = document.getElementById("mistakes-grammar-circle");
-        if (MGC) {
-            MGC.style.backgroundColor = "#ededed";
-        };
-        var MGN = document.getElementById("mistakes-grammar-num");
-        if (MGN) {
-             MGN.style.color = "#898989"; 
+        if (this.eg == 0) {
+            var MGli = document.getElementById("mistakes-grammar");
+            MGli.style.backgroundColor = "white";
+            var MGC = document.getElementById("mistakes-grammar-circle");
+            if (MGC) {
+                MGC.style.backgroundColor = "#ededed";
+            };
+            var MGN = document.getElementById("mistakes-grammar-num");
+            if (MGN) {
+                MGN.style.color = "#898989"; 
+            }
         }
     },
     changeML() {
@@ -423,15 +474,17 @@ export default {
         }   
     },
     returnML() {
-        var MLli = document.getElementById("mistakes-lexeme");
-        MLli.style.backgroundColor = "white";
-        var MLC = document.getElementById("mistakes-lexeme-circle");
-        if (MLC) {
-            MLC.style.backgroundColor = "#ededed";
-        };
-        var MLN = document.getElementById("mistakes-lexeme-num");
-        if (MLN) {
-            MLN.style.color = "#898989"; 
+        if (this.ese == 0) {
+            var MLli = document.getElementById("mistakes-lexeme");
+            MLli.style.backgroundColor = "white";
+            var MLC = document.getElementById("mistakes-lexeme-circle");
+            if (MLC) {
+                MLC.style.backgroundColor = "#ededed";
+            };
+            var MLN = document.getElementById("mistakes-lexeme-num");
+            if (MLN) {
+                MLN.style.color = "#898989"; 
+            }
         }
     },
     changeSSP() {
@@ -448,15 +501,17 @@ export default {
         }
     },
     returnSSP() {
-        var SLli = document.getElementById("suggestions-spelling");
-        SLli.style.backgroundColor = "white";
-        var SSP = document.getElementById("suggestion-spelling-circle");
-        if (SSP) {
-            SSP.style.backgroundColor = "#ededed";
-        };
-        var SSP = document.getElementById("suggestion-spelling-num");
-        if (SSP) {
-            SSP.style.color = "#898989"; 
+        if (this.ss == 0) {
+            var SLli = document.getElementById("suggestions-spelling");
+            SLli.style.backgroundColor = "white";
+            var SSP = document.getElementById("suggestion-spelling-circle");
+            if (SSP) {
+                SSP.style.backgroundColor = "#ededed";
+            };
+            var SSP = document.getElementById("suggestion-spelling-num");
+            if (SSP) {
+                SSP.style.color = "#898989"; 
+            }
         }
     },
     changeSG() {
@@ -473,15 +528,17 @@ export default {
         }
     },
     returnSG() {
-        var SLli = document.getElementById("suggestions-grammar");
-        SLli.style.backgroundColor = "white";
-        var SLC = document.getElementById("suggestion-grammar-circle");
-        if (SLC) {
-            SLC.style.backgroundColor = "#ededed";
-        };
-        var SLN = document.getElementById("suggestion-grammar-num");
-        if (SLN) {
-            SLN.style.color = "#898989"; 
+        if (this.sg == 0) {
+            var SLli = document.getElementById("suggestions-grammar");
+            SLli.style.backgroundColor = "white";
+            var SLC = document.getElementById("suggestion-grammar-circle");
+            if (SLC) {
+                SLC.style.backgroundColor = "#ededed";
+            };
+            var SLN = document.getElementById("suggestion-grammar-num");
+            if (SLN) {
+                SLN.style.color = "#898989"; 
+            }
         }
     },
     changeSL() {
@@ -498,15 +555,17 @@ export default {
         }
     },
     returnSL() {
-        var SLli = document.getElementById("suggestions-lexeme");
-        SLli.style.backgroundColor = "white";
-        var SLC = document.getElementById("suggestion-lexeme-circle");
-        if (SLC) {
-            SLC.style.backgroundColor = "#ededed";
-        };
-        var SLN = document.getElementById("suggestion-lexeme-num");
-        if (SLN) {
-            SLN.style.color = "#898989"; 
+        if (this.sse == 0) {
+            var SLli = document.getElementById("suggestions-lexeme");
+            SLli.style.backgroundColor = "white";
+            var SLC = document.getElementById("suggestion-lexeme-circle");
+            if (SLC) {
+                SLC.style.backgroundColor = "#ededed";
+            };
+            var SLN = document.getElementById("suggestion-lexeme-num");
+            if (SLN) {
+                SLN.style.color = "#898989"; 
+            }
         }
     },
     changeSS() {
@@ -523,16 +582,18 @@ export default {
         }      
     },
     returnSS() {
-        var SSli = document.getElementById("suggestions-structure");
-        SSli.style.backgroundColor = "white";
-        var SSC = document.getElementById("suggestion-structure-circle");
-        if (SSC) {
-            SSC.style.backgroundColor = "#ededed";
-        };
-        var SSN = document.getElementById("suggestion-structure-num");
-        if (SSN) {
-            SSN.style.color = "#898989";
-        } 
+        if (this.sst == 0) {
+            var SSli = document.getElementById("suggestions-structure");
+            SSli.style.backgroundColor = "white";
+            var SSC = document.getElementById("suggestion-structure-circle");
+            if (SSC) {
+                SSC.style.backgroundColor = "#ededed";
+            };
+            var SSN = document.getElementById("suggestion-structure-num");
+            if (SSN) {
+                SSN.style.color = "#898989";
+            } 
+        }
     },
     onEditorFocus() {
         if (this.judgeFlag == 0) {
@@ -625,7 +686,26 @@ export default {
         this.showSSpelling = true,
         this.showSGrammar = true,
         this.showSSemantic = true,
-        this.showSStructure = true
+        this.showSStructure = true,
+        this.all = 1,
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
     },
     toShowMistake() {
         this.showESpelling = true,
@@ -634,7 +714,26 @@ export default {
         this.showSSpelling = false,
         this.showSGrammar = false,
         this.showSSemantic = false,
-        this.showSStructure = false
+        this.showSStructure = false,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 1,
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
     },
     toShowSuggestion() {
         this.showESpelling = false,
@@ -643,7 +742,26 @@ export default {
         this.showSSpelling = true,
         this.showSGrammar = true,
         this.showSSemantic = true,
-        this.showSStructure = true
+        this.showSStructure = true,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 1,
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
     },
     toShowESpelling() {
         this.showESpelling = true,
@@ -652,7 +770,26 @@ export default {
         this.showSSpelling = false,
         this.showSGrammar = false,
         this.showSSemantic = false,
-        this.showSStructure = false
+        this.showSStructure = false,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 1,
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
     },
     toShowEGrammar() {
         this.showESpelling = false,
@@ -661,7 +798,26 @@ export default {
         this.showSSpelling = false,
         this.showSGrammar = false,
         this.showSSemantic = false,
-        this.showSStructure = false
+        this.showSStructure = false,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 1,
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
     },
     toShowESemantic() {
         this.showESpelling = false,
@@ -670,7 +826,26 @@ export default {
         this.showSSpelling = false,
         this.showSGrammar = false,
         this.showSSemantic = false,
-        this.showSStructure = false
+        this.showSStructure = false,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 1,
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
     },
     toShowSSpelling() {
         this.showESpelling = false,
@@ -679,7 +854,26 @@ export default {
         this.showSSpelling = true,
         this.showSGrammar = false,
         this.showSSemantic = false,
-        this.showSStructure = false
+        this.showSStructure = false,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 1,
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
     },
     toShowSGrammar() {
         this.showESpelling = false,
@@ -688,7 +882,26 @@ export default {
         this.showSSpelling = false,
         this.showSGrammar = true,
         this.showSSemantic = false,
-        this.showSStructure = false
+        this.showSStructure = false,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 1,
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
     },
     toShowSSemantic() {
         this.showESpelling = false,
@@ -697,7 +910,26 @@ export default {
         this.showSSpelling = false,
         this.showSGrammar = false,
         this.showSSemantic = true,
-        this.showSStructure = false
+        this.showSStructure = false,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 1,
+        this.sst = 0,
+        this.returnSS()
     },
     toShowSStructure() {
         this.showESpelling = false,
@@ -706,7 +938,26 @@ export default {
         this.showSSpelling = false,
         this.showSGrammar = false,
         this.showSSemantic = false,
-        this.showSStructure = true
+        this.showSStructure = true,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 1
     }
   },
   created() {
@@ -770,11 +1021,11 @@ export default {
     float:left;
     padding-bottom:10px;
 }
-.show-all:hover {
+/* .show-all:hover {
     font-weight: bolder;
     cursor: pointer;
     background-color:rgb(234,234,234);
-}
+} */
 .show-all-circle {
     display: inline-block;
     margin:18px 0 0 20px;
@@ -800,11 +1051,11 @@ export default {
     float:left;
     padding-bottom: 10px;
 }
-.mistakes-all:hover {
+/* .mistakes-all:hover {
     font-weight: bolder;
     cursor: pointer;
     background-color:rgb(234,234,234);
-}
+} */
 .mistakes-circle {
     display:inline-block;
     margin:18px 0 0 20px;
@@ -899,11 +1150,11 @@ export default {
     float:left;
     padding-bottom: 10px;
 }
-.suggestions-all:hover {
+/* .suggestions-all:hover {
     font-weight: bolder;
     cursor: pointer;
     background-color:rgb(234,234,234);
-}
+} */
 .suggestions-circle {
     display: inline-block;
     margin:18px 0 0 20px;
