@@ -21,7 +21,8 @@
                     "rep": "spelling err rep",
                     "start": [4],
                     "type": 1,
-                    "exp":"<div class=\"demo\">hahaha</div>"
+                    "exp":"<div class=\"demo\">hahaha</div>",
+                    "id":123
                 }
             ],
             "sug": [
@@ -32,7 +33,8 @@
                     "rep": "spelling sug rep",
                     "start": [14],
                     "type": 2,
-                    "exp":"<p style=\"color:red\">hhhh</p>"
+                    "exp":"<p style=\"color:red\">hhhh</p>",
+                    "id":234
                 }
             ]
         },
@@ -41,11 +43,12 @@
             {
                 "cat": 2,
                 "eid": 3,
-                "end": [50],
+                "end": [44],
                 "rep": "grammar err rep",
                 "start": [40],
                 "type": 1,
-                "exp":"grammar err exp"
+                "exp":"grammar err exp",
+                "id":345
             }
             ],
             "sug": [
@@ -54,9 +57,10 @@
                 "eid": 3,
                 "end": [50],
                 "rep": "grammar sug rep",
-                "start": [40],
+                "start": [46],
                 "type": 2,
-                "exp":"grammar sug exp"
+                "exp":"grammar sug exp",
+                "id":456
             }
             ]
         },
@@ -69,7 +73,8 @@
                     "rep": "semantic err rep",
                     "start": [30],
                     "type": 1,
-                    "exp":"semantic err exp"
+                    "exp":"semantic err exp",
+                    "id":567
                 }
             ],
             "sug":[
@@ -78,9 +83,10 @@
                     "eid": 3,
                     "end": [23],
                     "rep": "semantic sug rep",
-                    "start": [24],
+                    "start": [20],
                     "type": 2,
-                    "exp":"semantic sug exp"
+                    "exp":"semantic sug exp",
+                    "id":678
                 }
             ]
         },
@@ -89,11 +95,12 @@
                 {
                     "cat": 4,
                     "eid": 3,
-                    "end": [90],
+                    "end": [60],
                     "rep": "structure err rep",
-                    "start": [94],
+                    "start": [64],
                     "type": 1,
-                    "exp":"structure err exp"
+                    "exp":"structure err exp",
+                    "id":789
                 }
             ],
             "sug": [
@@ -102,9 +109,10 @@
                     "eid": 3,
                     "end": [19],
                     "rep": "structure sug rep",
-                    "start": [15],
+                    "start": [18],
                     "type": 2,
-                    "exp":"structure sug exp"
+                    "exp":"structure sug exp",
+                    "id":890
                 }
             ]
         },

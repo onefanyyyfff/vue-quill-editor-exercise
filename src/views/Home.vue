@@ -103,18 +103,25 @@
                       :content="titleContent"
                       :options="titleEditorOption">
         </quill-editor>
-        <quill-editor class="body-paste"
+        <!-- <quill-editor class="body-paste"
                       ref="myTextEditor"
                       @focus="onEditorFocus()"
                       :content="bodyContent"
                       :options="bodyEditorOption">
+        </quill-editor> -->
+        <quill-editor class="body-paste"
+                      id="body-paste"
+                      ref="myTextEditor"
+                      :content="bodyContent"
+                      :options="bodyEditorOption"
+                      @focus="getEventTrigger($event)">
         </quill-editor>
     </div>
     <div class="splender-right">
     </div>
     <div class="right">
-        <el-collapse accordion>
-            <el-collapse-item v-for="(el,index) in errorSpellingArr" :key="index"  v-if="showESpelling">
+        <el-collapse v-model="activeName" accordion @change="handleChange" ref="accordion" :value="activeName">
+            <el-collapse-item v-for="(el,index) in errorSpellingArr" :key="index"  v-if="showESpelling" :name="el.id" :value="activeName">
                 <template slot="title">
                     <li class="right-spelling">{{el.rep}}</li>
                 </template>
@@ -134,7 +141,7 @@
                  -->
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in errorGrammarArr" :key="`A-${index}`"  v-if="showEGrammar">
+            <el-collapse-item v-for="(el,index) in errorGrammarArr" :key="`A-${index}`"  v-if="showEGrammar" :name="el.id" :value="activeName">
                 <template slot="title">
                     <li class="right-grammar">{{el.rep}}</li>
                 </template>
@@ -159,7 +166,7 @@
                 
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in errorSemanticArr" :key="`B-${index}`" v-if="showESemantic">
+            <el-collapse-item v-for="(el,index) in errorSemanticArr" :key="`B-${index}`" v-if="showESemantic" :name="el.id" :value="activeName">
                 <template slot="title">
                     <li class="right-semantic">{{el.rep}}</li>
                 </template>
@@ -175,7 +182,7 @@
                     <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>-->
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestSpellingArr" :key="`C-${index}`" v-if="showESpelling">
+            <el-collapse-item v-for="(el,index) in suggestSpellingArr" :key="`C-${index}`" v-if="showESpelling" :name="el.id" :value="activeName">
                 <template slot="title">
                     <li class="suggest-spelling">{{el.rep}}</li>
                 </template>
@@ -195,7 +202,7 @@
                  -->
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestGrammarArr" :key="`D-${index}`" v-if="showEGrammar">
+            <el-collapse-item v-for="(el,index) in suggestGrammarArr" :key="`D-${index}`" v-if="showEGrammar" :name="el.id" :value="activeName">
                 <template slot="title">
                     <li class="suggest-grammar">{{el.rep}}</li>
                 </template>
@@ -220,7 +227,7 @@
                 
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestSemanticArr" :key="`E-${index}`" v-if="showSSemantic">
+            <el-collapse-item v-for="(el,index) in suggestSemanticArr" :key="`E-${index}`" v-if="showSSemantic" :name="el.id" :value="activeName">
                 <template slot="title">
                     <li class="suggest-semantic">{{el.rep}}</li>
                 </template>
@@ -237,7 +244,7 @@
 
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestStructureArr" :key="`F-${index}`" v-if="showSStructure">
+            <el-collapse-item v-for="(el,index) in suggestStructureArr" :key="`F-${index}`" v-if="showSStructure" :name="el.id" :value="activeName">
                 <template slot="title">
                     <li class="suggest-structure">{{el.rep}}</li>
                 </template>
@@ -269,8 +276,17 @@ var boxAttributor = new Parchment.Attributor.Class('box', 'line', {
     scope: Parchment.Scope.INLINE,
     whitelist: ['error','suggest']
 });
+var IdAttribute = new Parchment.Attributor.Attribute('id', 'id', {
+    scope: Parchment.Scope.INLINE,
+});
 Quill.register(boxAttributor);
+Quill.register({
+    'attributors/attribute/id': IdAttribute
+}, true);
 
+Quill.register({
+    'formats/id': IdAttribute,
+}, true);
 export default {
   data () {
     return {
@@ -294,39 +310,20 @@ export default {
         sumNum: '' ,
         judgeAdd:'',
         errorSpellingArr: [],
-        errorSpellingPosL:[],
-        errorSpellingPosR:[],
-        errorSpellingRight:[],
-        errorSpellingExplain:[],
         errorGrammarArr: [],
-        errorGrammarPosL:[],
-        errorGrammarPosR:[],
-        errorGrammarRight:[],
-        errorGrammarExplain:[],
         errorSemanticArr:[],
-        errorSemanticPosL:[],
-        errorSemanticPosR:[],
-        errorSemanticRight:[],
-        errorSemanticExplain:[],
         suggestSpellingArr: [],
         suggestGrammarArr: [],
         suggestSemanticArr: [],
-        // suggestSemanticPosL:[],
-        // suggestSemanticPosR:[],
-        // suggestSemanticRight:[],
-        // suggestSemanticExplain:[],
         judgeFlag: 0,
         suggestStructureArr: [],
-        // suggestStructurePosL:[],
-        // suggestStructurePosR:[],
-        // suggestStructureRight:[],
-        // suggestStructureExplain:[],
         titleContent: '',
         bodyContent:'',
         bodyContentArray: [],
         spanArray:[],
         spanString:'',
         htmlContent:'',
+        activeName: this.activeName,
         titleEditorOption: {
           theme: 'bubble',
           placeholder: "PASTE TITLE",
@@ -345,6 +342,19 @@ export default {
       this.changeHtml()
   },
   methods: {
+    getEventTrigger($event) {
+        var id = event.target.id
+        // console.log(event.target.id)
+        // this.activeName = id
+        this.openBoard(id)
+    }, 
+    openBoard(id) {
+        this.activeName = id
+    },
+    handleChange(va) {
+        // console.log(this.activeName)
+        console.log(va)
+    },
     changeMS() {
         var MSli = document.getElementById("mistakes-spelling");
         MSli.style.backgroundColor = "#eaeaea";
@@ -554,7 +564,7 @@ export default {
                     this.suggestStructureArr = res.body.structure.sug
                     let resArr = []
                     let catArr = [this.errorSpellingArr, this.errorGrammarArr, this.errorSemanticArr, 
-                    this.suggestSemanticArr, this.suggestStructureArr]
+                    this.suggestSpellingArr,this.suggestGrammarArr,this.suggestSemanticArr, this.suggestStructureArr]
                     catArr.forEach(cat => {                        
                         cat.forEach(item => {
                             if(item.end) {
@@ -562,7 +572,8 @@ export default {
                                 resArr.push({
                                     start: item.start[i],
                                     end: item.end[i],
-                                    type: item.type
+                                    type: item.type,
+                                    id: item.id
                                 })
                             } 
                             }
@@ -578,19 +589,14 @@ export default {
                         if (item.type == 1) {
                             if(item.end > text.length) return
                             text = insert_flg(text, item.end, '</span>')
-                            text = insert_flg(text, item.start, '<span class="line-error">')
+                            text = insert_flg(text, item.start, '<span class="line-error" id="'+item.id+'" >')
                         }
                         else {
                             if(item.end > text.length) return
                             text = insert_flg(text, item.end, '</span>')
-                            text = insert_flg(text, item.start, '<span class="line-suggest">')
+                            text = insert_flg(text, item.start, '<span class="line-suggest" id="'+item.id+'" >')
                         }
                     });
-                    for (let i=0 ; i<text.length ; i++) {
-                        if(text.charAt(i) == '\n') {
-                            insert_flg(text,i,'<br>')
-                        }
-                    }
                     this.cursorIndex = this.editor.getSelection().index
                     this.editor.deleteText(0, this.editor.getLength()+1)
                     //插入html
@@ -687,6 +693,7 @@ export default {
   },
   computed: {
     editor() {
+        console.log(this.$refs.accordion)
         return this.$refs.myTextEditor.quill
     }
   },
@@ -992,6 +999,14 @@ export default {
 }
 .line-suggest {
     border-bottom: 2px solid rgb(238,188,80);
+}
+.line-error:hover {
+    cursor: pointer;
+    background:rgba(230,157,169,0.7);
+}
+.line-suggest:hover {
+    cursor: pointer;
+    background: rgba(220,170,70,0.4);
 }
 .title-paste {
     width:80%;
