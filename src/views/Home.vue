@@ -120,8 +120,8 @@
     <div class="splender-right">
     </div>
     <div class="right">
-        <el-collapse v-model="activeName" accordion @change="handleChange" ref="accordion" :value="activeName">
-            <el-collapse-item v-for="(el,index) in errorSpellingArr" :key="index"  v-if="showESpelling" :name="el.id" :value="activeName">
+        <el-collapse v-model="activeNames" @change="handleChange" ref="accordion">
+            <el-collapse-item v-for="(el,index) in errorSpellingArr" :key="index"  v-if="showESpelling" :name="el.id" >
                 <template slot="title">
                     <li class="right-spelling">{{el.rep}}</li>
                 </template>
@@ -141,7 +141,7 @@
                  -->
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in errorGrammarArr" :key="`A-${index}`"  v-if="showEGrammar" :name="el.id" :value="activeName">
+            <el-collapse-item v-for="(el,index) in errorGrammarArr" :key="`A-${index}`"  v-if="showEGrammar" :name="el.id" >
                 <template slot="title">
                     <li class="right-grammar">{{el.rep}}</li>
                 </template>
@@ -166,7 +166,7 @@
                 
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in errorSemanticArr" :key="`B-${index}`" v-if="showESemantic" :name="el.id" :value="activeName">
+            <el-collapse-item v-for="(el,index) in errorSemanticArr" :key="`B-${index}`" v-if="showESemantic" :name="el.id" >
                 <template slot="title">
                     <li class="right-semantic">{{el.rep}}</li>
                 </template>
@@ -182,7 +182,7 @@
                     <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>-->
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestSpellingArr" :key="`C-${index}`" v-if="showESpelling" :name="el.id" :value="activeName">
+            <el-collapse-item v-for="(el,index) in suggestSpellingArr" :key="`C-${index}`" v-if="showESpelling" :name="el.id" >
                 <template slot="title">
                     <li class="suggest-spelling">{{el.rep}}</li>
                 </template>
@@ -202,7 +202,7 @@
                  -->
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestGrammarArr" :key="`D-${index}`" v-if="showEGrammar" :name="el.id" :value="activeName">
+            <el-collapse-item v-for="(el,index) in suggestGrammarArr" :key="`D-${index}`" v-if="showEGrammar" :name="el.id" >
                 <template slot="title">
                     <li class="suggest-grammar">{{el.rep}}</li>
                 </template>
@@ -227,7 +227,7 @@
                 
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestSemanticArr" :key="`E-${index}`" v-if="showSSemantic" :name="el.id" :value="activeName">
+            <el-collapse-item v-for="(el,index) in suggestSemanticArr" :key="`E-${index}`" v-if="showSSemantic" :name="el.id" >
                 <template slot="title">
                     <li class="suggest-semantic">{{el.rep}}</li>
                 </template>
@@ -244,7 +244,7 @@
 
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestStructureArr" :key="`F-${index}`" v-if="showSStructure" :name="el.id" :value="activeName">
+            <el-collapse-item v-for="(el,index) in suggestStructureArr" :key="`F-${index}`" v-if="showSStructure" :name="el.id" >
                 <template slot="title">
                     <li class="suggest-structure">{{el.rep}}</li>
                 </template>
@@ -323,7 +323,7 @@ export default {
         spanArray:[],
         spanString:'',
         htmlContent:'',
-        activeName: this.activeName,
+        activeNames: [],//this.activeNames,
         titleEditorOption: {
           theme: 'bubble',
           placeholder: "PASTE TITLE",
@@ -344,16 +344,15 @@ export default {
   methods: {
     getEventTrigger($event) {
         var id = event.target.id
-        // console.log(event.target.id)
-        // this.activeName = id
+        // console.log(id)
         this.openBoard(id)
+        // console.log(this.activeNames)
     }, 
     openBoard(id) {
-        this.activeName = id
+        this.activeNames = [parseInt(id)]
     },
     handleChange(va) {
-        // console.log(this.activeName)
-        console.log(va)
+        // console.log(va)
     },
     changeMS() {
         var MSli = document.getElementById("mistakes-spelling");
