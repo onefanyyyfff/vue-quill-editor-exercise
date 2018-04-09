@@ -17,9 +17,11 @@
         <div class="clear-float">
         </div>
         <div class="mistakes">
-            <div class="mistakes-circle">
+            <div class="mistakes-all">
+                <div class="mistakes-circle">
+                </div>
+                <span class="mistakes-title" @click="toShowMistake()">错误</span>
             </div>
-            <span class="mistakes-title">错误</span>
             <ul class="mistakes-list">
                 <li id="mistakes-spelling" @mouseover="changeMS()" @mouseout="returnMS()" @click="toShowESpelling()">
                     <span class="list-title">拼写</span>
@@ -50,9 +52,11 @@
         <div class="clear-float">
         </div>
         <div class="suggestions">
-            <div class="suggestions-circle">
+            <div class="suggestions-all">
+                <div class="suggestions-circle">
+                </div>
+                <span class="suggestions-title" @click="toShowSuggestion()">建议</span>
             </div>
-            <span class="suggestions-title">建议</span>
             <ul class="suggestions-list">
                 <li id="suggestions-spelling" @mouseover="changeSSP()" @mouseout="returnSSP()" @click="toShowSSpelling()">
                     <span class="list-title">拼写</span>
@@ -182,7 +186,7 @@
                     <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>-->
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestSpellingArr" :key="`C-${index}`" v-if="showESpelling" :name="el.id" >
+            <el-collapse-item v-for="(el,index) in suggestSpellingArr" :key="`C-${index}`" v-if="showSSpelling" :name="el.id" >
                 <template slot="title">
                     <li class="suggest-spelling">{{el.rep}}</li>
                 </template>
@@ -202,7 +206,7 @@
                  -->
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestGrammarArr" :key="`D-${index}`" v-if="showEGrammar" :name="el.id" >
+            <el-collapse-item v-for="(el,index) in suggestGrammarArr" :key="`D-${index}`" v-if="showSGrammar" :name="el.id" >
                 <template slot="title">
                     <li class="suggest-grammar">{{el.rep}}</li>
                 </template>
@@ -344,9 +348,7 @@ export default {
   methods: {
     getEventTrigger($event) {
         var id = event.target.id
-        // console.log(id)
         this.openBoard(id)
-        // console.log(this.activeNames)
     }, 
     openBoard(id) {
         this.activeNames = [parseInt(id)]
@@ -360,6 +362,7 @@ export default {
         var MSC = document.getElementById("mistakes-spelling-circle");
         if (MSC) {
             MSC.style.backgroundColor = "#ef4632";
+            MSC.style.cursor = "pointer";
         };
         var MSN = document.getElementById("mistakes-spelling-num");
         if (MSN) {
@@ -384,6 +387,7 @@ export default {
         var MGC = document.getElementById("mistakes-grammar-circle");
         if (MGC) {
             MGC.style.backgroundColor = "#ef4632";
+            MGC.style.cursor = "pointer";
         };
         var MGN = document.getElementById("mistakes-grammar-num");
         if (MGN) {
@@ -408,6 +412,7 @@ export default {
         var MLC = document.getElementById("mistakes-lexeme-circle");
         if (MLC) {
             MLC.style.backgroundColor = "#ef4632";
+            MLC.style.cursor = "pointer";
         };
         var MLN = document.getElementById("mistakes-lexeme-num");
         if (MLN) {
@@ -429,25 +434,26 @@ export default {
     changeSSP() {
         var SLli = document.getElementById("suggestions-spelling");
         SLli.style.backgroundColor = "#eaeaea";
-        var SLC = document.getElementById("suggestion-spelling-circle");
-        if (SLC) {
-            SLC.style.backgroundColor = "#ef4632";
+        var SSP = document.getElementById("suggestion-spelling-circle");
+        if (SSP) {
+            SSP.style.backgroundColor = "#ef4632";
+            SSP.style.cursor = "pointer";
         };
-        var SLN = document.getElementById("suggestion-spelling-num");
-        if (SLN) {
-            SLN.style.color = "white"; 
+        var SSP = document.getElementById("suggestion-spelling-num");
+        if (SSP) {
+            SSP.style.color = "white"; 
         }
     },
     returnSSP() {
         var SLli = document.getElementById("suggestions-spelling");
         SLli.style.backgroundColor = "white";
-        var SLC = document.getElementById("suggestion-spelling-circle");
-        if (SLC) {
-            SLC.style.backgroundColor = "#ededed";
+        var SSP = document.getElementById("suggestion-spelling-circle");
+        if (SSP) {
+            SSP.style.backgroundColor = "#ededed";
         };
-        var SLN = document.getElementById("suggestion-spelling-num");
-        if (SLN) {
-            SLN.style.color = "#898989"; 
+        var SSP = document.getElementById("suggestion-spelling-num");
+        if (SSP) {
+            SSP.style.color = "#898989"; 
         }
     },
     changeSG() {
@@ -456,6 +462,7 @@ export default {
         var SLC = document.getElementById("suggestion-grammar-circle");
         if (SLC) {
             SLC.style.backgroundColor = "#ef4632";
+            SLC.style.cursor = "pointer";
         };
         var SLN = document.getElementById("suggestion-grammar-num");
         if (SLN) {
@@ -480,6 +487,7 @@ export default {
         var SLC = document.getElementById("suggestion-lexeme-circle");
         if (SLC) {
             SLC.style.backgroundColor = "#ef4632";
+            SLC.style.cursor = "pointer";
         };
         var SLN = document.getElementById("suggestion-lexeme-num");
         if (SLN) {
@@ -504,6 +512,7 @@ export default {
         var SSC = document.getElementById("suggestion-structure-circle");
         if (SSC) {
             SSC.style.backgroundColor = "#ef4632";
+            SSC.style.cursor = "pointer";
         };
         var SSN = document.getElementById("suggestion-structure-num");
         if (SSN) {
@@ -624,6 +633,15 @@ export default {
         this.showSSemantic = false,
         this.showSStructure = false
     },
+    toShowSuggestion() {
+        this.showESpelling = false,
+        this.showEGrammar = false,
+        this.showESemantic = false,
+        this.showSSpelling = true,
+        this.showSGrammar = true,
+        this.showSSemantic = true,
+        this.showSStructure = true
+    },
     toShowESpelling() {
         this.showESpelling = true,
         this.showEGrammar = false,
@@ -714,11 +732,13 @@ export default {
 .topper {
     height:20px;
     background-color:rgb(79,145,210);
+    width:100%;
+    position: absolute;
+    top:0;
 }
 /* 左边栏样式 */
 .left {
     float: left;
-    margin-left: 15px;
     width:21%;
     height: 100%;
     min-width: 245px;
@@ -744,9 +764,8 @@ export default {
     margin:10px 0px 0px 20px;
 }
 .show-all {
-    width:50%;
+    width:100%;
     float:left;
-    margin-left: 20px;
     padding-bottom:10px;
 }
 .show-all:hover {
@@ -755,45 +774,48 @@ export default {
     background-color:rgb(234,234,234);
 }
 .show-all-circle {
-    float: left;
-    margin:18px 0 0 -20px;
+    display: inline-block;
+    margin:18px 0 0 20px;
     width:12px;
     height:12px;
     border-radius:50%;
     background-color:rgb(79,145,210);
 }
 .show-all-title {
-    display: block;
-    float: left;
+    display: inline-block;
     color: rgb(79,145,210);
     margin:13px 0 0 0;
     font-size: 18px;
 }
 .mistakes {
     border-bottom:1px solid rgb(218,218,218);
-    width:50%;
+    width:100%;
     float:left;
-    margin-left: 20px;
     padding-bottom:10px;
 }
+.mistakes-all {
+    width:100%;
+    float:left;
+    padding-bottom: 10px;
+}
+.mistakes-all:hover {
+    font-weight: bolder;
+    cursor: pointer;
+    background-color:rgb(234,234,234);
+}
 .mistakes-circle {
-    float: left;
-    margin:18px 0 0 -20px;
+    display:inline-block;
+    margin:18px 0 0 20px;
     width:12px;
     height:12px;
     border-radius:50%;
     background-color:rgb(232,78,61);
 }
 .mistakes-title {
-    display: block;
-    float: left;
+    display: inline-block;
     color: rgb(232,78,61);
     margin:13px 0 0 0;
     font-size:18px;
-}
-.mistakes-title:hover {
-    font-weight: bolder;
-    cursor: pointer;
 }
 #mistakes-spelling-circle {
     float: right;
@@ -802,7 +824,7 @@ export default {
     border-radius:50%;
     background-color:rgb(237,237,237);
     z-index: 1;
-    margin: 8px 0 0 10px;
+    margin: 8px 20px 0 0;
 }
 #mistakes-grammar-circle {
     float: right;
@@ -811,7 +833,7 @@ export default {
     border-radius:50%;
     background-color:rgb(237,237,237);
     z-index: 1;
-    margin: 8px 0 0 10px;
+    margin: 8px 20px 0 0;
 }
 #mistakes-lexeme-circle {
     float: right;
@@ -820,23 +842,22 @@ export default {
     border-radius:50%;
     background-color:rgb(237,237,237);
     z-index: 1;
-    margin: 8px 0 0 10px;
+    margin: 8px 20px 0 0;
 }
 .mistakes-list {
-    width: 140%;
+    width: 100%;
     float: left;
     list-style: none;
-    margin: 5px 0 0 -40px;
-    padding-top:10px;
+    margin: 5px 0 0 0px;
+    padding:10px 0 0 0;
 }
 .list-title {
-    width:80%;
     font-size:16px;
     color:rgb(137,137,137);
     display: block;
     float:left;
     margin:0 0 10px 0;
-    padding-top: 10px;
+    padding: 10px 0 0 35px;
 }
 #mistakes-spelling-num {
     display: block; 
@@ -867,22 +888,30 @@ export default {
 }
 .suggestions {
     border-bottom:1px solid rgb(218,218,218);
-    width:50%;
+    width:100%;
     float:left;
-    margin-left: 20px;
     padding-bottom:30px;
 }
+.suggestions-all {
+    width:100%;
+    float:left;
+    padding-bottom: 10px;
+}
+.suggestions-all:hover {
+    font-weight: bolder;
+    cursor: pointer;
+    background-color:rgb(234,234,234);
+}
 .suggestions-circle {
-    float: left;
-    margin:18px 0 0 -20px;
+    display: inline-block;
+    margin:18px 0 0 20px;
     width:12px;
     height:12px;
     border-radius:50%;
     background-color:rgb(253,182,75);
 }
 .suggestions-title {
-    display: block;
-    float: left;
+    display: inline-block;
     color:rgb(253,182,75);
     margin:15px 0 0 0;
     font-size:18px;
@@ -898,7 +927,7 @@ export default {
     border-radius:50%;
     background-color:rgb(237,237,237);
     z-index: 1;
-    margin: 8px 0 0 10px;
+    margin: 8px 20px 0 0;
 }
 #suggestion-grammar-circle {
     float: right;
@@ -907,7 +936,7 @@ export default {
     border-radius:50%;
     background-color:rgb(237,237,237);
     z-index: 1;
-    margin: 8px 0 0 10px;
+    margin: 8px 20px 0 0;
 }
 #suggestion-lexeme-circle {
     float: right;
@@ -916,7 +945,7 @@ export default {
     border-radius:50%;
     background-color:rgb(237,237,237);
     z-index: 1;
-    margin: 8px 0 0 10px;
+    margin: 8px 20px 0 0;
 }
 #suggestion-structure-circle {
     float: right;
@@ -925,14 +954,14 @@ export default {
     border-radius:50%;
     background-color:rgb(237,237,237);
     z-index: 1;
-    margin: 8px 0 0 10px;
+    margin: 8px 20px 0 0;
 }
 .suggestions-list {
-    width:140%;
+    width:100%;
     float: left;
     list-style: none;
-    margin: 5px 0 0 -40px;
-    padding-top:10px;
+    margin: 5px 0 0 0px;
+    padding:10px 0 0 0;
 }
 #suggestion-spelling-num {
     display: block; 
@@ -975,10 +1004,10 @@ export default {
     float:left;
 }
 .advanced-issues-img {
-    width:24px;
-    height:22px;
+    width:22px;
+    height:20px;
     float: left;
-    margin: 15px 0 0 0;
+    margin: 17px 0 0 10px;
 }
 .advanced-issues-title {
     display: block;
