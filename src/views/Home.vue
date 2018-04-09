@@ -101,7 +101,7 @@
     </div>
     <div class="splender-left">
     </div>
-    <div class="middle">
+    <div class="middle" @click="getEventTrigger()">
         <quill-editor class="title-paste"
                       ref="myTextEditor"
                       :content="titleContent"
@@ -116,15 +116,18 @@
         <quill-editor class="body-paste"
                       id="body-paste"
                       ref="myTextEditor"
+                      autocomplete="off" 
+                      autocorrect="off" 
+                      autocapitalize="off" 
+                      spellcheck="false"
                       :content="bodyContent"
-                      :options="bodyEditorOption"
-                      @focus="getEventTrigger($event)">
+                      :options="bodyEditorOption">
         </quill-editor>
     </div>
     <div class="splender-right">
     </div>
     <div class="right">
-        <el-collapse v-model="activeNames" @change="handleChange" ref="accordion">
+        <el-collapse v-model="activeNames" @change="handleChange" >
             <el-collapse-item v-for="(el,index) in errorSpellingArr" :key="index"  v-if="showESpelling" :name="el.id" >
                 <template slot="title">
                     <li class="right-spelling">{{el.rep}}</li>
@@ -346,7 +349,7 @@ export default {
       this.changeHtml()
   },
   methods: {
-    getEventTrigger($event) {
+    getEventTrigger() {
         var id = event.target.id
         this.openBoard(id)
     }, 
@@ -710,7 +713,6 @@ export default {
   },
   computed: {
     editor() {
-        console.log(this.$refs.accordion)
         return this.$refs.myTextEditor.quill
     }
   },
