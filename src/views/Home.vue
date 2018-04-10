@@ -128,7 +128,7 @@
     <div class="splender-right">
     </div>
     <div class="right">
-        <el-collapse v-model="activeNames" @change="handleChange" >
+        <!-- <el-collapse v-model="activeNames" @change="handleChange" >
             <el-collapse-item v-for="(el,index) in errorSpellingArr" :key="index"  v-if="showESpelling" :name="el.id" >
                 <template slot="title">
                     <li class="right-spelling">{{el.rep}}</li>
@@ -136,8 +136,8 @@
                 <div class="es-second-floor">
                     <span v-html="el.exp"></span>
                     
-                    <!-- 以下是后端传回的html样式 -->
-                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px">
+                
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px">
                         <li style="color:#fff;text-indent:5px;">单词拼写错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px;font-size:18px">
@@ -146,7 +146,7 @@
                         <span style="background:rgb(79,145,210);color:#fff;padding:4px;">efficient</span>
                     </div>
                     <div style="margin:10px 10px 10px 20px;">One cares about making the process repeatable and <span style="color:rgb(79,145,210);font-weight:bold">efficient</span></div>
-                 -->
+                
                 </div>
             </el-collapse-item>
             <el-collapse-item v-for="(el,index) in errorGrammarArr" :key="`A-${index}`"  v-if="showEGrammar" :name="el.id" >
@@ -156,8 +156,8 @@
                 <div class="eg-second-floor">
                     <span v-html="el.exp"></span>
                     
-                    <!-- 以下是后端传回的html样式 -->
-                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                    
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">词组搭配错误</li>
                     </div>
                     <div style="margin-left:20px;font-size:18px">
@@ -170,7 +170,7 @@
                     <div style="color:rgb(79,145,210);font-weight:bold;font-size:17px;margin:0 10px 0 20px;">examples</div>
                     <div style="color:rgb(117,117,117);font-style:oblique;margin:0 10px 10px 20px;line-height:15px;">
                         <span>This place is close and <span>convenient to</span> the street car</span>
-                    </div> -->
+                    </div>
                 
                 </div>
             </el-collapse-item>
@@ -181,13 +181,13 @@
                 <div class="ese-second-floor">
                     <span v-html="el.exp"></span>
 
-                    <!-- 以下是后端传回的html样式 -->
-                   <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                    
+                   <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">知识性错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px">整句话无语法性错误，但语义有知识性错误</div>
                     <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color:#ff0000">Imperial Palace</span> has a long history originated in <span style="color:#ff0000;text-decoration:line-through;">Qing</span> Dynasty</div>
-                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>-->
+                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
                 </div>
             </el-collapse-item>
             <el-collapse-item v-for="(el,index) in suggestSpellingArr" :key="`C-${index}`" v-if="showSSpelling" :name="el.id" >
@@ -197,8 +197,8 @@
                 <div class="ese-second-floor">
                     <span v-html="el.exp"></span>
 
-                    <!-- 以下是后端传回的html样式 -->
-                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                   
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">单词拼写错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px;font-size:18px">
@@ -207,7 +207,7 @@
                         <span style="background:rgb(79,145,210);color:#fff;padding:4px;">efficient</span>
                     </div>
                     <div style="margin:10px 10px 10px 20px;">One cares about making the process repeatable and <span style="color:rgb(79,145,210);font-weight:bold">efficient</span></div>
-                 -->
+                
                 </div>
             </el-collapse-item>
             <el-collapse-item v-for="(el,index) in suggestGrammarArr" :key="`D-${index}`" v-if="showSGrammar" :name="el.id" >
@@ -217,8 +217,8 @@
                 <div class="ese-second-floor">
                     <span v-html="el.exp"></span>
 
-                    <!-- 以下是后端传回的html样式 -->
-                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+              
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">词组搭配错误</li>
                     </div>
                     <div style="margin-left:20px;font-size:18px">
@@ -231,7 +231,7 @@
                     <div style="color:rgb(79,145,210);font-weight:bold;font-size:17px;margin:0 10px 0 20px;">examples</div>
                     <div style="color:rgb(117,117,117);font-style:oblique;margin:0 10px 10px 20px;line-height:15px;">
                         <span>This place is close and <span>convenient to</span> the street car</span>
-                    </div> -->
+                    </div>
                 
                 </div>
             </el-collapse-item>
@@ -242,13 +242,13 @@
                 <div class="ss-second-floor">
                     <span v-html="el.exp"></span>
 
-                    <!-- 以下是后端传回的html样式 -->
-                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                   
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">知识性错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px">整句话无语法性错误，但语义有知识性错误</div>
                     <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color: rgb(238,188,80);">Imperial Palace</span> has a long history originated in <span style="color:rgb(238,188,80);text-decoration:line-through;">Qing</span> Dynasty</div>
-                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div> -->
+                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
 
                 </div>
             </el-collapse-item>
@@ -259,14 +259,25 @@
                 <div class="sst-second-floor">
                     <span v-html="el.exp"></span>
 
-                    <!-- 以下是后端传回的html样式 -->
-                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                 
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">句式结构错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px">从句式结构考虑，整句话有累赘错误</div>
                     <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color:rgb(238,188,80);text-decoration:line-through;">Imperial Palace</span> has a long history originated in Dynasty</div>
-                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div> -->
+                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
 
+                </div>
+            </el-collapse-item>
+        </el-collapse> -->
+        <el-collapse v-model="activeNames" @change="handleChange" >
+            <el-collapse-item v-for="(el,index) in rightArr" :key="index"  v-if="showESpelling" :name="el.id" >
+                <template slot="title">
+                    <li class="error-rep" v-if="el.type==1">{{el.rep}}</li>
+                    <li class="sug-rep" v-if="el.type==2">{{el.rep}}</li>
+                </template>
+                <div class="es-second-floor">
+                    <span v-html="el.exp"></span>
                 </div>
             </el-collapse-item>
         </el-collapse>
@@ -323,6 +334,7 @@ export default {
         suggestSpellingArr: [],
         suggestGrammarArr: [],
         suggestSemanticArr: [],
+        rightArr: [],
         judgeFlag: 0,
         all: 0,
         m: 0,
@@ -492,7 +504,7 @@ export default {
         SLli.style.backgroundColor = "#eaeaea";
         var SSP = document.getElementById("suggestion-spelling-circle");
         if (SSP) {
-            SSP.style.backgroundColor = "#ef4632";
+            SSP.style.backgroundColor = "#FDB64B";
             SSP.style.cursor = "pointer";
         };
         var SSP = document.getElementById("suggestion-spelling-num");
@@ -519,7 +531,7 @@ export default {
         SLli.style.backgroundColor = "#eaeaea";
         var SLC = document.getElementById("suggestion-grammar-circle");
         if (SLC) {
-            SLC.style.backgroundColor = "#ef4632";
+            SLC.style.backgroundColor = "#FDB64B";
             SLC.style.cursor = "pointer";
         };
         var SLN = document.getElementById("suggestion-grammar-num");
@@ -546,7 +558,7 @@ export default {
         SLli.style.backgroundColor = "#eaeaea";
         var SLC = document.getElementById("suggestion-lexeme-circle");
         if (SLC) {
-            SLC.style.backgroundColor = "#ef4632";
+            SLC.style.backgroundColor = "#FDB64B";
             SLC.style.cursor = "pointer";
         };
         var SLN = document.getElementById("suggestion-lexeme-num");
@@ -573,7 +585,7 @@ export default {
         SSli.style.backgroundColor = "#eaeaea";
         var SSC = document.getElementById("suggestion-structure-circle");
         if (SSC) {
-            SSC.style.backgroundColor = "#ef4632";
+            SSC.style.backgroundColor = "#FDB64B";
             SSC.style.cursor = "pointer";
         };
         var SSN = document.getElementById("suggestion-structure-num");
@@ -651,6 +663,23 @@ export default {
                             }
                         })
                     });
+                    catArr.forEach(cat => {                        
+                        cat.forEach(item => {
+                            if(item.end) {
+                               for(let i = 0; i< item.end.length; i++) {
+                                this.rightArr.push({
+                                    start: item.start[i],
+                                    end: item.end[i],
+                                    type: item.type,
+                                    id: item.id,
+                                    exp: item.exp,
+                                    rep: item.rep
+                                })
+                            } 
+                            }
+                        })
+                    });
+                    this.rightArr.sort((a,b) => a.end > b.end)
                     resArr.sort((a,b) => a.end < b.end)
                     function insert_flg(str,idx,insert){
                         let a = str.substring(0, idx)
@@ -660,18 +689,20 @@ export default {
                     resArr.forEach(item => {
                         if (item.type == 1) {
                             if(item.end > text.length) return
-                            text = insert_flg(text, item.end, '</span>')
-                            text = insert_flg(text, item.start, '<span class="line-error" id="'+item.id+'" >')
+                            text = insert_flg(text, item.end+1, '</span>')
+                            text = insert_flg(text, item.start, '<span class="line-error" id="'+item.id+'">')
                         }
                         else {
                             if(item.end > text.length) return
-                            text = insert_flg(text, item.end, '</span>')
-                            text = insert_flg(text, item.start, '<span class="line-suggest" id="'+item.id+'" >')
+                            text = insert_flg(text, item.end+1, '</span>')
+                            text = insert_flg(text, item.start, '<span class="line-suggest" id="'+item.id+'">')
                         }
                     });
+                    console.log("1"+text)
                     this.cursorIndex = this.editor.getSelection().index
                     this.editor.deleteText(0, this.editor.getLength()+1)
                     //插入html
+                    console.log("2"+text)
                     this.editor.clipboard.dangerouslyPasteHTML(0,text)
                     this.editor.setSelection(this.cursorIndex, 0)
                     this.htmlContent = originContent
@@ -988,6 +1019,7 @@ export default {
     width:100%;
     position: absolute;
     top:0;
+    z-index: 100;
 }
 /* 左边栏样式 */
 .left {
@@ -1009,11 +1041,9 @@ export default {
     display: inline-block;
     position: relative;
     top: 20px;
-    /* float: left; */
 }
 .reload-num {
     display: inline-block;
-    /* float: left; */
     font-size:75px;
     color:rgb(126,126,126);
     margin: 0px 0px 0px 20px;
@@ -1023,11 +1053,6 @@ export default {
     float:left;
     padding-bottom:10px;
 }
-/* .show-all:hover {
-    font-weight: bolder;
-    cursor: pointer;
-    background-color:rgb(234,234,234);
-} */
 .show-all-circle {
     display: inline-block;
     margin:18px 0 0 20px;
@@ -1053,11 +1078,6 @@ export default {
     float:left;
     padding-bottom: 10px;
 }
-/* .mistakes-all:hover {
-    font-weight: bolder;
-    cursor: pointer;
-    background-color:rgb(234,234,234);
-} */
 .mistakes-circle {
     display:inline-block;
     margin:18px 0 0 20px;
@@ -1152,11 +1172,6 @@ export default {
     float:left;
     padding-bottom: 10px;
 }
-/* .suggestions-all:hover {
-    font-weight: bolder;
-    cursor: pointer;
-    background-color:rgb(234,234,234);
-} */
 .suggestions-circle {
     display: inline-block;
     margin:18px 0 0 20px;
@@ -1311,15 +1326,29 @@ export default {
 .right {
     float: left;
     width: 31%;
-    margin-top: 125px;
+    height:100%;
+    overflow: scroll;
     margin-left:1px;
 }
 .el-collapse {
+    padding-top:125px;
     border: none;
     width:96%;
     margin: 0 auto 0  0;
 }
-.right-spelling {
+.error-rep {
+    color: red;
+    height: 30px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
+}
+.sug-rep {
+    color: rgb(238,188,80);
+    height: 30px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
+}
+/* .right-spelling {
     color: red;
     height: 30px;
     margin: 0 40px 10px 2px;
@@ -1336,8 +1365,8 @@ export default {
     height: 30px;
     margin: 0 40px 10px 2px;
     font-size: 16px;
-}
-.suggest-spelling {
+} */
+/* .suggest-spelling {
     color: rgb(238,188,80);
     height: 30px;
     margin: 0 40px 10px 2px;
@@ -1360,7 +1389,7 @@ export default {
     height: 30px;
     margin: 0 40px 10px 2px;
     font-size: 16px;
-}
+} */
 .es-second-floor {
     position: relative;
     top:-5px;

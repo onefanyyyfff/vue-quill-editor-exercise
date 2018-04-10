@@ -17,12 +17,22 @@
                 {
                     "cat": 1,
                     "eid": 3,
-                    "end": [6],
-                    "rep": "spelling err rep",
-                    "start": [4],
+                    "end": [2],
+                    "rep": "spelling err rep1",
+                    "start": [0],
                     "type": 1,
                     "exp":"<div class=\"demo\">hahaha</div>",
                     "id":123
+                },
+                {
+                    "cat": 1,
+                    "eid": 3,
+                    "end": [8],
+                    "rep": "spelling err rep2",
+                    "start": [4],
+                    "type": 1,
+                    "exp":"<div class=\"demo\">hahaha</div>",
+                    "id":909
                 }
             ],
             "sug": [
@@ -43,9 +53,9 @@
             {
                 "cat": 2,
                 "eid": 3,
-                "end": [44],
+                "end": [25],
                 "rep": "grammar err rep",
-                "start": [40],
+                "start": [20],
                 "type": 1,
                 "exp":"grammar err exp",
                 "id":345
@@ -55,9 +65,9 @@
             {
                 "cat": 2,
                 "eid": 3,
-                "end": [50],
+                "end": [35],
                 "rep": "grammar sug rep",
-                "start": [46],
+                "start": [30],
                 "type": 2,
                 "exp":"grammar sug exp",
                 "id":456
@@ -69,9 +79,9 @@
                 {
                     "cat": 3,
                     "eid": 3,
-                    "end": [33],
+                    "end": [45],
                     "rep": "semantic err rep",
-                    "start": [30],
+                    "start": [40],
                     "type": 1,
                     "exp":"semantic err exp",
                     "id":567
@@ -81,9 +91,9 @@
                 {
                     "cat": 3,
                     "eid": 3,
-                    "end": [23],
+                    "end": [55],
                     "rep": "semantic sug rep",
-                    "start": [20],
+                    "start": [50],
                     "type": 2,
                     "exp":"semantic sug exp",
                     "id":678
@@ -107,9 +117,9 @@
                 {
                     "cat": 4,
                     "eid": 3,
-                    "end": [19],
+                    "end": [75],
                     "rep": "structure sug rep",
-                    "start": [18],
+                    "start": [70],
                     "type": 2,
                     "exp":"structure sug exp",
                     "id":890
