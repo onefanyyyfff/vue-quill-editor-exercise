@@ -315,7 +315,7 @@ export default {
         suggestGrammar:'',
         suggestSemantic: '',
         suggestStructure: '',
-        sumNum: '' ,
+        sumNum: 0 ,
         judgeAdd:'',
         errorSpellingArr: [],
         errorGrammarArr: [],
@@ -1003,18 +1003,20 @@ export default {
     margin-left: 20px;
 }
 .reload-img {
-    margin:25px auto 15px 20px;
-    width:15px;
-    height:60px;
-    display: block;
-    float: left;
+    margin: 30px auto 15px 20px;
+    width: 15px;
+    height: 65px;
+    display: inline-block;
+    position: relative;
+    top: 20px;
+    /* float: left; */
 }
 .reload-num {
-    display: block;
-    float: left;
+    display: inline-block;
+    /* float: left; */
     font-size:75px;
     color:rgb(126,126,126);
-    margin:10px 0px 0px 20px;
+    margin: 0px 0px 0px 20px;
 }
 .show-all {
     width:100%;
