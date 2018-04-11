@@ -304,24 +304,6 @@ Vue.use(VueQuillEditor)
 
 let Inline = Quill.import('blots/inline');
 
-// class ErrorBlot extends Inline {
-//     static create(value) {
-//         let node = super.create();
-//         node.setAttribute('id', value.id);
-//         return node;
-//     }
-
-//     static value(node) {
-//         return {
-//             id: node.getAttribute('id')
-//         };
-//     }
-// }
-
-// ErrorBlot.blotName = 'error';
-// ErrorBlot.tagName = 'SPAN';
-// ErrorBlot.className = 'line-error'
-
 class IssueBlot extends Inline {
     static create(value) {
         let node = super.create();
@@ -350,10 +332,7 @@ var boxAttributor = new Parchment.Attributor.Class('box', 'line', {
 Quill.register({
     'formats/issue': IssueBlot
 });
-// Quill.register({
-//     'formats/suggest': SuggestBlot
-// });
-// also, add in bodyEditorOption/formats
+// also, register in bodyEditorOption/formats
 
 Quill.register(boxAttributor);
 
@@ -744,37 +723,33 @@ export default {
                     // console.log(blot);
                 });
 
+                // Combine all issues
                 catArr.forEach(cat => {
                     cat.forEach(item => {
                         if(item.end) {
                             for(let i = 0; i< item.end.length; i++) {
-                            resArr.push({
-                                start: item.start[i],
-                                end: item.end[i],
-                                type: item.type,
-                                id: item.id
-                            })
-                        } 
+                                resArr.push({
+                                    start: item.start[i],
+                                    end: item.end[i],
+                                    type: item.type,
+                                    id: item.id
+                                });
+                            }
+                            if (item.end.length > 0) {
+                                this.rightArr.push({
+                                    start: item.start[0],
+                                    end: item.end[0],
+                                    type: item.type,
+                                    id: item.id,
+                                    exp: item.exp,
+                                    rep: item.rep
+                                });
+                            }
                         }
                     })
                 });
-                catArr.forEach(cat => {
-                    cat.forEach(item => {
-                        if(item.end) {
-                            for(let i = 0; i< item.end.length; i++) {
-                            this.rightArr.push({
-                                start: item.start[i],
-                                end: item.end[i],
-                                type: item.type,
-                                id: item.id,
-                                exp: item.exp,
-                                rep: item.rep
-                            })
-                        } 
-                        }
-                    })
-                });
-                this.rightArr.sort((a,b) => a.end > b.end)
+
+                this.rightArr.sort((a,b) => a.start > b.start)
                 // resArr.sort((a,b) => a.end < b.end)
                 // function insert_flg(str,idx,insert){
                 //     let a = str.substring(0, idx)
