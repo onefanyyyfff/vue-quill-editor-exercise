@@ -4,7 +4,6 @@
     </div>
     <div class="left">
         <div class="reload">
-            <img class="reload-img" src="/static/img/reload.png" onclick="reloadPaper()" v-if="showPic">
             <img class="reload-img" src="/static/img/load.gif" onclick="reloadPaper()" v-if="showGif">
             <span class="reload-num">{{sumNum}}</span>
         </div>

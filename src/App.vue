@@ -1,16 +1,22 @@
 <template>
   <div id="app">
+    <img class="reload-img" src="/static/img/load.gif" onclick="reloadPaper()" v-if="showGif">
     <router-view/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data() {
+    return {
+      showGif:false
+    }
+  }
 }
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   -webkit-font-smoothing: antialiased;
