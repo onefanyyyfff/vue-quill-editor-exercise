@@ -759,9 +759,9 @@ export default {
                 resArr.forEach(item => {
                     if(item.end > this.editor.getLength()-1) return
                     if (item.type == 1) {
-                        this.editor.formatText(item.start, item.end+1-item.start, 'issue', {class: 'line-error', id: item.id+''})
+                        this.editor.formatText(item.start, item.end-item.start, 'issue', {class: 'line-error', id: item.id+''})
                     } else if (item.type == 2) {
-                        this.editor.formatText(item.start, item.end+1-item.start, 'issue', {class: 'line-suggest', id: item.id+''})
+                        this.editor.formatText(item.start, item.end-item.start, 'issue', {class: 'line-suggest', id: item.id+''})
                     }
                 });
                 // this.cursorIndex = this.editor.getSelection().index
