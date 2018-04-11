@@ -290,22 +290,73 @@ import Quill from 'quill'
 import VueQuillEditor from 'vue-quill-editor'
 Vue.use(VueQuillEditor)
 
+
+// var IdAttribute = new Parchment.Attributor.Attribute('id', 'id', {
+//     scope: Parchment.Scope.INLINE,
+// });
+// Quill.register({
+//     'attributors/attribute/id': IdAttribute
+// }, true);
+
+// Quill.register({
+//     'formats/id': IdAttribute,
+// }, true);
+
+let Inline = Quill.import('blots/inline');
+
+// class ErrorBlot extends Inline {
+//     static create(value) {
+//         let node = super.create();
+//         node.setAttribute('id', value.id);
+//         return node;
+//     }
+
+//     static value(node) {
+//         return {
+//             id: node.getAttribute('id')
+//         };
+//     }
+// }
+
+// ErrorBlot.blotName = 'error';
+// ErrorBlot.tagName = 'SPAN';
+// ErrorBlot.className = 'line-error'
+
+class IssueBlot extends Inline {
+    static create(value) {
+        let node = super.create();
+        node.setAttribute('class', value.class);
+        node.setAttribute('id', value.id);
+        return node;
+    }
+
+    static value(node) {
+        return {
+            class: node.getAttribute('class'),
+            id: node.getAttribute('id')
+        };
+    }
+}
+
+IssueBlot.blotName = 'issue';
+IssueBlot.tagName = 'SPAN';
+
 const Parchment = Quill.import('parchment')
 var boxAttributor = new Parchment.Attributor.Class('box', 'line', {
     scope: Parchment.Scope.INLINE,
     whitelist: ['error','suggest']
 });
-var IdAttribute = new Parchment.Attributor.Attribute('id', 'id', {
-    scope: Parchment.Scope.INLINE,
-});
-Quill.register(boxAttributor);
-Quill.register({
-    'attributors/attribute/id': IdAttribute
-}, true);
 
 Quill.register({
-    'formats/id': IdAttribute,
-}, true);
+    'formats/issue': IssueBlot
+});
+// Quill.register({
+//     'formats/suggest': SuggestBlot
+// });
+// also, add in bodyEditorOption/formats
+
+Quill.register(boxAttributor);
+
 export default {
   data () {
     return {
@@ -336,6 +387,7 @@ export default {
         suggestSemanticArr: [],
         rightArr: [],
         judgeFlag: 0,
+        lastEditTimerId: -1,
         all: 0,
         m: 0,
         s: 0,
@@ -362,6 +414,15 @@ export default {
         },
         bodyEditorOption: {
           theme: 'bubble',
+          formats: [
+            'bold',
+            'header',
+            'italic',
+            'link',
+            'list',
+            'indent',
+            'issue'
+          ],
           placeholder: "PASTE PAPER",
           modules: {
           }
@@ -369,7 +430,22 @@ export default {
     }
   },
   mounted () {
-      this.changeHtml()
+    var that = this; 
+    this.editor.on('text-change', function(delta, oldDelta, source) {
+        if (source == 'api') {
+            // do nothing at the moment
+        } else if (source == 'user') {
+            that.updateEditor();
+        }
+    });
+    var Delta = Quill.import('delta');
+    this.editor.clipboard.addMatcher (Node.ELEMENT_NODE, function (node, delta) {
+        return new Delta().insert(node.textContent);
+    });
+    // Interpret a <b> tag as bold
+    // this.editor.clipboard.addMatcher('B', function(node, delta) {
+    //     return delta.compose(new Delta().retain(delta.length(), { bold: true }));
+    // });
   },
   methods: {
     getEventTrigger() {
@@ -607,7 +683,7 @@ export default {
             } 
         }
     },
-    onEditorFocus() {
+    onEditorFocus({ editor, html, text }) {
         if (this.judgeFlag == 0) {
             this.$alert('暂时不能输入空格和回车', '不好意思～', {
                 confirmButtonText: '确定',
@@ -621,94 +697,102 @@ export default {
         }
         this.judgeFlag = 1
     },
+    updateEditor() {
+        if (this.lastEditTimerId != -1) {
+            clearTimeout(this.lastEditTimerId);
+        }
+        this.lastEditTimerId = setTimeout(() => {
+            this.changeHtml();
+        }, 1200);
+    },
     changeHtml() {
-        setInterval(() => {
-            if(this.editor.container.firstChild.innerText.trim() == this.htmlContent.trim() || this.editor.container.firstChild.innerText.trim()=="") return     
-            let originContent = this.editor.container.firstChild.innerText
-            this.$http.post('/api/num', {
-                paperBody: this.editor.getText()
-            }).then(res => {
-                if(res.body.success) {
-                    let text = this.editor.getText()
-                    this.paperOn = true,
-                    this.errorSpelling = res.body.count.errorSpelling,
-                    this.errorGrammar = res.body.count.errorGrammar,
-                    this.errorSemantic = res.body.count.errorSemantic,
-                    this.suggestSpelling = res.body.count.suggestSpelling,
-                    this.suggestGrammar = res.body.count.suggestGrammar,
-                    this.suggestSemantic = res.body.count.suggestSemantic,
-                    this.suggestStructure = res.body.count.suggestStructure,
-                    this.sumNum = res.body.count.sumNum,
-                    this.errorSpellingArr = res.body.spelling.err,
-                    this.errorGrammarArr = res.body.grammar.err,
-                    this.errorSemanticArr = res.body.semantic.err,
-                    this.suggestSpellingArr = res.body.spelling.sug,
-                    this.suggestGrammarArr = res.body.grammar.sug,
-                    this.suggestSemanticArr = res.body.semantic.sug,
-                    this.suggestStructureArr = res.body.structure.sug
-                    let resArr = []
-                    let catArr = [this.errorSpellingArr, this.errorGrammarArr, this.errorSemanticArr, 
-                    this.suggestSpellingArr,this.suggestGrammarArr,this.suggestSemanticArr, this.suggestStructureArr]
-                    catArr.forEach(cat => {                        
-                        cat.forEach(item => {
-                            if(item.end) {
-                               for(let i = 0; i< item.end.length; i++) {
-                                resArr.push({
-                                    start: item.start[i],
-                                    end: item.end[i],
-                                    type: item.type,
-                                    id: item.id
-                                })
-                            } 
-                            }
-                        })
-                    });
-                    catArr.forEach(cat => {                        
-                        cat.forEach(item => {
-                            if(item.end) {
-                               for(let i = 0; i< item.end.length; i++) {
-                                this.rightArr.push({
-                                    start: item.start[i],
-                                    end: item.end[i],
-                                    type: item.type,
-                                    id: item.id,
-                                    exp: item.exp,
-                                    rep: item.rep
-                                })
-                            } 
-                            }
-                        })
-                    });
-                    this.rightArr.sort((a,b) => a.end > b.end)
-                    resArr.sort((a,b) => a.end < b.end)
-                    function insert_flg(str,idx,insert){
-                        let a = str.substring(0, idx)
-                        let b = str.substring(idx, str.length)
-                        return a+insert+b
-                    };
-                    resArr.forEach(item => {
-                        if (item.type == 1) {
-                            if(item.end > text.length) return
-                            text = insert_flg(text, item.end+1, '</span>')
-                            text = insert_flg(text, item.start, '<span class="line-error" id="'+item.id+'">')
+        if(this.editor.container.firstChild.innerText.trim() == this.htmlContent.trim() || this.editor.container.firstChild.innerText.trim()=="") return
+        this.htmlContent = this.editor.container.firstChild.innerText.trim();
+        this.$http.post('/api/num', {
+            paperBody: this.editor.getText()
+        }).then(res => {
+            if(res.body.success) {
+                this.paperOn = true,
+                this.errorSpelling = res.body.count.errorSpelling,
+                this.errorGrammar = res.body.count.errorGrammar,
+                this.errorSemantic = res.body.count.errorSemantic,
+                this.suggestSpelling = res.body.count.suggestSpelling,
+                this.suggestGrammar = res.body.count.suggestGrammar,
+                this.suggestSemantic = res.body.count.suggestSemantic,
+                this.suggestStructure = res.body.count.suggestStructure,
+                this.sumNum = res.body.count.sumNum,
+                this.errorSpellingArr = res.body.spelling.err,
+                this.errorGrammarArr = res.body.grammar.err,
+                this.errorSemanticArr = res.body.semantic.err,
+                this.suggestSpellingArr = res.body.spelling.sug,
+                this.suggestGrammarArr = res.body.grammar.sug,
+                this.suggestSemanticArr = res.body.semantic.sug,
+                this.suggestStructureArr = res.body.structure.sug
+                this.rightArr = []
+                let resArr = []
+                let catArr = [this.errorSpellingArr, this.errorGrammarArr, this.errorSemanticArr, 
+                this.suggestSpellingArr, this.suggestGrammarArr, this.suggestSemanticArr, this.suggestStructureArr]
+
+                // Remove existing formatting
+                let errors = document.getElementsByClassName("line-error");
+                let suggests = document.getElementsByClassName("line-suggest");
+                let allIssues = Array.from(errors).concat(Array.from(suggests));
+                allIssues.forEach(errorNode => {
+                    errorNode.removeAttribute('class');
+                    errorNode.removeAttribute('id');
+                    // let blot = Parchment.find(errorNode);
+                    // console.log(blot);
+                });
+
+                catArr.forEach(cat => {
+                    cat.forEach(item => {
+                        if(item.end) {
+                            for(let i = 0; i< item.end.length; i++) {
+                            resArr.push({
+                                start: item.start[i],
+                                end: item.end[i],
+                                type: item.type,
+                                id: item.id
+                            })
+                        } 
                         }
-                        else {
-                            if(item.end > text.length) return
-                            text = insert_flg(text, item.end+1, '</span>')
-                            text = insert_flg(text, item.start, '<span class="line-suggest" id="'+item.id+'">')
+                    })
+                });
+                catArr.forEach(cat => {
+                    cat.forEach(item => {
+                        if(item.end) {
+                            for(let i = 0; i< item.end.length; i++) {
+                            this.rightArr.push({
+                                start: item.start[i],
+                                end: item.end[i],
+                                type: item.type,
+                                id: item.id,
+                                exp: item.exp,
+                                rep: item.rep
+                            })
+                        } 
                         }
-                    });
-                    console.log("1"+text)
-                    this.cursorIndex = this.editor.getSelection().index
-                    this.editor.deleteText(0, this.editor.getLength()+1)
-                    //插入html
-                    console.log("2"+text)
-                    this.editor.clipboard.dangerouslyPasteHTML(0,text)
-                    this.editor.setSelection(this.cursorIndex, 0)
-                    this.htmlContent = originContent
-                }
-            })
-        },3000)
+                    })
+                });
+                this.rightArr.sort((a,b) => a.end > b.end)
+                // resArr.sort((a,b) => a.end < b.end)
+                // function insert_flg(str,idx,insert){
+                //     let a = str.substring(0, idx)
+                //     let b = str.substring(idx, str.length)
+                //     return a+insert+b
+                // };
+                resArr.forEach(item => {
+                    if(item.end > this.editor.getLength()-1) return
+                    if (item.type == 1) {
+                        this.editor.formatText(item.start, item.end+1-item.start, 'issue', {class: 'line-error', id: item.id+''})
+                    } else if (item.type == 2) {
+                        this.editor.formatText(item.start, item.end+1-item.start, 'issue', {class: 'line-suggest', id: item.id+''})
+                    }
+                });
+                // this.cursorIndex = this.editor.getSelection().index
+                // this.editor.setSelection(this.cursorIndex, 0)
+            }
+        })
     },
     toShowAll() {
         this.showESpelling = true,
