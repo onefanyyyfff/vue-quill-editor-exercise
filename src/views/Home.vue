@@ -4,7 +4,7 @@
     </div>
     <div class="left">
         <div class="reload">
-            <img class="reload-img" src="/static/img/reload.png" onclick="reloadPaper()" v-if="showPic">
+            <!-- <img class="reload-img" src="/static/img/reload.png" onclick="reloadPaper()" v-if="showPic"> -->
             <img class="reload-img" src="/static/img/load.gif" onclick="reloadPaper()" v-if="showGif">
             <span class="reload-num">{{sumNum}}</span>
         </div>
@@ -379,7 +379,7 @@ export default {
         sse: 0,
         sst: 0,
         showPic: true,
-        showGif: false,
+        showGif: true,
         suggestStructureArr: [],
         titleContent: '',
         bodyContent:'',
@@ -696,8 +696,8 @@ export default {
             paperBody: this.editor.getText(),
         }).then(res => {
             if(res.body.success) {
-                this.showGif = false,
-                this.showPic = true,
+                // this.showGif = false,
+                // this.showPic = true,
                 this.paperOn = true,
                 this.errorSpelling = res.body.count.errorSpelling,
                 this.errorGrammar = res.body.count.errorGrammar,
