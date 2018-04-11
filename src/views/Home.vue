@@ -4,7 +4,8 @@
     </div>
     <div class="left">
         <div class="reload">
-            <img class="reload-img" src="/static/img/reload.png" onclick="reloadPaper()">
+            <img class="reload-img" src="/static/img/reload.png" onclick="reloadPaper()" v-if="showPic">
+            <img class="reload-img" src="/static/img/load.gif" onclick="reloadPaper()" v-if="showGif">
             <span class="reload-num">{{sumNum}}</span>
         </div>
         <div class="clear-float">
@@ -377,6 +378,8 @@ export default {
         sg: 0,
         sse: 0,
         sst: 0,
+        showPic: true,
+        showGif: false,
         suggestStructureArr: [],
         titleContent: '',
         bodyContent:'',
@@ -687,10 +690,14 @@ export default {
     changeHtml() {
         if(this.editor.container.firstChild.innerText.trim() == this.htmlContent.trim() || this.editor.container.firstChild.innerText.trim()=="") return
         this.htmlContent = this.editor.container.firstChild.innerText.trim();
+        this.showGif = true,
+        this.showPic = false,
         this.$http.post('/api/num', {
-            paperBody: this.editor.getText()
+            paperBody: this.editor.getText(),
         }).then(res => {
             if(res.body.success) {
+                this.showGif = false,
+                this.showPic = true,
                 this.paperOn = true,
                 this.errorSpelling = res.body.count.errorSpelling,
                 this.errorGrammar = res.body.count.errorGrammar,
@@ -1089,13 +1096,13 @@ export default {
 }
 .reload {
     border-bottom:1px solid rgb(218,218,218);
-    width:50%;
+    width:100%;
     float:left;
-    margin-left: 20px;
+    /* margin-left: 20px; */
 }
 .reload-img {
-    margin: 30px auto 15px 20px;
-    width: 15px;
+    margin: 30px 0 15px 20px;
+    width: 73px;
     height: 65px;
     display: inline-block;
     position: relative;
@@ -1105,7 +1112,7 @@ export default {
     display: inline-block;
     font-size:75px;
     color:rgb(126,126,126);
-    margin: 0px 0px 0px 20px;
+    margin-left: -10px;
 }
 .show-all {
     width:100%;
