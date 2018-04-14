@@ -109,12 +109,6 @@
                       :content="titleContent"
                       :options="titleEditorOption">
         </quill-editor>
-        <!-- <quill-editor class="body-paste"
-                      ref="myTextEditor"
-                      @focus="onEditorFocus()"
-                      :content="bodyContent"
-                      :options="bodyEditorOption">
-        </quill-editor> -->
         <quill-editor class="body-paste"
                       id="body-paste"
                       ref="myTextEditor"
@@ -272,10 +266,11 @@
             </el-collapse-item>
         </el-collapse> -->
         <el-collapse v-model="activeNames" @change="handleChange" >
-            <el-collapse-item v-for="(el,index) in rightArr" :key="index"  v-if="showESpelling" :name="el.id" >
+            <el-collapse-item v-for="(el,index) in rightArr" :key="index" :index="index+''" :name="el.id" >
                 <template slot="title">
                     <li class="error-rep" v-if="el.type==1">{{el.rep}}</li>
                     <li class="sug-rep" v-if="el.type==2">{{el.rep}}</li>
+                    <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
                 </template>
                 <div class="es-second-floor">
                     <span v-html="el.exp"></span>
@@ -746,6 +741,7 @@ export default {
                                 this.rightArr.push({
                                     start: item.start[0],
                                     end: item.end[0],
+                                    cat: item.cat,
                                     type: item.type,
                                     id: item.id,
                                     exp: item.exp,
@@ -775,6 +771,13 @@ export default {
                 // this.editor.setSelection(this.cursorIndex, 0)
             }
         })
+    },
+    replaceLeft(id,start,end,rep,index) {
+        let replace = document.getElementById(id)
+        let length = rep.length
+        this.editor.insertText(start,rep, true)
+        this.editor.deleteText(start+length, end-start);
+        console.log(event.target)
     },
     toShowAll() {
         this.showESpelling = true,
@@ -1407,12 +1410,21 @@ export default {
     height: 30px;
     margin: 0 40px 10px 2px;
     font-size: 16px;
+    display: inline-block;
+    width: 75%;
 }
 .sug-rep {
     color: rgb(238,188,80);
     height: 30px;
     margin: 0 40px 10px 2px;
     font-size: 16px;
+    display: inline-block;
+    width: 75%;
+}
+.replace-left {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
 }
 /* .right-spelling {
     color: red;
