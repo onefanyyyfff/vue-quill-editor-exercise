@@ -6,123 +6,83 @@
             "errorStructure": 0,
             "errorSemantic": 0,
             "id": 1,
-            "suggestStructure": 0,
-            "suggestGrammar": 0,
-            "suggestSemantic": 0,
+            "suggestStructure": 1,
+            "suggestGrammar": 1,
+            "suggestSemantic": 1,
             "suggestSpelling": 0,
-            "sumNum": 1
+            "sumNum": 5
         },
         "spelling": {
             "err": [
-                {
-                    "cat": 1,
-                    "eid": 3,
-                    "end": [2],
-                    "rep": "spelling err rep1",
-                    "start": [0],
-                    "type": 1,
-                    "exp":"<div class=\"demo\">hahaha</div>",
-                    "id":123
-                },
-                {
-                    "cat": 1,
-                    "eid": 3,
-                    "end": [8],
-                    "rep": "spelling err rep2",
-                    "start": [4],
-                    "type": 1,
-                    "exp":"<div class=\"demo\">hahaha</div>",
-                    "id":909
-                }
             ],
             "sug": [
-                {
-                    "cat": 1,
-                    "eid": 3,
-                    "end": [16],
-                    "rep": "spelling sug rep",
-                    "start": [14],
-                    "type": 2,
-                    "exp":"<p style=\"color:red\">hhhh</p>",
-                    "id":234
-                }
             ]
         },
         "grammar": {
             "err": [
-            {
-                "cat": 2,
-                "eid": 3,
-                "end": [25],
-                "rep": "grammar err rep",
-                "start": [20],
-                "type": 1,
-                "exp":"grammar err exp",
-                "id":345
-            }
+                {
+                    "cat": 2,
+                    "eid": 3,
+                    "end": [43],
+                    "rep": "methods",
+                    "start": [37],
+                    "type": 1,
+                    "exp":"",
+                    "id":123
+                },
+                {
+                    "cat": 2,
+                    "eid": 3,
+                    "end": [576],
+                    "rep": "research",
+                    "start": [566],
+                    "type": 1,
+                    "exp":"",
+                    "id":234
+                }
             ],
             "sug": [
             {
                 "cat": 2,
                 "eid": 3,
-                "end": [35],
-                "rep": "grammar sug rep",
-                "start": [30],
+                "end": [423],
+                "rep": "of",
+                "start": [420],
                 "type": 2,
-                "exp":"grammar sug exp",
-                "id":456
+                "exp":"",
+                "id":345
             }
             ]
         },
         "semantic": {
             "err":[
-                {
-                    "cat": 3,
-                    "eid": 3,
-                    "end": [45],
-                    "rep": "semantic err rep",
-                    "start": [40],
-                    "type": 1,
-                    "exp":"semantic err exp",
-                    "id":567
-                }
             ],
             "sug":[
                 {
                     "cat": 3,
                     "eid": 3,
-                    "end": [55],
-                    "rep": "semantic sug rep",
-                    "start": [50],
+                    "end": [605],
+                    "rep": "Researchs have proposed",
+                    "start": [577],
                     "type": 2,
-                    "exp":"semantic sug exp",
-                    "id":678
+                    "exp":"<div style=\"background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px\"><li style=\"color:#fff;text-indent:5px;\">知识性错误</li></div><div style=\"margin:0 10px 0 20px\">整句话无语法性错误，但语义有知识性错误</div><div style=\"margin:0 10px 0 20px;color:rgb(117,117,117);\"><span style=\"color:rgb(238,188,80);text-decoration:line-through;\">Past</span> studies have proposed</div><div style=\"margin:0 10px 0 20px;color:rgb(79,145,210);\">Recent studies have proposed。</div>",
+                    "id":456
                 }
             ]
         },
         "structure": {
             "err": [
-                {
-                    "cat": 4,
-                    "eid": 3,
-                    "end": [60],
-                    "rep": "structure err rep",
-                    "start": [64],
-                    "type": 1,
-                    "exp":"structure err exp",
-                    "id":789
-                }
             ],
             "sug": [
                 {
                     "cat": 4,
                     "eid": 3,
-                    "end": [75],
-                    "rep": "structure sug rep",
-                    "start": [70],
+                    "end": [1140],
+                    "rep": "or where the input capacity",
+                    "start": [1119],
                     "type": 2,
-                    "exp":"structure sug exp",
-                    "id":890
+                    "exp":"",
+                    "id":567
                 }
             ]
         },
