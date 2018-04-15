@@ -45,7 +45,7 @@
             {
                 "cat": 2,
                 "eid": 3,
-                "end": [424],
+                "end": [423],
                 "rep": "of",
                 "start": [420],
                 "type": 2,
@@ -61,7 +61,7 @@
                 {
                     "cat": 3,
                     "eid": 3,
-                    "end": [592],
+                    "end": [605],
                     "rep": "Researchs have proposed",
                     "start": [577],
                     "type": 2,
@@ -77,9 +77,9 @@
                 {
                     "cat": 4,
                     "eid": 3,
-                    "end": [1141],
+                    "end": [1140],
                     "rep": "or where the input capacity",
-                    "start": [1116],
+                    "start": [1119],
                     "type": 2,
                     "exp":"",
                     "id":567
