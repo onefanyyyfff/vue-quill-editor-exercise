@@ -6,105 +6,83 @@
             "errorStructure": 0,
             "errorSemantic": 0,
             "id": 1,
-            "suggestStructure": 0,
-            "suggestGrammar": 0,
-            "suggestSemantic": 0,
+            "suggestStructure": 1,
+            "suggestGrammar": 1,
+            "suggestSemantic": 1,
             "suggestSpelling": 0,
-            "sumNum": 1
+            "sumNum": 5
         },
         "spelling": {
             "err": [
-                {
-                    "cat": 1,
-                    "eid": 3,
-                    "end": [6],
-                    "rep": "spelling err rep",
-                    "start": [4],
-                    "type": 1,
-                    "exp":"<div class=\"demo\">hahaha</div>"
-                }
             ],
             "sug": [
-                {
-                    "cat": 1,
-                    "eid": 3,
-                    "end": [16],
-                    "rep": "spelling sug rep",
-                    "start": [14],
-                    "type": 2,
-                    "exp":"<p style=\"color:red\">hhhh</p>"
-                }
             ]
         },
         "grammar": {
             "err": [
-            {
-                "cat": 2,
-                "eid": 3,
-                "end": [50],
-                "rep": "grammar err rep",
-                "start": [40],
-                "type": 1,
-                "exp":"grammar err exp"
-            }
+                {
+                    "cat": 2,
+                    "eid": 3,
+                    "end": [43],
+                    "rep": "methods",
+                    "start": [37],
+                    "type": 1,
+                    "exp":"",
+                    "id":123
+                },
+                {
+                    "cat": 2,
+                    "eid": 3,
+                    "end": [576],
+                    "rep": "research",
+                    "start": [566],
+                    "type": 1,
+                    "exp":"",
+                    "id":234
+                }
             ],
             "sug": [
             {
                 "cat": 2,
                 "eid": 3,
-                "end": [50],
-                "rep": "grammar sug rep",
-                "start": [40],
+                "end": [424],
+                "rep": "of",
+                "start": [420],
                 "type": 2,
-                "exp":"grammar sug exp"
+                "exp":"",
+                "id":345
             }
             ]
         },
         "semantic": {
             "err":[
-                {
-                    "cat": 3,
-                    "eid": 3,
-                    "end": [33],
-                    "rep": "semantic err rep",
-                    "start": [30],
-                    "type": 1,
-                    "exp":"semantic err exp"
-                }
             ],
             "sug":[
                 {
                     "cat": 3,
                     "eid": 3,
-                    "end": [23],
-                    "rep": "semantic sug rep",
-                    "start": [24],
+                    "end": [592],
+                    "rep": "Researchs have proposed",
+                    "start": [577],
                     "type": 2,
-                    "exp":"semantic sug exp"
+                    "exp":"<div style=\"background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px\"><li style=\"color:#fff;text-indent:5px;\">知识性错误</li></div><div style=\"margin:0 10px 0 20px\">整句话无语法性错误，但语义有知识性错误</div><div style=\"margin:0 10px 0 20px;color:rgb(117,117,117);\"><span style=\"color:rgb(238,188,80);text-decoration:line-through;\">Past</span> studies have proposed</div><div style=\"margin:0 10px 0 20px;color:rgb(79,145,210);\">Recent studies have proposed。</div>",
+                    "id":456
                 }
             ]
         },
         "structure": {
             "err": [
-                {
-                    "cat": 4,
-                    "eid": 3,
-                    "end": [90],
-                    "rep": "structure err rep",
-                    "start": [94],
-                    "type": 1,
-                    "exp":"structure err exp"
-                }
             ],
             "sug": [
                 {
                     "cat": 4,
                     "eid": 3,
-                    "end": [19],
-                    "rep": "structure sug rep",
-                    "start": [15],
+                    "end": [1141],
+                    "rep": "or where the input capacity",
+                    "start": [1116],
                     "type": 2,
-                    "exp":"structure sug exp"
+                    "exp":"",
+                    "id":567
                 }
             ]
         },

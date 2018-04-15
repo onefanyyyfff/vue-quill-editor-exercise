@@ -4,12 +4,13 @@
     </div>
     <div class="left">
         <div class="reload">
-            <img class="reload-img" src="/static/img/reload.png" onclick="reloadPaper()">
+            <img class="reload-img" src="/static/img/reload.png" onclick="reloadPaper()" v-if="showPic">
+            <img class="reload-img" src="/static/img/load.gif" onclick="reloadPaper()" v-if="showGif">
             <span class="reload-num">{{sumNum}}</span>
         </div>
         <div class="clear-float">
         </div>
-        <div class="show-all" @click="toShowAll()">
+        <div class="show-all" id="all" @mouseover="changeAll()" @mouseout="returnAll()" @click="toShowAll()">
             <div class="show-all-circle">
             </div>
             <span class="show-all-title">显示全部</span>
@@ -17,10 +18,13 @@
         <div class="clear-float">
         </div>
         <div class="mistakes">
-            <div class="mistakes-circle">
+            <div class="mistakes-all" id="mistake" @mouseover="changeM()" @mouseout="returnM()" @click="toShowMistake()">
+                <div class="mistakes-circle">
+                </div>
+                <span class="mistakes-title">错误</span>
             </div>
-            <span class="mistakes-title">错误</span>
             <ul class="mistakes-list">
+                <!-- <li id="mistakes-spelling" @mouseover="changeMS()" @mouseout="returnMS()" @click="toShowESpelling()"> -->
                 <li id="mistakes-spelling" @mouseover="changeMS()" @mouseout="returnMS()" @click="toShowESpelling()">
                     <span class="list-title">拼写</span>
                     <div id="mistakes-spelling-circle" v-if="paperOn">
@@ -50,9 +54,11 @@
         <div class="clear-float">
         </div>
         <div class="suggestions">
-            <div class="suggestions-circle">
+            <div class="suggestions-all" id="suggestion" @mouseover="changeS()" @mouseout="returnS()" @click="toShowSuggestion()">
+                <div class="suggestions-circle">
+                </div>
+                <span class="suggestions-title">建议</span>
             </div>
-            <span class="suggestions-title">建议</span>
             <ul class="suggestions-list">
                 <li id="suggestions-spelling" @mouseover="changeSSP()" @mouseout="returnSSP()" @click="toShowSSpelling()">
                     <span class="list-title">拼写</span>
@@ -97,15 +103,19 @@
     </div>
     <div class="splender-left">
     </div>
-    <div class="middle">
+    <div class="middle" @click="getEventTrigger()">
         <quill-editor class="title-paste"
                       ref="myTextEditor"
                       :content="titleContent"
                       :options="titleEditorOption">
         </quill-editor>
         <quill-editor class="body-paste"
+                      id="body-paste"
                       ref="myTextEditor"
-                      @focus="onEditorFocus()"
+                      autocomplete="off" 
+                      autocorrect="off" 
+                      autocapitalize="off" 
+                      spellcheck="false"
                       :content="bodyContent"
                       :options="bodyEditorOption">
         </quill-editor>
@@ -113,15 +123,15 @@
     <div class="splender-right">
     </div>
     <div class="right">
-        <el-collapse accordion>
-            <el-collapse-item v-for="(el,index) in errorSpellingArr" :key="index"  v-if="showESpelling">
+        <!-- <el-collapse v-model="activeNames" @change="handleChange" >
+            <el-collapse-item v-for="(el,index) in errorSpellingArr" :key="index"  v-if="showESpelling" :name="el.id" >
                 <template slot="title">
                     <li class="right-spelling">{{el.rep}}</li>
                 </template>
                 <div class="es-second-floor">
-                    <!-- <span v-html="el.exp"></span> -->
+                    <span v-html="el.exp"></span>
                     
-                    <!-- 以下是后端传回的html样式 -->
+                
                     <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px">
                         <li style="color:#fff;text-indent:5px;">单词拼写错误</li>
                     </div>
@@ -130,18 +140,18 @@
                         <img src="/static/img/array.png" style="width:40px;">
                         <span style="background:rgb(79,145,210);color:#fff;padding:4px;">efficient</span>
                     </div>
-                    <div style="margin:10px 10px 10px 20px;">One cares about making the process repeatable and <span style="color:rgb(79,145,210);font-weight:bold">efficient</span></div> -->
+                    <div style="margin:10px 10px 10px 20px;">One cares about making the process repeatable and <span style="color:rgb(79,145,210);font-weight:bold">efficient</span></div>
                 
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in errorGrammarArr" :key="`A-${index}`"  v-if="showEGrammar">
+            <el-collapse-item v-for="(el,index) in errorGrammarArr" :key="`A-${index}`"  v-if="showEGrammar" :name="el.id" >
                 <template slot="title">
                     <li class="right-grammar">{{el.rep}}</li>
                 </template>
                 <div class="eg-second-floor">
-                    <!-- <span v-html="el.exp"></span> -->
+                    <span v-html="el.exp"></span>
                     
-                    <!-- 以下是后端传回的html样式 -->
+                    
                     <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">词组搭配错误</li>
                     </div>
@@ -159,31 +169,30 @@
                 
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in errorSemanticArr" :key="`B-${index}`" v-if="showESemantic">
+            <el-collapse-item v-for="(el,index) in errorSemanticArr" :key="`B-${index}`" v-if="showESemantic" :name="el.id" >
                 <template slot="title">
                     <li class="right-semantic">{{el.rep}}</li>
                 </template>
                 <div class="ese-second-floor">
-                    <!-- <span v-html="el.exp"></span> -->
+                    <span v-html="el.exp"></span>
 
-                    <!-- 以下是后端传回的html样式 -->
-                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                    
+                   <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">知识性错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px">整句话无语法性错误，但语义有知识性错误</div>
                     <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color:#ff0000">Imperial Palace</span> has a long history originated in <span style="color:#ff0000;text-decoration:line-through;">Qing</span> Dynasty</div>
                     <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
-
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestSpellingArr" :key="`C-${index}`" v-if="showESpelling">
+            <el-collapse-item v-for="(el,index) in suggestSpellingArr" :key="`C-${index}`" v-if="showSSpelling" :name="el.id" >
                 <template slot="title">
                     <li class="suggest-spelling">{{el.rep}}</li>
                 </template>
                 <div class="ese-second-floor">
-                    <!-- <span v-html="el.exp"></span> -->
+                    <span v-html="el.exp"></span>
 
-                    <!-- 以下是后端传回的html样式 -->
+                   
                     <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">单词拼写错误</li>
                     </div>
@@ -196,14 +205,14 @@
                 
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestGrammarArr" :key="`D-${index}`" v-if="showEGrammar">
+            <el-collapse-item v-for="(el,index) in suggestGrammarArr" :key="`D-${index}`" v-if="showSGrammar" :name="el.id" >
                 <template slot="title">
                     <li class="suggest-grammar">{{el.rep}}</li>
                 </template>
                 <div class="ese-second-floor">
-                    <!-- <span v-html="el.exp"></span> -->
+                    <span v-html="el.exp"></span>
 
-                    <!-- 以下是后端传回的html样式 -->
+              
                     <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">词组搭配错误</li>
                     </div>
@@ -221,14 +230,14 @@
                 
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestSemanticArr" :key="`E-${index}`" v-if="showSSemantic">
+            <el-collapse-item v-for="(el,index) in suggestSemanticArr" :key="`E-${index}`" v-if="showSSemantic" :name="el.id" >
                 <template slot="title">
                     <li class="suggest-semantic">{{el.rep}}</li>
                 </template>
                 <div class="ss-second-floor">
-                    <!-- <span v-html="el.exp"></span> -->
+                    <span v-html="el.exp"></span>
 
-                    <!-- 以下是后端传回的html样式 -->
+                   
                     <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">知识性错误</li>
                     </div>
@@ -238,14 +247,14 @@
 
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in suggestStructureArr" :key="`F-${index}`" v-if="showSStructure">
+            <el-collapse-item v-for="(el,index) in suggestStructureArr" :key="`F-${index}`" v-if="showSStructure" :name="el.id" >
                 <template slot="title">
                     <li class="suggest-structure">{{el.rep}}</li>
                 </template>
                 <div class="sst-second-floor">
-                    <!-- <span v-html="el.exp"></span> -->
+                    <span v-html="el.exp"></span>
 
-                    <!-- 以下是后端传回的html样式 -->
+                 
                     <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">句式结构错误</li>
                     </div>
@@ -253,6 +262,44 @@
                     <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color:rgb(238,188,80);text-decoration:line-through;">Imperial Palace</span> has a long history originated in Dynasty</div>
                     <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
 
+                </div>
+            </el-collapse-item>
+        </el-collapse> -->
+        <el-collapse v-model="activeNames" @change="handleChange" >
+            <el-collapse-item v-for="(el,index) in rightArr" :key="index" :index="index+''" :name="el.id" :style="{display:replace}">
+                <template slot="title">
+                    <li class="error-rep" v-if="(el.type==1 && el.cat==1) && showESpelling">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                    <li class="sug-rep" v-if="(el.type==2 && el.cat==1) && showSSpelling">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                    <li class="error-rep" v-if="(el.type==1 && el.cat==2) && showEGrammar">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                    <li class="sug-rep" v-if="(el.type==2 && el.cat==2) && showSGrammar">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                    <li class="error-rep" v-if="(el.type==1 && el.cat==3) && showESemantic">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                    <li class="sug-rep" v-if="(el.type==2 && el.cat==3) && showSSemantic">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                    <li class="error-rep" v-if="(el.type==2 && el.cat==4) && showSStructure">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                    
+                </template>
+                <div class="es-second-floor">
+                    <span v-html="el.exp"></span>
                 </div>
             </el-collapse-item>
         </el-collapse>
@@ -265,11 +312,50 @@ import Quill from 'quill'
 import VueQuillEditor from 'vue-quill-editor'
 Vue.use(VueQuillEditor)
 
+
+// var IdAttribute = new Parchment.Attributor.Attribute('id', 'id', {
+//     scope: Parchment.Scope.INLINE,
+// });
+// Quill.register({
+//     'attributors/attribute/id': IdAttribute
+// }, true);
+
+// Quill.register({
+//     'formats/id': IdAttribute,
+// }, true);
+
+let Inline = Quill.import('blots/inline');
+
+class IssueBlot extends Inline {
+    static create(value) {
+        let node = super.create();
+        node.setAttribute('class', value.class);
+        node.setAttribute('id', value.id);
+        return node;
+    }
+
+    static value(node) {
+        return {
+            class: node.getAttribute('class'),
+            id: node.getAttribute('id')
+        };
+    }
+}
+
+IssueBlot.blotName = 'issue';
+IssueBlot.tagName = 'SPAN';
+
 const Parchment = Quill.import('parchment')
 var boxAttributor = new Parchment.Attributor.Class('box', 'line', {
     scope: Parchment.Scope.INLINE,
     whitelist: ['error','suggest']
 });
+
+Quill.register({
+    'formats/issue': IssueBlot
+});
+// also, register in bodyEditorOption/formats
+
 Quill.register(boxAttributor);
 
 export default {
@@ -292,42 +378,38 @@ export default {
         suggestGrammar:'',
         suggestSemantic: '',
         suggestStructure: '',
-        sumNum: '' ,
+        sumNum: 0 ,
         judgeAdd:'',
         errorSpellingArr: [],
-        errorSpellingPosL:[],
-        errorSpellingPosR:[],
-        errorSpellingRight:[],
-        errorSpellingExplain:[],
         errorGrammarArr: [],
-        errorGrammarPosL:[],
-        errorGrammarPosR:[],
-        errorGrammarRight:[],
-        errorGrammarExplain:[],
         errorSemanticArr:[],
-        errorSemanticPosL:[],
-        errorSemanticPosR:[],
-        errorSemanticRight:[],
-        errorSemanticExplain:[],
         suggestSpellingArr: [],
         suggestGrammarArr: [],
         suggestSemanticArr: [],
-        // suggestSemanticPosL:[],
-        // suggestSemanticPosR:[],
-        // suggestSemanticRight:[],
-        // suggestSemanticExplain:[],
-        judgeFlag: '',
+        rightArr: [],
+        judgeFlag: 0,
+        replace: 'block',
+        lastEditTimerId: -1,
+        all: 0,
+        m: 0,
+        s: 0,
+        es: 0,
+        eg: 0,
+        ese: 0,
+        ss: 0,
+        sg: 0,
+        sse: 0,
+        sst: 0,
+        showPic: true,
+        showGif: false,
         suggestStructureArr: [],
-        // suggestStructurePosL:[],
-        // suggestStructurePosR:[],
-        // suggestStructureRight:[],
-        // suggestStructureExplain:[],
         titleContent: '',
         bodyContent:'',
         bodyContentArray: [],
         spanArray:[],
         spanString:'',
         htmlContent:'',
+        activeNames: [],//this.activeNames,
         titleEditorOption: {
           theme: 'bubble',
           placeholder: "PASTE TITLE",
@@ -336,6 +418,15 @@ export default {
         },
         bodyEditorOption: {
           theme: 'bubble',
+          formats: [
+            'bold',
+            'header',
+            'italic',
+            'link',
+            'list',
+            'indent',
+            'issue'
+          ],
           placeholder: "PASTE PAPER",
           modules: {
           }
@@ -343,15 +434,78 @@ export default {
     }
   },
   mounted () {
-      this.changeHtml()
+    var that = this; 
+    this.editor.on('text-change', function(delta, oldDelta, source) {
+        if (source == 'api') {
+            // do nothing at the moment
+            that.updateEditor();
+        } else if (source == 'user') {
+            that.updateEditor();
+        }
+    });
+    var Delta = Quill.import('delta');
+    this.editor.clipboard.addMatcher (Node.ELEMENT_NODE, function (node, delta) {
+        return new Delta().insert(node.textContent);
+    });
+    // Interpret a <b> tag as bold
+    // this.editor.clipboard.addMatcher('B', function(node, delta) {
+    //     return delta.compose(new Delta().retain(delta.length(), { bold: true }));
+    // });
   },
   methods: {
+    getEventTrigger() {
+        var id = event.target.id
+        this.openBoard(id)
+    }, 
+    openBoard(id) {
+        this.activeNames = [parseInt(id)]
+    },
+    handleChange(va) {
+        // console.log(va)
+    },
+    changeAll() {
+        var M = document.getElementById("all");
+        M.style.backgroundColor = "#eaeaea";
+        M.style.fontWeight = "bolder";
+    },
+    returnAll() {
+        if (this.all == 0) {
+            var M = document.getElementById("all");
+            M.style.backgroundColor = "#ffffff";
+            M.style.fontWeight = "normal";
+        }
+    },
+    changeM() {
+        var M = document.getElementById("mistake");
+        M.style.backgroundColor = "#eaeaea";
+        M.style.fontWeight = "bolder";
+    },
+    returnM() {
+        if (this.m == 0) {
+            var M = document.getElementById("mistake");
+            M.style.backgroundColor = "#ffffff";
+            M.style.fontWeight = "normal";
+        }
+    },
+    changeS() {
+        var M = document.getElementById("suggestion");
+        M.style.backgroundColor = "#eaeaea";
+        M.style.fontWeight = "bolder";
+    },
+    returnS() {
+        if (this.s == 0) {
+            var M = document.getElementById("suggestion");
+            M.style.backgroundColor = "#ffffff";
+            M.style.fontWeight = "normal";
+        }
+    },
     changeMS() {
         var MSli = document.getElementById("mistakes-spelling");
         MSli.style.backgroundColor = "#eaeaea";
         var MSC = document.getElementById("mistakes-spelling-circle");
         if (MSC) {
             MSC.style.backgroundColor = "#ef4632";
+            MSC.style.cursor = "pointer";
         };
         var MSN = document.getElementById("mistakes-spelling-num");
         if (MSN) {
@@ -359,15 +513,17 @@ export default {
         }
     },
     returnMS() {
-        var MSli = document.getElementById("mistakes-spelling");
-        MSli.style.backgroundColor = "white";
-        var MSC = document.getElementById("mistakes-spelling-circle");
-        if (MSC) {
-            MSC.style.backgroundColor = "#ededed";
-        };
-        var MSN = document.getElementById("mistakes-spelling-num");
-        if (MSN) {
-            MSN.style.color = "#898989";
+        if (this.es == 0) {
+            var MSli = document.getElementById("mistakes-spelling");
+            MSli.style.backgroundColor = "white";
+            var MSC = document.getElementById("mistakes-spelling-circle");
+            if (MSC) {
+                MSC.style.backgroundColor = "#ededed";
+            };
+            var MSN = document.getElementById("mistakes-spelling-num");
+            if (MSN) {
+                MSN.style.color = "#898989";
+            }
         }
     },
     changeMG() {
@@ -376,6 +532,7 @@ export default {
         var MGC = document.getElementById("mistakes-grammar-circle");
         if (MGC) {
             MGC.style.backgroundColor = "#ef4632";
+            MGC.style.cursor = "pointer";
         };
         var MGN = document.getElementById("mistakes-grammar-num");
         if (MGN) {
@@ -383,15 +540,17 @@ export default {
         }
     },
     returnMG() {
-        var MGli = document.getElementById("mistakes-grammar");
-        MGli.style.backgroundColor = "white";
-        var MGC = document.getElementById("mistakes-grammar-circle");
-        if (MGC) {
-            MGC.style.backgroundColor = "#ededed";
-        };
-        var MGN = document.getElementById("mistakes-grammar-num");
-        if (MGN) {
-             MGN.style.color = "#898989"; 
+        if (this.eg == 0) {
+            var MGli = document.getElementById("mistakes-grammar");
+            MGli.style.backgroundColor = "white";
+            var MGC = document.getElementById("mistakes-grammar-circle");
+            if (MGC) {
+                MGC.style.backgroundColor = "#ededed";
+            };
+            var MGN = document.getElementById("mistakes-grammar-num");
+            if (MGN) {
+                MGN.style.color = "#898989"; 
+            }
         }
     },
     changeML() {
@@ -400,6 +559,7 @@ export default {
         var MLC = document.getElementById("mistakes-lexeme-circle");
         if (MLC) {
             MLC.style.backgroundColor = "#ef4632";
+            MLC.style.cursor = "pointer";
         };
         var MLN = document.getElementById("mistakes-lexeme-num");
         if (MLN) {
@@ -407,39 +567,44 @@ export default {
         }   
     },
     returnML() {
-        var MLli = document.getElementById("mistakes-lexeme");
-        MLli.style.backgroundColor = "white";
-        var MLC = document.getElementById("mistakes-lexeme-circle");
-        if (MLC) {
-            MLC.style.backgroundColor = "#ededed";
-        };
-        var MLN = document.getElementById("mistakes-lexeme-num");
-        if (MLN) {
-            MLN.style.color = "#898989"; 
+        if (this.ese == 0) {
+            var MLli = document.getElementById("mistakes-lexeme");
+            MLli.style.backgroundColor = "white";
+            var MLC = document.getElementById("mistakes-lexeme-circle");
+            if (MLC) {
+                MLC.style.backgroundColor = "#ededed";
+            };
+            var MLN = document.getElementById("mistakes-lexeme-num");
+            if (MLN) {
+                MLN.style.color = "#898989"; 
+            }
         }
     },
     changeSSP() {
         var SLli = document.getElementById("suggestions-spelling");
         SLli.style.backgroundColor = "#eaeaea";
-        var SLC = document.getElementById("suggestion-spelling-circle");
-        if (SLC) {
-            SLC.style.backgroundColor = "#ef4632";
+        var SSP = document.getElementById("suggestion-spelling-circle");
+        if (SSP) {
+            SSP.style.backgroundColor = "#FDB64B";
+            SSP.style.cursor = "pointer";
         };
-        var SLN = document.getElementById("suggestion-spelling-num");
-        if (SLN) {
-            SLN.style.color = "white"; 
+        var SSP = document.getElementById("suggestion-spelling-num");
+        if (SSP) {
+            SSP.style.color = "white"; 
         }
     },
     returnSSP() {
-        var SLli = document.getElementById("suggestions-spelling");
-        SLli.style.backgroundColor = "white";
-        var SLC = document.getElementById("suggestion-spelling-circle");
-        if (SLC) {
-            SLC.style.backgroundColor = "#ededed";
-        };
-        var SLN = document.getElementById("suggestion-spelling-num");
-        if (SLN) {
-            SLN.style.color = "#898989"; 
+        if (this.ss == 0) {
+            var SLli = document.getElementById("suggestions-spelling");
+            SLli.style.backgroundColor = "white";
+            var SSP = document.getElementById("suggestion-spelling-circle");
+            if (SSP) {
+                SSP.style.backgroundColor = "#ededed";
+            };
+            var SSP = document.getElementById("suggestion-spelling-num");
+            if (SSP) {
+                SSP.style.color = "#898989"; 
+            }
         }
     },
     changeSG() {
@@ -447,7 +612,8 @@ export default {
         SLli.style.backgroundColor = "#eaeaea";
         var SLC = document.getElementById("suggestion-grammar-circle");
         if (SLC) {
-            SLC.style.backgroundColor = "#ef4632";
+            SLC.style.backgroundColor = "#FDB64B";
+            SLC.style.cursor = "pointer";
         };
         var SLN = document.getElementById("suggestion-grammar-num");
         if (SLN) {
@@ -455,15 +621,17 @@ export default {
         }
     },
     returnSG() {
-        var SLli = document.getElementById("suggestions-grammar");
-        SLli.style.backgroundColor = "white";
-        var SLC = document.getElementById("suggestion-grammar-circle");
-        if (SLC) {
-            SLC.style.backgroundColor = "#ededed";
-        };
-        var SLN = document.getElementById("suggestion-grammar-num");
-        if (SLN) {
-            SLN.style.color = "#898989"; 
+        if (this.sg == 0) {
+            var SLli = document.getElementById("suggestions-grammar");
+            SLli.style.backgroundColor = "white";
+            var SLC = document.getElementById("suggestion-grammar-circle");
+            if (SLC) {
+                SLC.style.backgroundColor = "#ededed";
+            };
+            var SLN = document.getElementById("suggestion-grammar-num");
+            if (SLN) {
+                SLN.style.color = "#898989"; 
+            }
         }
     },
     changeSL() {
@@ -471,7 +639,8 @@ export default {
         SLli.style.backgroundColor = "#eaeaea";
         var SLC = document.getElementById("suggestion-lexeme-circle");
         if (SLC) {
-            SLC.style.backgroundColor = "#ef4632";
+            SLC.style.backgroundColor = "#FDB64B";
+            SLC.style.cursor = "pointer";
         };
         var SLN = document.getElementById("suggestion-lexeme-num");
         if (SLN) {
@@ -479,15 +648,17 @@ export default {
         }
     },
     returnSL() {
-        var SLli = document.getElementById("suggestions-lexeme");
-        SLli.style.backgroundColor = "white";
-        var SLC = document.getElementById("suggestion-lexeme-circle");
-        if (SLC) {
-            SLC.style.backgroundColor = "#ededed";
-        };
-        var SLN = document.getElementById("suggestion-lexeme-num");
-        if (SLN) {
-            SLN.style.color = "#898989"; 
+        if (this.sse == 0) {
+            var SLli = document.getElementById("suggestions-lexeme");
+            SLli.style.backgroundColor = "white";
+            var SLC = document.getElementById("suggestion-lexeme-circle");
+            if (SLC) {
+                SLC.style.backgroundColor = "#ededed";
+            };
+            var SLN = document.getElementById("suggestion-lexeme-num");
+            if (SLN) {
+                SLN.style.color = "#898989"; 
+            }
         }
     },
     changeSS() {
@@ -495,7 +666,8 @@ export default {
         SSli.style.backgroundColor = "#eaeaea";
         var SSC = document.getElementById("suggestion-structure-circle");
         if (SSC) {
-            SSC.style.backgroundColor = "#ef4632";
+            SSC.style.backgroundColor = "#FDB64B";
+            SSC.style.cursor = "pointer";
         };
         var SSN = document.getElementById("suggestion-structure-num");
         if (SSN) {
@@ -503,18 +675,20 @@ export default {
         }      
     },
     returnSS() {
-        var SSli = document.getElementById("suggestions-structure");
-        SSli.style.backgroundColor = "white";
-        var SSC = document.getElementById("suggestion-structure-circle");
-        if (SSC) {
-            SSC.style.backgroundColor = "#ededed";
-        };
-        var SSN = document.getElementById("suggestion-structure-num");
-        if (SSN) {
-            SSN.style.color = "#898989";
-        } 
+        if (this.sst == 0) {
+            var SSli = document.getElementById("suggestions-structure");
+            SSli.style.backgroundColor = "white";
+            var SSC = document.getElementById("suggestion-structure-circle");
+            if (SSC) {
+                SSC.style.backgroundColor = "#ededed";
+            };
+            var SSN = document.getElementById("suggestion-structure-num");
+            if (SSN) {
+                SSN.style.color = "#898989";
+            } 
+        }
     },
-    onEditorFocus() {
+    onEditorFocus({ editor, html, text }) {
         if (this.judgeFlag == 0) {
             this.$alert('暂时不能输入空格和回车', '不好意思～', {
                 confirmButtonText: '确定',
@@ -528,79 +702,111 @@ export default {
         }
         this.judgeFlag = 1
     },
+    updateEditor() {
+        if (this.lastEditTimerId != -1) {
+            clearTimeout(this.lastEditTimerId);
+        }
+        this.lastEditTimerId = setTimeout(() => {
+            this.changeHtml();
+        }, 1200);
+    },
     changeHtml() {
-        setInterval(() => {
-            if(this.editor.container.firstChild.innerText.trim() == this.htmlContent.trim() || this.editor.container.firstChild.innerText.trim()=="") return     
-            let originContent = this.editor.container.firstChild.innerText
-            this.$http.post('/api/num', {
-                paperBody: this.editor.getText()
-            }).then(res => {
-                if(res.body.success) {
-                    let text = this.editor.getText()
-                    this.paperOn = true,
-                    this.errorSpelling = res.body.count.errorSpelling,
-                    this.errorGrammar = res.body.count.errorGrammar,
-                    this.errorSemantic = res.body.count.errorSemantic,
-                    this.suggestSpelling = res.body.count.suggestSpelling,
-                    this.suggestGrammar = res.body.count.suggestGrammar,
-                    this.suggestSemantic = res.body.count.suggestSemantic,
-                    this.suggestStructure = res.body.count.suggestStructure,
-                    this.sumNum = res.body.count.sumNum,
-                    this.errorSpellingArr = res.body.spelling.err,
-                    this.errorGrammarArr = res.body.grammar.err,
-                    this.errorSemanticArr = res.body.semantic.err,
-                    this.suggestSpellingArr = res.body.spelling.sug,
-                    this.suggestGrammarArr = res.body.grammar.sug,
-                    this.suggestSemanticArr = res.body.semantic.sug,
-                    this.suggestStructureArr = res.body.structure.sug
-                    let resArr = []
-                    let catArr = [this.errorSpellingArr, this.errorGrammarArr, this.errorSemanticArr, 
-                    this.suggestSemanticArr, this.suggestStructureArr]
-                    catArr.forEach(cat => {                        
-                        cat.forEach(item => {
-                            if(item.end) {
-                               for(let i = 0; i< item.end.length; i++) {
+        if(this.editor.container.firstChild.innerText.trim() == this.htmlContent.trim() || this.editor.container.firstChild.innerText.trim()=="") return
+        this.htmlContent = this.editor.container.firstChild.innerText.trim();
+        this.showGif = true,
+        this.showPic = false,
+        this.$http.post('/api/num', {
+            paperBody: this.editor.getText(),
+        }).then(res => {
+            if(res.body.success) {
+                this.replace = 'block'
+                this.showGif = false,
+                this.showPic = true,
+                this.paperOn = true,
+                this.errorSpelling = res.body.count.errorSpelling,
+                this.errorGrammar = res.body.count.errorGrammar,
+                this.errorSemantic = res.body.count.errorSemantic,
+                this.suggestSpelling = res.body.count.suggestSpelling,
+                this.suggestGrammar = res.body.count.suggestGrammar,
+                this.suggestSemantic = res.body.count.suggestSemantic,
+                this.suggestStructure = res.body.count.suggestStructure,
+                this.sumNum = res.body.count.sumNum,
+                this.errorSpellingArr = res.body.spelling.err,
+                this.errorGrammarArr = res.body.grammar.err,
+                this.errorSemanticArr = res.body.semantic.err,
+                this.suggestSpellingArr = res.body.spelling.sug,
+                this.suggestGrammarArr = res.body.grammar.sug,
+                this.suggestSemanticArr = res.body.semantic.sug,
+                this.suggestStructureArr = res.body.structure.sug
+                this.rightArr = []
+                let resArr = []
+                let catArr = [this.errorSpellingArr, this.errorGrammarArr, this.errorSemanticArr, 
+                this.suggestSpellingArr, this.suggestGrammarArr, this.suggestSemanticArr, this.suggestStructureArr]
+
+                // Remove existing formatting
+                let errors = document.getElementsByClassName("line-error");
+                let suggests = document.getElementsByClassName("line-suggest");
+                let allIssues = Array.from(errors).concat(Array.from(suggests));
+                allIssues.forEach(errorNode => {
+                    errorNode.removeAttribute('class');
+                    errorNode.removeAttribute('id');
+                    // let blot = Parchment.find(errorNode);
+                    // console.log(blot);
+                });
+
+                // Combine all issues
+                catArr.forEach(cat => {
+                    cat.forEach(item => {
+                        if(item.end) {
+                            for(let i = 0; i< item.end.length; i++) {
                                 resArr.push({
                                     start: item.start[i],
                                     end: item.end[i],
-                                    type: item.type
-                                })
-                            } 
+                                    type: item.type,
+                                    id: item.id
+                                });
                             }
-                        })
-                    });
-                    resArr.sort((a,b) => a.end < b.end)
-                    function insert_flg(str,idx,insert){
-                        let a = str.substring(0, idx)
-                        let b = str.substring(idx, str.length)
-                        return a+insert+b
-                    };
-                    resArr.forEach(item => {
-                        if (item.type == 1) {
-                            if(item.end > text.length) return
-                            text = insert_flg(text, item.end, '</span>')
-                            text = insert_flg(text, item.start, '<span class="line-error">')
+                            if (item.end.length > 0) {
+                                this.rightArr.push({
+                                    start: item.start[0],
+                                    end: item.end[0],
+                                    cat: item.cat,
+                                    type: item.type,
+                                    id: item.id,
+                                    exp: item.exp,
+                                    rep: item.rep
+                                });
+                            }
                         }
-                        else {
-                            if(item.end > text.length) return
-                            text = insert_flg(text, item.end, '</span>')
-                            text = insert_flg(text, item.start, '<span class="line-suggest">')
-                        }
-                    });
-                    for (let i=0 ; i<text.length ; i++) {
-                        if(text.charAt(i) == '\n') {
-                            insert_flg(text,i,'<br>')
-                        }
+                    })
+                });
+
+                this.rightArr.sort((a,b) => a.start > b.start)
+                // resArr.sort((a,b) => a.end < b.end)
+                // function insert_flg(str,idx,insert){
+                //     let a = str.substring(0, idx)
+                //     let b = str.substring(idx, str.length)
+                //     return a+insert+b
+                // };
+                resArr.forEach(item => {
+                    if(item.end > this.editor.getLength()-1) return
+                    if (item.type == 1) {
+                        this.editor.formatText(item.start, item.end-item.start, 'issue', {class: 'line-error', id: item.id+''})
+                    } else if (item.type == 2) {
+                        this.editor.formatText(item.start, item.end-item.start, 'issue', {class: 'line-suggest', id: item.id+''})
                     }
-                    this.cursorIndex = this.editor.getSelection().index
-                    this.editor.deleteText(0, this.editor.getLength()+1)
-                    //插入html
-                    this.editor.clipboard.dangerouslyPasteHTML(0,text)
-                    this.editor.setSelection(this.cursorIndex, 0)
-                    this.htmlContent = originContent
-                }
-            })
-        },3000)
+                });
+                // this.cursorIndex = this.editor.getSelection().index
+                // this.editor.setSelection(this.cursorIndex, 0)
+            }
+        })
+    },
+    replaceLeft(id,start,end,rep,index) {
+        let replace = document.getElementById(id)
+        let length = rep.length
+        this.editor.insertText(start,rep, true)
+        this.editor.deleteText(start+length, end-start);
+        this.replace = 'none'
     },
     toShowAll() {
         this.showESpelling = true,
@@ -609,7 +815,26 @@ export default {
         this.showSSpelling = true,
         this.showSGrammar = true,
         this.showSSemantic = true,
-        this.showSStructure = true
+        this.showSStructure = true,
+        this.all = 1,
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
     },
     toShowMistake() {
         this.showESpelling = true,
@@ -618,7 +843,54 @@ export default {
         this.showSSpelling = false,
         this.showSGrammar = false,
         this.showSSemantic = false,
-        this.showSStructure = false
+        this.showSStructure = false,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 1,
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
+    },
+    toShowSuggestion() {
+        this.showESpelling = false,
+        this.showEGrammar = false,
+        this.showESemantic = false,
+        this.showSSpelling = true,
+        this.showSGrammar = true,
+        this.showSSemantic = true,
+        this.showSStructure = true,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 1,
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
     },
     toShowESpelling() {
         this.showESpelling = true,
@@ -627,7 +899,26 @@ export default {
         this.showSSpelling = false,
         this.showSGrammar = false,
         this.showSSemantic = false,
-        this.showSStructure = false
+        this.showSStructure = false,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 1,
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
     },
     toShowEGrammar() {
         this.showESpelling = false,
@@ -636,7 +927,26 @@ export default {
         this.showSSpelling = false,
         this.showSGrammar = false,
         this.showSSemantic = false,
-        this.showSStructure = false
+        this.showSStructure = false,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 1,
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
     },
     toShowESemantic() {
         this.showESpelling = false,
@@ -645,7 +955,26 @@ export default {
         this.showSSpelling = false,
         this.showSGrammar = false,
         this.showSSemantic = false,
-        this.showSStructure = false
+        this.showSStructure = false,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 1,
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
     },
     toShowSSpelling() {
         this.showESpelling = false,
@@ -654,7 +983,26 @@ export default {
         this.showSSpelling = true,
         this.showSGrammar = false,
         this.showSSemantic = false,
-        this.showSStructure = false
+        this.showSStructure = false,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 1,
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
     },
     toShowSGrammar() {
         this.showESpelling = false,
@@ -663,7 +1011,26 @@ export default {
         this.showSSpelling = false,
         this.showSGrammar = true,
         this.showSSemantic = false,
-        this.showSStructure = false
+        this.showSStructure = false,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 1,
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 0,
+        this.returnSS()
     },
     toShowSSemantic() {
         this.showESpelling = false,
@@ -672,7 +1039,26 @@ export default {
         this.showSSpelling = false,
         this.showSGrammar = false,
         this.showSSemantic = true,
-        this.showSStructure = false
+        this.showSStructure = false,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 1,
+        this.sst = 0,
+        this.returnSS()
     },
     toShowSStructure() {
         this.showESpelling = false,
@@ -681,7 +1067,26 @@ export default {
         this.showSSpelling = false,
         this.showSGrammar = false,
         this.showSSemantic = false,
-        this.showSStructure = true
+        this.showSStructure = true,
+        this.all = 0,
+        this.returnAll(),
+        this.m = 0,
+        this.returnM(),
+        this.s = 0,
+        this.returnS(),
+        this.es = 0,
+        this.returnMS(),
+        this.eg = 0,
+        this.returnMG(),
+        this.ese = 0,
+        this.returnML(),
+        this.ss = 0,
+        this.returnSSP(),
+        this.sg = 0,
+        this.returnSG(),
+        this.sse = 0,
+        this.returnSL(),
+        this.sst = 1
     }
   },
   created() {
@@ -709,86 +1114,81 @@ export default {
 .topper {
     height:20px;
     background-color:rgb(79,145,210);
+    width:100%;
+    position: absolute;
+    top:0;
+    z-index: 100;
 }
 /* 左边栏样式 */
 .left {
     float: left;
-    margin-left: 15px;
     width:21%;
     height: 100%;
     min-width: 245px;
 }
 .reload {
     border-bottom:1px solid rgb(218,218,218);
-    width:50%;
+    width:100%;
     float:left;
-    margin-left: 20px;
+    /* margin-left: 20px; */
 }
 .reload-img {
-    margin:25px auto 15px 20px;
-    width:15px;
-    height:60px;
-    display: block;
-    float: left;
+    margin: 30px 0 15px 20px;
+    width: 73px;
+    height: 65px;
+    display: inline-block;
+    position: relative;
+    top: 20px;
 }
 .reload-num {
-    display: block;
-    float: left;
+    display: inline-block;
     font-size:75px;
     color:rgb(126,126,126);
-    margin:10px 0px 0px 20px;
+    margin-left: -10px;
 }
 .show-all {
-    width:50%;
+    width:100%;
     float:left;
-    margin-left: 20px;
     padding-bottom:10px;
 }
-.show-all:hover {
-    font-weight: bolder;
-    cursor: pointer;
-    background-color:rgb(234,234,234);
-}
 .show-all-circle {
-    float: left;
-    margin:18px 0 0 -20px;
+    display: inline-block;
+    margin:18px 0 0 20px;
     width:12px;
     height:12px;
     border-radius:50%;
     background-color:rgb(79,145,210);
 }
 .show-all-title {
-    display: block;
-    float: left;
+    display: inline-block;
     color: rgb(79,145,210);
     margin:13px 0 0 0;
     font-size: 18px;
 }
 .mistakes {
     border-bottom:1px solid rgb(218,218,218);
-    width:50%;
+    width:100%;
     float:left;
-    margin-left: 20px;
     padding-bottom:10px;
 }
+.mistakes-all {
+    width:100%;
+    float:left;
+    padding-bottom: 10px;
+}
 .mistakes-circle {
-    float: left;
-    margin:18px 0 0 -20px;
+    display:inline-block;
+    margin:18px 0 0 20px;
     width:12px;
     height:12px;
     border-radius:50%;
     background-color:rgb(232,78,61);
 }
 .mistakes-title {
-    display: block;
-    float: left;
+    display: inline-block;
     color: rgb(232,78,61);
     margin:13px 0 0 0;
     font-size:18px;
-}
-.mistakes-title:hover {
-    font-weight: bolder;
-    cursor: pointer;
 }
 #mistakes-spelling-circle {
     float: right;
@@ -797,7 +1197,7 @@ export default {
     border-radius:50%;
     background-color:rgb(237,237,237);
     z-index: 1;
-    margin: 8px 0 0 10px;
+    margin: 8px 20px 0 0;
 }
 #mistakes-grammar-circle {
     float: right;
@@ -806,7 +1206,7 @@ export default {
     border-radius:50%;
     background-color:rgb(237,237,237);
     z-index: 1;
-    margin: 8px 0 0 10px;
+    margin: 8px 20px 0 0;
 }
 #mistakes-lexeme-circle {
     float: right;
@@ -815,23 +1215,22 @@ export default {
     border-radius:50%;
     background-color:rgb(237,237,237);
     z-index: 1;
-    margin: 8px 0 0 10px;
+    margin: 8px 20px 0 0;
 }
 .mistakes-list {
-    width: 140%;
+    width: 100%;
     float: left;
     list-style: none;
-    margin: 5px 0 0 -40px;
-    padding-top:10px;
+    margin: 5px 0 0 0px;
+    padding:10px 0 0 0;
 }
 .list-title {
-    width:80%;
     font-size:16px;
     color:rgb(137,137,137);
     display: block;
     float:left;
     margin:0 0 10px 0;
-    padding-top: 10px;
+    padding: 10px 0 0 35px;
 }
 #mistakes-spelling-num {
     display: block; 
@@ -862,22 +1261,25 @@ export default {
 }
 .suggestions {
     border-bottom:1px solid rgb(218,218,218);
-    width:50%;
+    width:100%;
     float:left;
-    margin-left: 20px;
     padding-bottom:30px;
 }
+.suggestions-all {
+    width:100%;
+    float:left;
+    padding-bottom: 10px;
+}
 .suggestions-circle {
-    float: left;
-    margin:18px 0 0 -20px;
+    display: inline-block;
+    margin:18px 0 0 20px;
     width:12px;
     height:12px;
     border-radius:50%;
     background-color:rgb(253,182,75);
 }
 .suggestions-title {
-    display: block;
-    float: left;
+    display: inline-block;
     color:rgb(253,182,75);
     margin:15px 0 0 0;
     font-size:18px;
@@ -893,7 +1295,7 @@ export default {
     border-radius:50%;
     background-color:rgb(237,237,237);
     z-index: 1;
-    margin: 8px 0 0 10px;
+    margin: 8px 20px 0 0;
 }
 #suggestion-grammar-circle {
     float: right;
@@ -902,7 +1304,7 @@ export default {
     border-radius:50%;
     background-color:rgb(237,237,237);
     z-index: 1;
-    margin: 8px 0 0 10px;
+    margin: 8px 20px 0 0;
 }
 #suggestion-lexeme-circle {
     float: right;
@@ -911,7 +1313,7 @@ export default {
     border-radius:50%;
     background-color:rgb(237,237,237);
     z-index: 1;
-    margin: 8px 0 0 10px;
+    margin: 8px 20px 0 0;
 }
 #suggestion-structure-circle {
     float: right;
@@ -920,14 +1322,14 @@ export default {
     border-radius:50%;
     background-color:rgb(237,237,237);
     z-index: 1;
-    margin: 8px 0 0 10px;
+    margin: 8px 20px 0 0;
 }
 .suggestions-list {
-    width:140%;
+    width:100%;
     float: left;
     list-style: none;
-    margin: 5px 0 0 -40px;
-    padding-top:10px;
+    margin: 5px 0 0 0px;
+    padding:10px 0 0 0;
 }
 #suggestion-spelling-num {
     display: block; 
@@ -970,10 +1372,10 @@ export default {
     float:left;
 }
 .advanced-issues-img {
-    width:24px;
-    height:22px;
+    width:22px;
+    height:20px;
     float: left;
-    margin: 15px 0 0 0;
+    margin: 17px 0 0 10px;
 }
 .advanced-issues-title {
     display: block;
@@ -993,6 +1395,14 @@ export default {
 }
 .line-suggest {
     border-bottom: 2px solid rgb(238,188,80);
+}
+.line-error:hover {
+    cursor: pointer;
+    background:rgba(230,157,169,0.7);
+}
+.line-suggest:hover {
+    cursor: pointer;
+    background: rgba(220,170,70,0.4);
 }
 .title-paste {
     width:80%;
@@ -1014,15 +1424,37 @@ export default {
 .right {
     float: left;
     width: 31%;
-    margin-top: 125px;
+    height:100%;
+    overflow: scroll;
     margin-left:1px;
 }
 .el-collapse {
+    padding-top:125px;
     border: none;
     width:96%;
     margin: 0 auto 0  0;
 }
-.right-spelling {
+.error-rep {
+    color: red;
+    height: 30px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
+    width: 75%;
+}
+.sug-rep {
+    color: rgb(238,188,80);
+    height: 30px;
+    margin: 0 40px 10px 2px;
+    font-size: 16px;
+    width: 75%;
+}
+.replace-left {
+    width: 16px;
+    height: 16px;
+    float: right;
+    margin: 15px 0 0 40px;
+}
+/* .right-spelling {
     color: red;
     height: 30px;
     margin: 0 40px 10px 2px;
@@ -1039,8 +1471,8 @@ export default {
     height: 30px;
     margin: 0 40px 10px 2px;
     font-size: 16px;
-}
-.suggest-spelling {
+} */
+/* .suggest-spelling {
     color: rgb(238,188,80);
     height: 30px;
     margin: 0 40px 10px 2px;
@@ -1063,7 +1495,7 @@ export default {
     height: 30px;
     margin: 0 40px 10px 2px;
     font-size: 16px;
-}
+} */
 .es-second-floor {
     position: relative;
     top:-5px;
@@ -1144,7 +1576,274 @@ export default {
 :-ms-input-placeholder { /* Internet Explorer 10+ */  
     color:rgb(180,180,180); 
 } 
-.demo {
-    color:red;
+/* 右边栏方框样式 */
+/* 拼写错误 */
+.es-tag {
+    background:rgb(79,145,210);
+    width:140px;
+    margin:20px;
+    position:relative;
+    top:10px;
+}
+.es-tag-li {
+    color:#fff;
+    text-indent:5px;
+}
+.es-word {
+    margin:0 10px 0 20px;
+    font-size:18px;
+}
+.es-origin-line {
+    text-decoration:line-through; 
+    color:#FF0000;
+}
+.es-origin-word {
+    color:#000;
+}
+.es-now-word {
+    background:rgb(79,145,210);
+    color:#fff;padding:4px;
+}
+.es-example {
+    margin:10px 10px 10px 20px;
+}
+.es-example-word {
+    color:rgb(79,145,210);
+    font-weight:bold
+}
+/* 语法错误 */
+.eg-tag {
+    background:rgb(79,145,210);
+    width:140px;
+    margin:20px;
+    position:relative;
+    top:10px;
+}
+.eg-tag-li {
+    color:#fff;
+    text-indent:5px;
+}
+.eg-grammar {
+    margin-left:20px;
+    font-size:18px;
+}
+.eg-origin-line {
+    text-decoration:line-through; 
+    color:#FF0000;
+}
+.eg-origin-grammar {
+    color:#000;
+}
+.eg-now-grammar {
+    background:rgb(79,145,210);
+    color:#fff;
+    padding:4px;
+}
+.eg-origin-example {
+    font-weight:bold;
+    color:rgb(113,113,113);
+    margin:10px 10px 0 20px;
+}
+.eg-origin-example-grammar {
+    background:rgb(79,145,210);
+    color:#fff;
+}
+.eg-origin-exp {
+    color:rgb(117,117,117);
+    margin:0 10px 0 20px;
+    line-height:15px;
+}
+.eg-example-tag {
+    color:rgb(79,145,210);
+    font-weight:bold;
+    font-size:17px;
+    margin:0 10px 0 20px;
+}
+.eg-example {
+    color:rgb(117,117,117);
+    font-style:oblique;
+    margin:0 10px 10px 20px;
+    line-height:15px;
+}
+.eg-example-grammar {
+    color:rgb(79,145,210);
+}
+/* 语义错误 */
+.ese-tag {
+    background:rgb(79,145,210);
+    width:140px;
+    margin:20px;
+    position:relative;
+    top:10px;
+}
+.ese-tag-li {
+    color:#fff;
+    text-indent:5px;
+}
+.ese-exp {
+    margin:0 10px 0 20px
+}
+.ese-origin {
+    margin:0 10px 0 20px;
+    color:rgb(117,117,117);
+}
+.ese-origin-semantic {
+    color:#ff0000;
+}
+.ese-origin-line {
+   color:#ff0000;
+   text-decoration:line-through;
+}
+.ese-now-semantic {
+    margin:0 10px 0 20px;
+    color:rgb(79,145,210);
+}
+/* 拼写建议 */
+.ss-tag {
+    background:rgb(79,145,210);
+    width:140px;
+    margin:20px;
+    position:relative;
+    top:10px;
+}
+.ss-tag-li {
+    color:#fff;
+    text-indent:5px;
+}
+.ss-word {
+    margin:0 10px 0 20px;
+    font-size:18px;
+}
+.ss-origin-line {
+    text-decoration:line-through; 
+    color:rgb(238,188,80);
+}
+.ss-origin-word {
+    color:#000;
+}
+.ss-now-word {
+    background:rgb(79,145,210);
+    color:#fff;padding:4px;
+}
+.ss-example {
+    margin:10px 10px 10px 20px;
+}
+.ss-example-word {
+    color:rgb(79,145,210);
+    font-weight:bold
+}
+/* 语法建议 */
+.sg-tag {
+    background:rgb(79,145,210);
+    width:140px;
+    margin:20px;
+    position:relative;
+    top:10px;
+}
+.sg-tag-li {
+    color:#fff;
+    text-indent:5px;
+}
+.sg-grammar {
+    margin-left:20px;
+    font-size:18px;
+}
+.sg-origin-line {
+    text-decoration:line-through; 
+    color:rgb(238,188,80);
+}
+.sg-origin-grammar {
+    color:#000;
+}
+.sg-now-grammar {
+    background:rgb(79,145,210);
+    color:#fff;
+    padding:4px;
+}
+.sg-origin-example {
+    font-weight:bold;
+    color:rgb(113,113,113);
+    margin:10px 10px 0 20px;
+}
+.sg-origin-example-grammar {
+    background:rgb(79,145,210);
+    color:#fff;
+}
+.sg-origin-exp {
+    color:rgb(117,117,117);
+    margin:0 10px 0 20px;
+    line-height:15px;
+}
+.sg-example-tag {
+    color:rgb(79,145,210);
+    font-weight:bold;
+    font-size:17px;
+    margin:0 10px 0 20px;
+}
+.sg-example {
+    color:rgb(117,117,117);
+    font-style:oblique;
+    margin:0 10px 10px 20px;
+    line-height:15px;
+}
+.sg-example-grammar {
+    color:rgb(79,145,210);
+}
+/* 语义建议 */
+.sse-tag {
+    background:rgb(79,145,210);
+    width:140px;
+    margin:20px;
+    position:relative;
+    top:10px;
+}
+.sse-tag-li {
+    color:#fff;
+    text-indent:5px;
+}
+.sse-exp {
+    margin:0 10px 0 20px
+}
+.sse-origin {
+    margin:0 10px 0 20px;
+    color:rgb(117,117,117);
+}
+.sse-origin-semantic {
+    color:rgb(238,188,80)
+}
+.sse-origin-line {
+   color:rgb(238,188,80);
+   text-decoration:line-through;
+}
+.sse-now-semantic {
+    margin:0 10px 0 20px;
+    color:rgb(79,145,210);
+}
+/* 句式结构建议 */ 
+.sst-tag {
+    background:rgb(79,145,210);
+    width:140px;
+    margin:20px;
+    position:relative;
+    top:10px;
+}
+.sst-tag-li {
+    color:#fff;
+    text-indent:5px;
+}
+.sst-exp {
+    margin:0 10px 0 20px;
+}
+.sst-origin {
+    margin:0 10px 0 20px;
+    color:rgb(117,117,117);
+}
+.sst-origin-word {
+    color:rgb(238,188,80);
+    text-decoration:line-through;
+}
+.sst-now {
+    margin:0 10px 0 20px;
+    color:rgb(79,145,210);
 }
 </style>
