@@ -123,8 +123,8 @@
     <div class="splender-right">
     </div>
     <div class="right">
-        <el-collapse v-model="activeNames" @change="handleChange" >
-            <el-collapse-item v-for="(el,index) in rightArr" :key="index"  v-if="(el.type==1 && el.cat==1) && showESpelling" :name="el.id" >
+        <!-- <el-collapse v-model="activeNames" @change="handleChange" >
+            <el-collapse-item v-for="(el,index) in rightArr" :key="index"  v-if="(el.type==1 && el.cat==1) && showESpelling" :name="el.id" :style="{display:replace}">
                 <template slot="title">
                     <li class="right-spelling">
                         {{el.rep}}
@@ -135,7 +135,7 @@
                     <span v-html="el.exp"></span>
                     
                 
-                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px">
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px">
                         <li style="color:#fff;text-indent:5px;">单词拼写错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px;font-size:18px">
@@ -144,10 +144,10 @@
                         <span style="background:rgb(79,145,210);color:#fff;padding:4px;">efficient</span>
                     </div>
                     <div style="margin:10px 10px 10px 20px;">One cares about making the process repeatable and <span style="color:rgb(79,145,210);font-weight:bold">efficient</span></div>
-                 -->
+                
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in rightArr" :key="`A-${index}`"  v-if="(el.type==2 && el.cat==1) && showSSpelling" :name="el.id" >
+            <el-collapse-item v-for="(el,index) in rightArr" :key="`A-${index}`"  v-if="(el.type==2 && el.cat==1) && showSSpelling" :name="el.id" :style="{display:replace}">
                 <template slot="title">
                     <li class="right-grammar">
                         {{el.rep}}
@@ -158,7 +158,7 @@
                     <span v-html="el.exp"></span>
                     
                     
-                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">词组搭配错误</li>
                     </div>
                     <div style="margin-left:20px;font-size:18px">
@@ -171,11 +171,11 @@
                     <div style="color:rgb(79,145,210);font-weight:bold;font-size:17px;margin:0 10px 0 20px;">examples</div>
                     <div style="color:rgb(117,117,117);font-style:oblique;margin:0 10px 10px 20px;line-height:15px;">
                         <span>This place is close and <span>convenient to</span> the street car</span>
-                    </div> -->
+                    </div>
                 
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in rightArr" :key="`B-${index}`" v-if="(el.type==1 && el.cat==2) && showEGrammar" :name="el.id" >
+            <el-collapse-item v-for="(el,index) in rightArr" :key="`B-${index}`" v-if="(el.type==1 && el.cat==2) && showEGrammar" :name="el.id" :style="{display:replace}">
                 <template slot="title">
                     <li class="right-semantic">
                         {{el.rep}}
@@ -186,16 +186,16 @@
                     <span v-html="el.exp"></span>
 
                     
-                   <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                   <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">知识性错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px">整句话无语法性错误，但语义有知识性错误</div>
                     <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color:#ff0000">Imperial Palace</span> has a long history originated in <span style="color:#ff0000;text-decoration:line-through;">Qing</span> Dynasty</div>
                     <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
-                 -->
+                
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in rightArr" :key="`C-${index}`" v-if="(el.type==2 && el.cat==2) && showSGrammar" :name="el.id" >
+            <el-collapse-item v-for="(el,index) in rightArr" :key="`C-${index}`" v-if="(el.type==2 && el.cat==2) && showSGrammar" :name="el.id" :style="{display:replace}">
                 <template slot="title">
                     <li class="suggest-spelling">
                         {{el.rep}}
@@ -206,7 +206,7 @@
                     <span v-html="el.exp"></span>
 
                    
-                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">单词拼写错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px;font-size:18px">
@@ -215,10 +215,10 @@
                         <span style="background:rgb(79,145,210);color:#fff;padding:4px;">efficient</span>
                     </div>
                     <div style="margin:10px 10px 10px 20px;">One cares about making the process repeatable and <span style="color:rgb(79,145,210);font-weight:bold">efficient</span></div>
-                 -->
+                
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in rightArr" :key="`D-${index}`" v-if="(el.type==1 && el.cat==3) && showESemantic" :name="el.id" >
+            <el-collapse-item v-for="(el,index) in rightArr" :key="`D-${index}`" v-if="(el.type==1 && el.cat==3) && showESemantic" :name="el.id" :style="{display:replace}">
                 <template slot="title">
                     <li class="suggest-grammar">
                         {{el.rep}}
@@ -229,7 +229,7 @@
                     <span v-html="el.exp"></span>
 
               
-                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">词组搭配错误</li>
                     </div>
                     <div style="margin-left:20px;font-size:18px">
@@ -243,10 +243,10 @@
                     <div style="color:rgb(117,117,117);font-style:oblique;margin:0 10px 10px 20px;line-height:15px;">
                         <span>This place is close and <span>convenient to</span> the street car</span>
                     </div>
-                 -->
+                
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in rightArr" :key="`E-${index}`" v-if="(el.type==2 && el.cat==3) && showSSemantic" :name="el.id" >
+            <el-collapse-item v-for="(el,index) in rightArr" :key="`E-${index}`" v-if="(el.type==2 && el.cat==3) && showSSemantic" :name="el.id" :style="{display:replace}">
                 <template slot="title">
                     <li class="suggest-semantic">
                         {{el.rep}}
@@ -257,16 +257,16 @@
                     <span v-html="el.exp"></span>
 
                   
-                    <!--  <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                     <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">知识性错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px">整句话无语法性错误，但语义有知识性错误</div>
                     <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color: rgb(238,188,80);">Imperial Palace</span> has a long history originated in <span style="color:rgb(238,188,80);text-decoration:line-through;">Qing</span> Dynasty</div>
-                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div> -->
+                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
 
                 </div>
             </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in rightArr" :key="`F-${index}`" v-if="(el.type==2 && el.cat==4) && showSStructure" :name="el.id" >
+            <el-collapse-item v-for="(el,index) in rightArr" :key="`F-${index}`" v-if="(el.type==2 && el.cat==4) && showSStructure" :name="el.id" :style="{display:replace}">
                 <template slot="title">
                     <li class="suggest-structure">
                         {{el.rep}}
@@ -277,66 +277,33 @@
                     <span v-html="el.exp"></span>
 
                  
-                    <!-- <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
+                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
                         <li style="color:#fff;text-indent:5px;">句式结构错误</li>
                     </div>
                     <div style="margin:0 10px 0 20px">从句式结构考虑，整句话有累赘错误</div>
                     <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color:rgb(238,188,80);text-decoration:line-through;">Imperial Palace</span> has a long history originated in Dynasty</div>
-                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div> -->
+                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
 
                 </div>
             </el-collapse-item>
-        </el-collapse> 
-        <!-- <el-collapse v-model="activeNames" @change="handleChange" >
+        </el-collapse> -->
+        <el-collapse v-model="activeNames" @change="handleChange" >
             <el-collapse-item v-for="(el,index) in rightArr" :key="index" :index="index+''" :name="el.id" >
                 <template slot="title">
-                    <li class="error-rep" v-if="el.type==1">{{el.rep}}</li>
-                    <li class="sug-rep" v-if="el.type==2">{{el.rep}}</li>
-                    <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    <li class="error-rep" v-if="el.type==1">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                    <li class="sug-rep" v-if="el.type==2">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
                 </template>
                 <div class="es-second-floor">
                     <span v-html="el.exp"></span>
                 </div>
             </el-collapse-item>
-        </el-collapse> -->
-        <!-- <el-collapse v-model="activeNames" @change="handleChange" >
-            <el-collapse-item v-for="(el,index) in rightArr" :key="index" :index="index+''" :name="el.id" :style="{display:replace}">
-                <template slot="title">
-                    <li class="error-rep" v-if="(el.type==1 && el.cat==1) && showESpelling">
-                        {{el.rep}}
-                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
-                    </li>
-                    <li class="sug-rep" v-if="(el.type==2 && el.cat==1) && showSSpelling">
-                        {{el.rep}}
-                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
-                    </li>
-                    <li class="error-rep" v-if="(el.type==1 && el.cat==2) && showEGrammar">
-                        {{el.rep}}
-                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
-                    </li>
-                    <li class="sug-rep" v-if="(el.type==2 && el.cat==2) && showSGrammar">
-                        {{el.rep}}
-                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
-                    </li>
-                    <li class="error-rep" v-if="(el.type==1 && el.cat==3) && showESemantic">
-                        {{el.rep}}
-                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
-                    </li>
-                    <li class="sug-rep" v-if="(el.type==2 && el.cat==3) && showSSemantic">
-                        {{el.rep}}
-                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
-                    </li>
-                    <li class="error-rep" v-if="(el.type==2 && el.cat==4) && showSStructure">
-                        {{el.rep}}
-                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
-                    </li>
-                    
-                </template>
-                <div class="es-second-floor">
-                    <span v-html="el.exp"></span>
-                </div>
-            </el-collapse-item>
-        </el-collapse> -->
+        </el-collapse>
     </div>
 </div>
 </template>
@@ -837,9 +804,11 @@ export default {
     },
     replaceLeft(id,start,end,rep,index) {
         let replace = document.getElementById(id)
-        let length = rep.length
-        this.editor.insertText(start+2,rep, true)
-        this.editor.deleteText(start+length+2, end-start);
+        // let length = rep.length
+        // this.editor.insertText(start+2,rep, true)
+        // this.editor.deleteText(start+length+1, end-start);
+        this.editor.deleteText(start, end-start);
+        this.editor.insertText(start,rep, true)
         this.replace = 'none'
     },
     toShowAll() {
@@ -1468,7 +1437,7 @@ export default {
     width:96%;
     margin: 0 auto 0  0;
 }
-/* .error-rep {
+.error-rep {
     color: red;
     height: 30px;
     margin: 0 40px 10px 2px;
@@ -1481,14 +1450,14 @@ export default {
     margin: 0 40px 10px 2px;
     font-size: 16px;
     width: 75%;
-} */
+}
 .replace-left {
     width: 16px;
     height: 16px;
     float: right;
     margin: 15px 0 0 40px;
 }
-.right-spelling {
+/* .right-spelling {
     color: red;
     height: 30px;
     margin: 0 40px 10px 2px;
@@ -1508,8 +1477,8 @@ export default {
     margin: 0 40px 10px 2px;
     font-size: 16px;
     width: 75%;
-} 
-.suggest-spelling {
+}  */
+/* .suggest-spelling {
     color: rgb(238,188,80);
     height: 30px;
     margin: 0 40px 10px 2px;
@@ -1522,8 +1491,8 @@ export default {
     margin: 0 40px 10px 2px;
     font-size: 16px;
     width: 75%;
-}
-.suggest-semantic {
+} */
+/* .suggest-semantic {
     color: rgb(238,188,80);
     height: 30px;
     margin: 0 40px 10px 2px;
@@ -1536,7 +1505,7 @@ export default {
     margin: 0 40px 10px 2px;
     font-size: 16px;
     width: 75%;
-} 
+}  */
 .es-second-floor {
     position: relative;
     top:-5px;
