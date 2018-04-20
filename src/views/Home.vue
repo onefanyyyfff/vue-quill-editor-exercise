@@ -123,178 +123,113 @@
     <div class="splender-right">
     </div>
     <div class="right">
-        <!-- <el-collapse v-model="activeNames" @change="handleChange" >
-            <el-collapse-item v-for="(el,index) in rightArr" :key="index"  v-if="(el.type==1 && el.cat==1) && showESpelling" :name="el.id" :style="{display:replace}">
-                <template slot="title">
-                    <li class="right-spelling">
-                        {{el.rep}}
-                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
-                    </li>
-                </template>
-                <div class="es-second-floor">
-                    <span v-html="el.exp"></span>
-                    
-                
-                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px">
-                        <li style="color:#fff;text-indent:5px;">单词拼写错误</li>
-                    </div>
-                    <div style="margin:0 10px 0 20px;font-size:18px">
-                        <span style="text-decoration:line-through; color:#FF0000"><span style="color:#000">efficiant</span></span>
-                        <img src="/static/img/array.png" style="width:40px;">
-                        <span style="background:rgb(79,145,210);color:#fff;padding:4px;">efficient</span>
-                    </div>
-                    <div style="margin:10px 10px 10px 20px;">One cares about making the process repeatable and <span style="color:rgb(79,145,210);font-weight:bold">efficient</span></div>
-                
-                </div>
-            </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in rightArr" :key="`A-${index}`"  v-if="(el.type==2 && el.cat==1) && showSSpelling" :name="el.id" :style="{display:replace}">
-                <template slot="title">
-                    <li class="right-grammar">
-                        {{el.rep}}
-                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
-                    </li>
-                </template>
-                <div class="eg-second-floor">
-                    <span v-html="el.exp"></span>
-                    
-                    
-                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
-                        <li style="color:#fff;text-indent:5px;">词组搭配错误</li>
-                    </div>
-                    <div style="margin-left:20px;font-size:18px">
-                        <span style="text-decoration:line-through; color:#FF0000"><span style="color:#000">convenient for</span></span>
-                        <img src="/static/img/array.png" style="width:40px;">
-                        <span style="background:rgb(79,145,210);color:#fff;padding:4px;">convenient to</span>
-                    </div>
-                    <div style="font-weight:bold;color:rgb(113,113,113);margin:10px 10px 0 20px;">A <span style="background:rgb(79,145,210);color:#fff">convenient</span> time <span style="background:rgb(79,145,210);color:#fff">for</span> receive guests.</div>
-                    <div style="color:rgb(117,117,117);margin:0 10px 0 20px;line-height:15px;">suitable for your purpose and needs and causing xxx</div>
-                    <div style="color:rgb(79,145,210);font-weight:bold;font-size:17px;margin:0 10px 0 20px;">examples</div>
-                    <div style="color:rgb(117,117,117);font-style:oblique;margin:0 10px 10px 20px;line-height:15px;">
-                        <span>This place is close and <span>convenient to</span> the street car</span>
-                    </div>
-                
-                </div>
-            </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in rightArr" :key="`B-${index}`" v-if="(el.type==1 && el.cat==2) && showEGrammar" :name="el.id" :style="{display:replace}">
-                <template slot="title">
-                    <li class="right-semantic">
-                        {{el.rep}}
-                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
-                    </li>
-                </template>
-                <div class="ese-second-floor">
-                    <span v-html="el.exp"></span>
-
-                    
-                   <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
-                        <li style="color:#fff;text-indent:5px;">知识性错误</li>
-                    </div>
-                    <div style="margin:0 10px 0 20px">整句话无语法性错误，但语义有知识性错误</div>
-                    <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color:#ff0000">Imperial Palace</span> has a long history originated in <span style="color:#ff0000;text-decoration:line-through;">Qing</span> Dynasty</div>
-                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
-                
-                </div>
-            </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in rightArr" :key="`C-${index}`" v-if="(el.type==2 && el.cat==2) && showSGrammar" :name="el.id" :style="{display:replace}">
-                <template slot="title">
-                    <li class="suggest-spelling">
-                        {{el.rep}}
-                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
-                    </li>
-                </template>
-                <div class="ese-second-floor">
-                    <span v-html="el.exp"></span>
-
-                   
-                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
-                        <li style="color:#fff;text-indent:5px;">单词拼写错误</li>
-                    </div>
-                    <div style="margin:0 10px 0 20px;font-size:18px">
-                        <span style="text-decoration:line-through; color:rgb(238,188,80)"><span style="color:#000">efficiant</span></span>
-                        <img src="/static/img/array.png" style="width:40px;">
-                        <span style="background:rgb(79,145,210);color:#fff;padding:4px;">efficient</span>
-                    </div>
-                    <div style="margin:10px 10px 10px 20px;">One cares about making the process repeatable and <span style="color:rgb(79,145,210);font-weight:bold">efficient</span></div>
-                
-                </div>
-            </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in rightArr" :key="`D-${index}`" v-if="(el.type==1 && el.cat==3) && showESemantic" :name="el.id" :style="{display:replace}">
-                <template slot="title">
-                    <li class="suggest-grammar">
-                        {{el.rep}}
-                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
-                    </li>
-                </template>
-                <div class="ese-second-floor">
-                    <span v-html="el.exp"></span>
-
-              
-                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
-                        <li style="color:#fff;text-indent:5px;">词组搭配错误</li>
-                    </div>
-                    <div style="margin-left:20px;font-size:18px">
-                        <span style="text-decoration:line-through; color: rgb(238,188,80);"><span style="color:#000">convenient for</span></span>
-                        <img src="/static/img/array.png" style="width:40px;">
-                        <span style="background:rgb(79,145,210);color:#fff;padding:4px;">convenient to</span>
-                    </div>
-                    <div style="font-weight:bold;color:rgb(113,113,113);margin:10px 10px 0 20px;">A <span style="background:rgb(79,145,210);color:#fff">convenient</span> time <span style="background:rgb(79,145,210);color:#fff">for</span> receive guests.</div>
-                    <div style="color:rgb(117,117,117);margin:0 10px 0 20px;line-height:15px;">suitable for your purpose and needs and causing xxx</div>
-                    <div style="color:rgb(79,145,210);font-weight:bold;font-size:17px;margin:0 10px 0 20px;">examples</div>
-                    <div style="color:rgb(117,117,117);font-style:oblique;margin:0 10px 10px 20px;line-height:15px;">
-                        <span>This place is close and <span>convenient to</span> the street car</span>
-                    </div>
-                
-                </div>
-            </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in rightArr" :key="`E-${index}`" v-if="(el.type==2 && el.cat==3) && showSSemantic" :name="el.id" :style="{display:replace}">
-                <template slot="title">
-                    <li class="suggest-semantic">
-                        {{el.rep}}
-                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
-                    </li>
-                </template>
-                <div class="ss-second-floor">
-                    <span v-html="el.exp"></span>
-
-                  
-                     <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
-                        <li style="color:#fff;text-indent:5px;">知识性错误</li>
-                    </div>
-                    <div style="margin:0 10px 0 20px">整句话无语法性错误，但语义有知识性错误</div>
-                    <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color: rgb(238,188,80);">Imperial Palace</span> has a long history originated in <span style="color:rgb(238,188,80);text-decoration:line-through;">Qing</span> Dynasty</div>
-                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
-
-                </div>
-            </el-collapse-item>
-            <el-collapse-item v-for="(el,index) in rightArr" :key="`F-${index}`" v-if="(el.type==2 && el.cat==4) && showSStructure" :name="el.id" :style="{display:replace}">
-                <template slot="title">
-                    <li class="suggest-structure">
-                        {{el.rep}}
-                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
-                    </li>
-                </template>
-                <div class="sst-second-floor">
-                    <span v-html="el.exp"></span>
-
-                 
-                    <div style="background:rgb(79,145,210);width:140px;margin:20px;position:relative;top:10px" >
-                        <li style="color:#fff;text-indent:5px;">句式结构错误</li>
-                    </div>
-                    <div style="margin:0 10px 0 20px">从句式结构考虑，整句话有累赘错误</div>
-                    <div style="margin:0 10px 0 20px;color:rgb(117,117,117);">The <span style="color:rgb(238,188,80);text-decoration:line-through;">Imperial Palace</span> has a long history originated in Dynasty</div>
-                    <div style="margin:0 10px 0 20px;color:rgb(79,145,210);">The Imperial Palace has a long history originated in Ming Dynasty</div>
-
-                </div>
-            </el-collapse-item>
-        </el-collapse> -->
         <el-collapse v-model="activeNames" @change="handleChange" >
-            <el-collapse-item v-for="(el,index) in rightArr" :key="index" :index="index+''" :name="el.id" >
+            <el-collapse-item v-for="(el,index) in rightArr" :key="index" :index="index+''" :name="el.id" v-if="showAll">
                 <template slot="title">
                     <li class="error-rep" v-if="el.type==1">
                         {{el.rep}}
                         <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
                     </li>
                     <li class="sug-rep" v-if="el.type==2">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                </template>
+                <div class="es-second-floor">
+                    <span v-html="el.exp"></span>
+                </div>
+            </el-collapse-item>
+            <el-collapse-item v-for="(el,index) in errArr" :key="index" :index="index+''" :name="el.id" v-if="showAllErr">
+                <template slot="title">
+                    <li class="error-rep">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                </template>
+                <div class="es-second-floor">
+                    <span v-html="el.exp"></span>
+                </div>
+            </el-collapse-item>
+            <el-collapse-item v-for="(el,index) in sugArr" :key="index" :index="index+''" :name="el.id" v-if="showAllSug">
+                <template slot="title">
+                    <li class="sug-rep">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                </template>
+                <div class="es-second-floor">
+                    <span v-html="el.exp"></span>
+                </div>
+            </el-collapse-item>
+            <el-collapse-item v-for="(el,index) in errSpeArr" :key="index" :index="index+''" :name="el.id" v-if="showErrSpe">
+                <template slot="title">
+                    <li class="error-rep">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                </template>
+                <div class="es-second-floor">
+                    <span v-html="el.exp"></span>
+                </div>
+            </el-collapse-item>
+            <el-collapse-item v-for="(el,index) in errGraArr" :key="index" :index="index+''" :name="el.id" v-if="showErrGra">
+                <template slot="title">
+                    <li class="error-rep">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                </template>
+                <div class="es-second-floor">
+                    <span v-html="el.exp"></span>
+                </div>
+            </el-collapse-item>
+            <el-collapse-item v-for="(el,index) in errSemArr" :key="index" :index="index+''" :name="el.id" v-if="showErrSem">
+                <template slot="title">
+                    <li class="error-rep">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                </template>
+                <div class="es-second-floor">
+                    <span v-html="el.exp"></span>
+                </div>
+            </el-collapse-item>
+            <el-collapse-item v-for="(el,index) in sugSpeArr" :key="index" :index="index+''" :name="el.id" v-if="showSugSpe">
+                <template slot="title">
+                    <li class="sug-rep">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                </template>
+                <div class="es-second-floor">
+                    <span v-html="el.exp"></span>
+                </div>
+            </el-collapse-item>
+            <el-collapse-item v-for="(el,index) in sugGraArr" :key="index" :index="index+''" :name="el.id" v-if="showSugGra">
+                <template slot="title">
+                    <li class="sug-rep">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                </template>
+                <div class="es-second-floor">
+                    <span v-html="el.exp"></span>
+                </div>
+            </el-collapse-item>
+            <el-collapse-item v-for="(el,index) in sugSemArr" :key="index" :index="index+''" :name="el.id" v-if="showSugSem">
+                <template slot="title">
+                    <li class="sug-rep">
+                        {{el.rep}}
+                        <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
+                    </li>
+                </template>
+                <div class="es-second-floor">
+                    <span v-html="el.exp"></span>
+                </div>
+            </el-collapse-item>
+            <el-collapse-item v-for="(el,index) in sugStrArr" :key="index" :index="index+''" :name="el.id" v-if="showSugSre">
+                <template slot="title">
+                    <li class="sug-rep">
                         {{el.rep}}
                         <img src="/static/img/replace.png" class="replace-left" @click="replaceLeft(el.id,el.start,el.end,el.rep,index)">
                     </li>
@@ -363,13 +298,16 @@ export default {
   data () {
     return {
         paperOn: false,
-        showESpelling: true,
-        showEGrammar: true,
-        showESemantic: true,
-        showSSpelling:true,
-        showSGrammar:true,
-        showSSemantic: true,
-        showSStructure: true,
+        showAll: true,
+        showAllErr: false,
+        showAllSug: false,
+        showErrSpe: false,
+        showErrGra: false,
+        showErrSem: false,
+        showSugSpe: false,
+        showSugGra: false,
+        showSugSem: false,
+        showSugSre: false,
         paperTitle:'',
         paperBody: '',
         errorSpelling: '',
@@ -388,6 +326,15 @@ export default {
         suggestGrammarArr: [],
         suggestSemanticArr: [],
         rightArr: [],
+        errArr: [],
+        sugArr: [],
+        errSpeArr: [],
+        errGraArr: [],
+        errSemArr: [],
+        sugSpeArr: [],
+        sugGraArr: [],
+        sugSemArr: [],
+        sugStrArr: [],
         judgeFlag: 0,
         replace: 'block',
         lastEditTimerId: -1,
@@ -781,7 +728,123 @@ export default {
                         }
                     })
                 });
-
+                this.rightArr.forEach(item => {
+                    if(item.type == 1) {
+                        this.errArr.push({
+                            start: item.start[0],
+                            end: item.end[0],
+                            cat: item.cat,
+                            type: item.type,
+                            id: item.id,
+                            exp: item.exp,
+                            rep: item.rep
+                        })
+                    } 
+                });
+                this.rightArr.forEach(item => {
+                    if(item.type == 2) {
+                        this.sugArr.push({
+                            start: item.start[0],
+                            end: item.end[0],
+                            cat: item.cat,
+                            type: item.type,
+                            id: item.id,
+                            exp: item.exp,
+                            rep: item.rep
+                        })
+                    }
+                });
+                this.rightArr.forEach(item => {
+                    if(item.type == 1 && item.cat == 1) {
+                        this.errSpeArr.push({
+                            start: item.start[0],
+                            end: item.end[0],
+                            cat: item.cat,
+                            type: item.type,
+                            id: item.id,
+                            exp: item.exp,
+                            rep: item.rep
+                        })
+                    }
+                });
+                this.rightArr.forEach(item => {
+                    if(item.type == 1 && item.cat == 2) {
+                        this.errGraArr.push({
+                            start: item.start[0],
+                            end: item.end[0],
+                            cat: item.cat,
+                            type: item.type,
+                            id: item.id,
+                            exp: item.exp,
+                            rep: item.rep
+                        })
+                    }
+                });
+                this.rightArr.forEach(item => {
+                    if(item.type == 1 && item.cat == 3) {
+                        this.errSemArr.push({
+                            start: item.start[0],
+                            end: item.end[0],
+                            cat: item.cat,
+                            type: item.type,
+                            id: item.id,
+                            exp: item.exp,
+                            rep: item.rep
+                        })
+                    }
+                });
+                this.rightArr.forEach(item => {
+                    if(item.type == 2 && item.cat == 1) {
+                        this.sugSpeArr.push({
+                            start: item.start[0],
+                            end: item.end[0],
+                            cat: item.cat,
+                            type: item.type,
+                            id: item.id,
+                            exp: item.exp,
+                            rep: item.rep
+                        })
+                    }
+                });
+                this.rightArr.forEach(item => {
+                    if(item.type == 2 && item.cat == 2) {
+                        this.sugGraArr.push({
+                            start: item.start[0],
+                            end: item.end[0],
+                            cat: item.cat,
+                            type: item.type,
+                            id: item.id,
+                            exp: item.exp,
+                            rep: item.rep
+                        })
+                    }
+                });
+                this.rightArr.forEach(item => {
+                    if(item.type == 2 && item.cat == 3) {
+                        this.sugSemArr.push({
+                            start: item.start[0],
+                            end: item.end[0],
+                            cat: item.cat,
+                            type: item.type,
+                            id: item.id,
+                            exp: item.exp,
+                            rep: item.rep
+                        })
+                    }
+                });
+                this.rightArr.forEach(item => {
+                    if(item.type == 2 && item.cat == 4) {
+                        this.sugStrArr.push({
+                            start: item.start[0],
+                            end: item.end[0],
+                            cat: item.cat,
+                            type: item.type,
+                            id: item.id,
+                            exp: item.exp,
+                            rep: item.rep
+                        })
+                    }
+                });
                 this.rightArr.sort((a,b) => a.start > b.start)
                 // resArr.sort((a,b) => a.end < b.end)
                 // function insert_flg(str,idx,insert){
@@ -812,13 +875,16 @@ export default {
         this.replace = 'none'
     },
     toShowAll() {
-        this.showESpelling = true,
-        this.showEGrammar = true,
-        this.showESemantic = true,
-        this.showSSpelling = true,
-        this.showSGrammar = true,
-        this.showSSemantic = true,
-        this.showSStructure = true,
+        this.showAll = true,
+        this.showAllErr = false,
+        this.showAllSug = false,
+        this.showErrSpe = false,
+        this.showErrGra = false,
+        this.showErrSem = false,
+        this.showSugSpe = false,
+        this.showSugGra = false,
+        this.showSugSem = false,
+        this.showSugSre = false,
         this.all = 1,
         this.m = 0,
         this.returnM(),
@@ -840,13 +906,16 @@ export default {
         this.returnSS()
     },
     toShowMistake() {
-        this.showESpelling = true,
-        this.showEGrammar = true,
-        this.showESemantic = true,
-        this.showSSpelling = false,
-        this.showSGrammar = false,
-        this.showSSemantic = false,
-        this.showSStructure = false,
+        this.showAll = false,
+        this.showAllErr = true,
+        this.showAllSug = false,
+        this.showErrSpe = false,
+        this.showErrGra = false,
+        this.showErrSem = false,
+        this.showSugSpe = false,
+        this.showSugGra = false,
+        this.showSugSem = false,
+        this.showSugSre = false,
         this.all = 0,
         this.returnAll(),
         this.m = 1,
@@ -868,13 +937,16 @@ export default {
         this.returnSS()
     },
     toShowSuggestion() {
-        this.showESpelling = false,
-        this.showEGrammar = false,
-        this.showESemantic = false,
-        this.showSSpelling = true,
-        this.showSGrammar = true,
-        this.showSSemantic = true,
-        this.showSStructure = true,
+        this.showAll = false,
+        this.showAllErr = false,
+        this.showAllSug = true,
+        this.showErrSpe = false,
+        this.showErrGra = false,
+        this.showErrSem = false,
+        this.showSugSpe = false,
+        this.showSugGra = false,
+        this.showSugSem = false,
+        this.showSugSre = false,
         this.all = 0,
         this.returnAll(),
         this.m = 0,
@@ -896,13 +968,16 @@ export default {
         this.returnSS()
     },
     toShowESpelling() {
-        this.showESpelling = true,
-        this.showEGrammar = false,
-        this.showESemantic = false,
-        this.showSSpelling = false,
-        this.showSGrammar = false,
-        this.showSSemantic = false,
-        this.showSStructure = false,
+        this.showAll = false,
+        this.showAllErr = false,
+        this.showAllSug = false,
+        this.showErrSpe = true,
+        this.showErrGra = false,
+        this.showErrSem = false,
+        this.showSugSpe = false,
+        this.showSugGra = false,
+        this.showSugSem = false,
+        this.showSugSre = false,
         this.all = 0,
         this.returnAll(),
         this.m = 0,
@@ -924,13 +999,16 @@ export default {
         this.returnSS()
     },
     toShowEGrammar() {
-        this.showESpelling = false,
-        this.showEGrammar = true,
-        this.showESemantic = false,
-        this.showSSpelling = false,
-        this.showSGrammar = false,
-        this.showSSemantic = false,
-        this.showSStructure = false,
+        this.showAll = false,
+        this.showAllErr = false,
+        this.showAllSug = false,
+        this.showErrSpe = false,
+        this.showErrGra = true,
+        this.showErrSem = false,
+        this.showSugSpe = false,
+        this.showSugGra = false,
+        this.showSugSem = false,
+        this.showSugSre = false,
         this.all = 0,
         this.returnAll(),
         this.m = 0,
@@ -952,13 +1030,16 @@ export default {
         this.returnSS()
     },
     toShowESemantic() {
-        this.showESpelling = false,
-        this.showEGrammar = false,
-        this.showESemantic = true,
-        this.showSSpelling = false,
-        this.showSGrammar = false,
-        this.showSSemantic = false,
-        this.showSStructure = false,
+        this.showAll = false,
+        this.showAllErr = false,
+        this.showAllSug = false,
+        this.showErrSpe = false,
+        this.showErrGra = false,
+        this.showErrSem = true,
+        this.showSugSpe = false,
+        this.showSugGra = false,
+        this.showSugSem = false,
+        this.showSugSre = false,
         this.all = 0,
         this.returnAll(),
         this.m = 0,
@@ -980,13 +1061,16 @@ export default {
         this.returnSS()
     },
     toShowSSpelling() {
-        this.showESpelling = false,
-        this.showEGrammar = false,
-        this.showESemantic = false,
-        this.showSSpelling = true,
-        this.showSGrammar = false,
-        this.showSSemantic = false,
-        this.showSStructure = false,
+        this.showAll = false,
+        this.showAllErr = false,
+        this.showAllSug = false,
+        this.showErrSpe = false,
+        this.showErrGra = false,
+        this.showErrSem = false,
+        this.showSugSpe = true,
+        this.showSugGra = false,
+        this.showSugSem = false,
+        this.showSugSre = false,
         this.all = 0,
         this.returnAll(),
         this.m = 0,
@@ -1008,13 +1092,16 @@ export default {
         this.returnSS()
     },
     toShowSGrammar() {
-        this.showESpelling = false,
-        this.showEGrammar = false,
-        this.showESemantic = false,
-        this.showSSpelling = false,
-        this.showSGrammar = true,
-        this.showSSemantic = false,
-        this.showSStructure = false,
+        this.showAll = false,
+        this.showAllErr = false,
+        this.showAllSug = false,
+        this.showErrSpe = false,
+        this.showErrGra = false,
+        this.showErrSem = false,
+        this.showSugSpe = false,
+        this.showSugGra = true,
+        this.showSugSem = false,
+        this.showSugSre = false,
         this.all = 0,
         this.returnAll(),
         this.m = 0,
@@ -1036,13 +1123,16 @@ export default {
         this.returnSS()
     },
     toShowSSemantic() {
-        this.showESpelling = false,
-        this.showEGrammar = false,
-        this.showESemantic = false,
-        this.showSSpelling = false,
-        this.showSGrammar = false,
-        this.showSSemantic = true,
-        this.showSStructure = false,
+        this.showAll = false,
+        this.showAllErr = false,
+        this.showAllSug = false,
+        this.showErrSpe = false,
+        this.showErrGra = false,
+        this.showErrSem = false,
+        this.showSugSpe = false,
+        this.showSugGra = false,
+        this.showSugSem = true,
+        this.showSugSre = false,
         this.all = 0,
         this.returnAll(),
         this.m = 0,
@@ -1064,13 +1154,16 @@ export default {
         this.returnSS()
     },
     toShowSStructure() {
-        this.showESpelling = false,
-        this.showEGrammar = false,
-        this.showESemantic = false,
-        this.showSSpelling = false,
-        this.showSGrammar = false,
-        this.showSSemantic = false,
-        this.showSStructure = true,
+        this.showAll = false,
+        this.showAllErr = false,
+        this.showAllSug = false,
+        this.showErrSpe = false,
+        this.showErrGra = false,
+        this.showErrSem = false,
+        this.showSugSpe = false,
+        this.showSugGra = false,
+        this.showSugSem = false,
+        this.showSugSre = true,
         this.all = 0,
         this.returnAll(),
         this.m = 0,
