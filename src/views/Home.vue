@@ -391,10 +391,12 @@ export default {
             that.updateEditor();
         }
     });
-    var Delta = Quill.import('delta');
-    this.editor.clipboard.addMatcher (Node.ELEMENT_NODE, function (node, delta) {
-        return new Delta().insert(node.textContent);
-    });
+    // var Delta = Quill.import('delta');
+    // this.editor.clipboard.addMatcher (Node.ELEMENT_NODE, function (node, delta) {
+    //     return new Delta().insert(node.textContent);
+    // });
+    this.editor.clipboard.dangerouslyPasteHTML(source == 'user');
+   
     // Interpret a <b> tag as bold
     // this.editor.clipboard.addMatcher('B', function(node, delta) {
     //     return delta.compose(new Delta().retain(delta.length(), { bold: true }));
@@ -660,7 +662,7 @@ export default {
     },
     changeHtml() {
         if(this.editor.container.firstChild.innerText.trim() == this.htmlContent.trim() || this.editor.container.firstChild.innerText.trim()=="") return
-        this.htmlContent = this.editor.container.firstChild.innerText.trim();
+        // this.htmlContent = this.editor.container.firstChild.innerText.trim();
         this.showGif = true,
         this.showPic = false,
         this.$http.post('/api/num', {
@@ -701,7 +703,7 @@ export default {
                     // let blot = Parchment.find(errorNode);
                     // console.log(blot);
                 });
-
+            
                 // Combine all issues
                 catArr.forEach(cat => {
                     cat.forEach(item => {
@@ -867,9 +869,6 @@ export default {
     },
     replaceLeft(id,start,end,rep,index) {
         let replace = document.getElementById(id)
-        // let length = rep.length
-        // this.editor.insertText(start+2,rep, true)
-        // this.editor.deleteText(start+length+1, end-start);
         this.editor.deleteText(start, end-start);
         this.editor.insertText(start,rep, true)
         this.replace = 'none'
