@@ -369,8 +369,6 @@ export default {
           formats: [
             'bold',
             'header',
-            'italic',
-            'link',
             'list',
             'indent',
             'issue'
@@ -386,7 +384,7 @@ export default {
     this.editor.on('text-change', function(delta, oldDelta, source) {
         if (source == 'api') {
             // do nothing at the moment
-            that.updateEditor();
+            // that.updateEditor();
         } else if (source == 'user') {
             that.updateEditor();
         }
@@ -869,9 +867,10 @@ export default {
     },
     replaceLeft(id,start,end,rep,index) {
         let replace = document.getElementById(id)
-        this.editor.deleteText(start, end-start);
+        this.editor.deleteText(start, end-start)
         this.editor.insertText(start,rep, true)
         this.replace = 'none'
+        // this.updateEditor()
     },
     toShowAll() {
         this.showAll = true,
